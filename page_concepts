@@ -1,0 +1,129 @@
+/*
+* This file is part of Lua API++ library (https://github.com/OldFisher/lua-api-pp)
+* distributed under MIT License (http://opensource.org/licenses/MIT).
+* See license.txt for details.
+* (c) 2014 OldFisher
+*/
+
+/*!
+* @page basic_concepts Basic concepts
+* Lua API++ is built on several basic concepts explained in this section. The
+* namespace @ref lua is omitted from expamples.
+*
+* @section basic_global_state Global state
+* The @ref lua::State "State" class represents a Lua context through <a href="http://en.wikipedia.org/wiki/RAII">RAII idiom</a>.
+* Besides maintaining life-cycle of the context, @ref lua::State "State" object can also execute files,
+* strings and Lua-compatible functions, which is useful for setting up the environment.
+*
+* @section basic_state Lua functions and context
+* This library maintains a specific format for functions exposed to Lua:\n
+* <code>@ref lua::Retval "Retval" someFunction(@ref lua::Context "Context"& context);</code>\n
+* Automatic stack management requires function to return specific kind of value,
+* @ref lua::Retval "Retval", which can be used to return arbitrary number of values.
+* The @ref lua::Context "Context" object gives access to function's local and global Lua context,
+* as well as access to most of API features that are not directly associated with @ref basic_values "values".
+* Through @ref lua::Context "Context" you gain access to function's arguments, global values,
+* registry, upvalues, garbage collector etc. It is also used for returning values and reporting errors.
+* Function that conforms to this specification cannot be used with Lua directly and must be explicitly
+* wrapped into C-function via @ref lua::mkcf "mkcf" function using function's name as template parameter.
+*
+* @subsection basic_state_multiret Multiple return values
+* @subsubsection basic_state_multiret_return Returning multiple values
+* You can return an arbitrary number of values inside @ref lua::Retval "Retval" object created with
+* a call to @ref lua::Context::ret "ret" method of @ref lua::Context "Context" object:
+* @code{.cpp}
+* using namespace lua;
+* Retval give123(Context& c){
+*     return c.ret(1, 2, "3");
+* }
+* @endcode
+* In order to return an arbitrary number of values, accumulate them in a @ref lua::Valset "Valset" and return it:
+* @code{.cpp}
+* using namespace lua;
+* Retval makeSequence(Context& c){   // create a sequence of natural numbers
+*     const unsigned int amount = c.args.at(0);  // First argument of function is sequence size
+*     Valset rv(c);
+*     for(auto i = 1u; i <= amount; ++i)
+*         rv.push_back(i);
+*     return c.ret(rv);
+* }
+* @endcode
+*
+* @subsubsection basic_state_multiret_call Accepting multiple return values of a call
+* The results of a call can be handled in four ways: discarded completely, used as a single value,
+* used as a sequence of values or saved in a @ref lua::Valset "Valset" object.
+* Using the results of a call as a single value happens in context where single value is assumed:
+* index, assignment etc. Contexts that assume a sequence of values, such as
+* function call parameters or returning values, will automatically expand multiple values into a subsequence.
+* In order to store an arbitrary number of return values on Lua stack for further processing,
+* create a @ref lua::Valset "Valset" object by assigning call results to it:
+* @code{.cpp}
+* using namespace lua;
+* Retval receiveMultiret(Context& c){
+*     Valset results = c.global["give123"]();	 // Call global function
+*     assert(results.size() == 3);
+*     assert(results[1] == 2);
+*     return c.ret();
+* }
+* @endcode
+* @note @ref lua::Valset "Valset" objects are expanded just like call results, but they cannot
+* be used as a single value.
+*
+* @section basic_values Lua values
+* Lua values, as opposed to @ref basic_values_native "native values", are values stored inside Lua state. They are handled with value-objects,
+* which incapsulate all available operations over values. In this documentation, "value" means a value-object unless specified otherwise.
+* Values can be indexed with <code><b>[]</b></code> and called with <code><b>()</b></code> to same effect as in Lua code, producing another value(s).
+* Arithmetic operations (not available in Lua 5.1 compatibility mode) with value-objects is done with Lua and produces yet another value-object.\n
+* Concatenation is supported with the <code><b>&</b></code> operation, chain concatenations being optimized into a single operation.\n
+* Comparisons of value-objects is done through Lua, but produces native boolean values.\n
+* The @ref lua::Valref "Valref" class documents all operations avaliable for value-object. Though there are @ref basic_value_types "other"
+* types of value-objects, referred to as @ref lua::Temporary "Temporary", they have same interface as @ref lua::Valref "Valref".
+
+* @subsection basic_values_native Native values
+* Native values are values that are used immediately in C++ code. The library recognises several basic types as native,
+* including <code><b>bool, int, unsigned, float, double, const char*</b></code> and <code>std::string</code>.
+* Native values of supported types can be implicitly promoted to Lua values when used in a context that expects a Lua value:
+* function parameters, indices, operands etc. Lua values can be converted to appropriate native type implicitly
+* or explicitly with @ref lua::Valref::cast "cast" method.
+* This documentation refers collectively to anything that is or can be promoted to Lua value as @ref lua::Valobj "Valobj".
+*
+* @subsection basic_values_user User values
+* Lua API++ library supports user-type handling in a minimally intrusive way. Objects of type that is bound as user-data
+* with @ref LUAPP_USERDATA macro are recognised as such and can be implicitly promoted to Lua values. Lua values
+* can be converted to reference to user type explicitly, using @ref lua::Valref::cast "cast" method.
+*
+* Be sure to @ref lua::Context::mt "assign" individual metatables to all userdata types when initializing environment: metatables are used to identify userdata properly.
+* When a new userdata is created, it is automatically assigned corresponding metatable.
+*
+* @subsection basic_value_types Temporary value handling
+* This documentation includes numerous references to @ref lua::Temporary "Temporary" type. What is it?
+*
+* The Lua values may be stored in different places: stack, global variables, upvalues, registry etc.
+* Even more important, they could be temporary results of some operations, which means they do not exist at all before the operation
+* and must be discarded after use. Their creation may require yet more temporary values.
+*
+* To handle such cases and free you from managing the stack manually, this library uses special types constructed via templates.
+* You do not need to know their exact types, because they behave just like @ref lua::Valref "Valref".
+*
+* @subsection basic_value_special Special value types
+* @subsubsection basic_value_special_valref Valref
+* The @ref lua::Valref "Valref" type represents a reference to a value that exists on Lua stack and isn't supposed to be removed any time soon
+* (to be exact, no reference is supposed to outlive referenced value). Function arguments are perfect example of such values.
+*
+* @subsubsection basic_values_special_value Value
+* The @ref lua::Value "Value" type represents a single Lua value on the stack. This type is intended to be used to anchor
+* result of some cumbersome operation for subsequent use without repeating that operation again. Because Value object represents
+* more an anchor to a position in stack rather than its content, the actual value at that position can be replaced at any time
+* with simple assignment. The only difference with @ref basic_value_special_valref "Valref" is that a Value object is considered
+* a new entity and when Value object expires, the referenced slot is removed from the stack.
+*
+* @subsubsection basic_values_special_table Table
+* The @ref lua::Table "Table" type represents a single specific subtype of Lua value: a table on the stack. This type has reduced set of
+* available operations, leaving only those applicable to tables and adding some more.
+*
+* @subsection basic_value_valset Value set
+* The @ref lua::Valset "Valset" object represents a contiguous set of values on the stack. The main purpose of this type is
+* to hold multiple values returned from function call. The arguments for the function are also represented as a read-only Valset object.
+* It is possible to grow Valset gradually in order to collect an arbitrary number of values, and returning single Valset from
+* function is a special case where members of the set are used directly as multiple return values without copying.
+*/

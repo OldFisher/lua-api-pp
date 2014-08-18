@@ -1,0 +1,45 @@
+/*
+* This file is part of Lua API++ library (https://github.com/OldFisher/lua-api-pp)
+* distributed under MIT License (http://opensource.org/licenses/MIT).
+* See license.txt for details.
+* (c) 2014 OldFisher
+*/
+
+/**
+* @page faq FAQ
+(In)Frequently Asked Questions
+* @tableofcontents
+*
+* @section faq_compat Compatibility
+* @subsection faq_compat_versions Which versions of Lua does this library support?
+* Versions @ref compatibility_5_1 "5.1" and @ref compatibility_5_2 "5.2" at the moment.
+*
+* @subsection faq_compat_luajit Is this library compatible with LuaJIT?
+* Yes, all tests pass with LuaJIT in @ref compatibility_5_1 "5.1" compatibility mode.
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*/

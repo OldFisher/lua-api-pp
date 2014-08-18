@@ -1,0 +1,122 @@
+/*
+* This file is part of Lua API++ library (https://github.com/OldFisher/lua-api-pp)
+* distributed under MIT License (http://opensource.org/licenses/MIT).
+* See license.txt for details.
+* (c) 2014 OldFisher
+*/
+
+/**
+* @page stack_management Automatic stack management
+* The library aims to free you of tedious stack management completely. You can freely
+* use indexing, function calls, arithmetics, concatenation and so on, with nesting
+* operation results and never worry about placing temporary values on the stack in correct order or
+* removing those you no longer need. It is done by Lua API++ objects.
+*
+* These objects allow smooth operations when used correctly. There are some limitations on how these objects can be used
+* without breaking the stack integrity. These objects are responsible for allocating and freeing space on Lua stack.
+* In order to do so, these objects must have strictly controlled lifetime (only be declared as local variables),
+* must not be copied, moved (with some safe exceptions like creating a @ref lua::Value "value anchor" by assignment),
+* stored in containers or be inherited from.
+* Many unsafe operations are already disabled for those objects, but there are still some ways left to break their proper functioning.
+*
+* In short, it is useful to remember this:
+* @li @ref lua::State "State" cannot be copied or moved;
+* @li @ref lua::Context "Context" is given to function, it cannot be copied, moved, stored or created
+* (exception: Context can be created explicitly in special situations);
+* @li @ref lua::Retval "Retvals" can only be created by calling @ref lua::Context::ret "return function" in a return-statement.
+* They cannot be copied or moved, but can be returned from functions;
+* @li non-owning @ref lua::Valref "value references" may be freely copied and passed around, but their
+* lifetime must never extend the lifetime of stack slot they refer to (and most certainly they mustn't survive function termination);
+* @li @ref lua::Value "value anchors", @ref lua::Table "table objects" and @ref lua::Valset "value sets" must not be stored, moved,
+* or be created anonymously, unless returned from functions;
+* @li @ref basic_values "value-like temporaries" that are created as results of operations must not be copied, stored, moved or
+* assigned to <code><b>auto</b></code> variables (assign to @ref lua::Value "Value", @ref lua::Table "Table" or @ref lua::Valset "Valset" to store operation result).
+*
+* @note The possibility to return Retvals and anchor objects from functions is built around compiler feature
+* named <a href="http://en.wikipedia.org/wiki/Return_value_optimization">RVO</a>. You may get link errors if your compiler doesn't support it,
+* or it was disabled, or failed to work properly.
+*
+* @page usage Using the library
+* @section usage_basic Using the library with your project
+* This library is intended to be compiled with your project. All the files you're going to need for the project are in luapp/ directory.
+* Add <em>lua_impl.cpp</em> to your project and include @ref lua.hpp.
+*
+* Do not include any other *.hpp files: those depend on particular inclusion order in which they are included into @ref lua.hpp.
+* Besides Lua API itself (configured with @ref luainc.h) and standard C++ library there are no external dependencies.
+*
+* Set the appropriate @ref configuring "configuration macros" if needed.
+*
+* @section usage_tests Building the tests (for library development)
+* Unit tests for this library are built on Boost::Test framework, so the additional requirement is (obviously) <a href="http://www.boost.org/">Boost</a>.
+*
+* @section Documentation
+* The documentation is created with <a href="http://www.doxygen.org/">Doxygen</a> from the library sources.
+* Doxygen configuration file and additional pages are provided with the library.
+*
+*
+* @page configuring Configuring the library
+* Additional library features can be configured with special macros. These macros must be defined project-wide to maintain consistency.
+* @section configuring_compatibility Compatibility
+* Macro names that control @ref compatibility mode:
+* @li @b LUAPP_COMPATIBILITY_V51;
+* @li @b LUAPP_COMPATIBILITY_V52.
+*
+* @section configuring_discardability Discardability
+* Operation that produces @ref lua::Temporary "temporary Lua value" may be skipped if the operation result is never used.
+* Such operation is called "discardable". The non-discardable operations are executed no matter what happens to results.
+*
+* By default, only function calls are non-discardable, but it is possible to switch this mode for:
+* @li indexing, with @b LUAPP_NONDISCARDABLE_INDEX;
+* @li arithmetic operations @lv52, with @b LUAPP_NONDISCARDABLE_ARITHMETICS;
+* @li concatenation, with @b LUAPP_NONDISCARDABLE_CONCAT;
+* @li all of the above, with @b LUAPP_NONDISCARDABLE_ALL.
+*
+* @section configuring_performance Performance
+* To achieve best performance, API-dependent part may be included in headers as a set of inline functions.
+* This mode can be used when link-time code generation is not available and the performance is crucial.
+*
+* It is turned on with @b LUAPP_HEADER_ONLY macro and lua_impl.cpp still needs to be compiled with the project.
+*
+* @section configuring_stack_watch Debugging: stack integrity checking
+* The @b LUAPP_WATCH_STACK enables special mode of stack integrity checking at the exense of some operational overhead.
+* In this mode, when the correct sequence of stack operations is broken, non-catchable exceptions will be raised,
+* leading to immediate program termination.
+*
+* This mode is recommended for debug purposes only.
+*
+*
+* @page performace Performance
+* The library was designed to introduce as little overhead as possible. Most functions were made inline, except those
+* that interact with @ref luainc.h "Lua API" directly. In order to isolate the user from Lua API its @ref luainc.h "headers" are not used in Lua API++ headers.
+* Functions that interact with Lua API were put into lua_impl.cpp and therefore are not inlined by default.
+* You can change that by using link-time code generation (called LTCG in Visual Studio and LTO in GCC).
+* Alternatively, the @b LUAPP_HEADER_ONLY macro will make every function inline, but unlike normal mode
+* @ref luainc.h "Lua API headers" will be included by @ref lua.hpp as well.
+*
+* The library relies heavily on templates and aggressive inlining, so without optimization there will be some operational overhead.
+* Use best optimization settings available for your project if you need to achieve best performance.
+*
+* @page compatibility Compatibility
+* The library supports several Lua versions listed below. By default the library selects the most recent API version known to it.
+* @section compatibility_5_1 Lua 5.1
+* Also compatible with <a href="http://luajit.org/">LuaJIT</a>.
+* Turned on with @b LUAPP_COMPATIBILITY_V51 macro.
+*
+* Differences to 5.2 mode:
+* @li natural arithmetics is not supported;
+* @li @ref lua::Valref::len "length" operation returns native size_t instead of producing @ref lua::Temporary "Lua value";
+* @li the @ref lua::Context::gcIsRunning "gcIsRunning" function is not available;
+* @li the @ref lua::Context::getVersion "getVersion" function is not available;
+* @li the @ref lua::Table::raw "raw accessor" does not use specialized pointer get/set functions.
+*
+* @section compatibility_5_2 Lua 5.2
+* Turned on by default ro with @b LUAPP_COMPATIBILITY_V52.
+*
+*
+* @page external_links External links
+* @li <a href="http://www.lua.org/">Official Lua website</a>;
+* @li <a href="http://www.boost.org/">Boost C++ Libraries</a>;
+* @li <a href="http://www.doxygen.org/">Official Doxygen website</a>;
+* @li <a href="http://www.stack.nl/~dimitri/doxygen/">Alternative URL for official Doxygen website</a>.
+*
+*/

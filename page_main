@@ -1,0 +1,55 @@
+/*
+* This file is part of Lua API++ library (https://github.com/OldFisher/lua-api-pp)
+* distributed under MIT License (http://opensource.org/licenses/MIT).
+* See license.txt for details.
+* (c) 2014 OldFisher
+*/
+
+/** @mainpage Lua API++ library
+* Lua API++ library is a C++ wrapper for <a href="http://www.lua.org/">Lua</a> API.
+* The goal of this library is to let you operate Lua using simple expressive syntax.
+*
+* Most noticeable features provided by the library:
+* @li @ref stack_management "automatic stack management";
+* @li natural expressions (indexing, calls, arithmetics @lv52, concatenation);
+* @li full support of @ref basic_state_multiret "multi-value returns";
+* @li @ref basic_values_user "userdata" support;
+* @li easy @ref lua::Table "table" creation and handling;
+* @li automatic @ref lua::Context::wrap "wrapping" of C functions.
+*
+* Most noticeable \b unsupported features:
+* @li debug;
+* @li coroutines;
+* @li string buffers.
+*
+* The library requires C++11 compatible compiler.
+*
+* To get acquainted, read about @ref basic_concepts "basic concepts" or @ref usage "how to use" it.
+*
+* This library is @ref main_license "licensed" under terms of MIT license (same as <a href="http://www.lua.org/">Lua</a> itself)
+* and maintained on <a href="https://github.com/OldFisher/lua-api-pp">GitHub</a>
+*                   
+* @page main_license License
+* The MIT License (MIT) <a href="http://opensource.org/licenses/MIT">http://opensource.org/licenses/MIT</a>
+*
+* Copyright (c) 2014 OldFisher
+* 
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+*  of this software and associated documentation files (the "Software"), to deal
+*  in the Software without restriction, including without limitation the rights
+*  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+*  copies of the Software, and to permit persons to whom the Software is
+*  furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+*  all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+*  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+*  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+*  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+*  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+*  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+*  THE SOFTWARE.
+*
+*/
