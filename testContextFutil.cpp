@@ -69,6 +69,19 @@ BOOST_FIXTURE_TEST_CASE(CreateChunkFromString, fxContext)
 
 
 
+BOOST_FIXTURE_TEST_CASE(CreateChunkFromStdString, fxContext)
+{
+	Value c = context.chunk(string("return 1, \"a string\""));
+	Valset result = c.pcall();
+	BOOST_CHECK(result.success());
+	BOOST_CHECK_EQUAL(result.size(), 2);
+	BOOST_CHECK_EQUAL(result[0].cast<int>(), 1);
+	BOOST_CHECK_EQUAL(result[1].cast<string>(), "a string");
+	BOOST_CHECK_THROW(Value v = context.chunk(string("{")), std::runtime_error);		// Chunk creators are discardable
+}
+
+
+
 BOOST_FIXTURE_TEST_CASE(CreateChunkFromFile, fxContext)
 {
 	context.runString("function fnSignal() signal = true end");
@@ -81,9 +94,22 @@ BOOST_FIXTURE_TEST_CASE(CreateChunkFromFile, fxContext)
 
 
 
+BOOST_FIXTURE_TEST_CASE(CreateChunkFromFileStdStr, fxContext)
+{
+	context.runString(string("function fnSignal() signal = true end"));
+	Value c = context.load(string("test_good.lua"));
+	c();
+	BOOST_CHECK(context.global["signal"].cast<bool>());
+	BOOST_CHECK_THROW(Value v = context.load(string("test_bad.lua")), std::runtime_error);	// Chunk creators are discardable
+	BOOST_CHECK_THROW(Value v = context.load(string("nosuchfile.lua")), std::runtime_error);
+}
+
+
+
 BOOST_FIXTURE_TEST_CASE(RunString, fxContext)
 {
 	BOOST_CHECK_THROW(context.runString("{"), std::runtime_error);
+	BOOST_CHECK_THROW(context.runString(string("{")), std::runtime_error);
 }
 
 
@@ -95,6 +121,17 @@ BOOST_FIXTURE_TEST_CASE(RunFile, fxContext)
 	BOOST_CHECK(context.global["signal"].cast<bool>());
 	BOOST_CHECK_THROW(context.runFile("test_bad.lua"), std::runtime_error);
 	BOOST_CHECK_THROW(context.runFile("nosuchfile.lua"), std::runtime_error);
+}
+
+
+
+BOOST_FIXTURE_TEST_CASE(RunFileStdStr, fxContext)
+{
+	context.runString(string("function fnSignal() signal = true end"));
+	context.runFile(string("test_good.lua"));
+	BOOST_CHECK(context.global["signal"].cast<bool>());
+	BOOST_CHECK_THROW(context.runFile(string("test_bad.lua")), std::runtime_error);
+	BOOST_CHECK_THROW(context.runFile(string("nosuchfile.lua")), std::runtime_error);
 }
 
 

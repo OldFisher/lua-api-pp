@@ -54,6 +54,30 @@ BOOST_FIXTURE_TEST_CASE(mkcf_, fxState)
 
 
 
+static Retval fnAutoPromoted(Context& c)
+{
+	const int u1 = c.upvalues[2];
+	const int u2 = c.upvalues[3];
+	const int a1 = c.args.at(0);
+	return c.ret(a1 * (u2 - u1));
+}
+
+
+BOOST_FIXTURE_TEST_CASE(LFunctionPromotion, fxContext)
+{
+	context.global["fn"] = fnSignal;
+	BOOST_CHECK(context.global["fn"].is<lua::CFunction>());
+	context.global["fn"].call();
+	BOOST_CHECK_EQUAL(signal, 1);
+
+	context.global["fn"] = context.closure(fnAutoPromoted, 3, 6);
+	BOOST_CHECK(context.global["fn"].is<lua::CFunction>());
+	const int rv = context.global["fn"].call(4);
+	BOOST_CHECK_EQUAL(rv, 12);
+}
+
+
+
 static int wrapped1(int x)
 {
 	return x*3;
@@ -99,6 +123,21 @@ BOOST_FIXTURE_TEST_CASE(SimpleWrappers, fxContext)
 	context.global["fn"] = context.vwrap(vwrapped);
 	context.global["fn"]("12345", 4);
 	BOOST_CHECK_EQUAL(signal, 9);
+#ifdef LUAPP_AUTOWRAP
+	context.global["fn"] = wrapped1;
+	BOOST_CHECK(context.global["fn"].is<lua::CFunction>());
+	{
+		Valset vs = context.global["fn"].pcall(3);
+		BOOST_CHECK(vs.success());
+		BOOST_REQUIRE_EQUAL(vs.size(), 1);
+		BOOST_CHECK(vs[0].is<int>());
+	}
+	BOOST_CHECK_EQUAL(context.global["fn"](3).cast<int>(), 9);
+	{
+		Valset vs = context.global["fn"].pcall();
+		BOOST_CHECK(!vs.success());
+	}
+#endif // LUAPP_AUTOWRAP
 }
 
 

@@ -23,12 +23,6 @@ var NAVTREE =
         [ "Value set", "basic_concepts.html#basic_value_valset", null ]
       ] ]
     ] ],
-    [ "FAQ", "faq.html", [
-      [ "Compatibility", "faq.html#faq_compat", [
-        [ "Which versions of Lua does this library support?", "faq.html#faq_compat_versions", null ],
-        [ "Is this library compatible with LuaJIT?", "faq.html#faq_compat_luajit", null ]
-      ] ]
-    ] ],
     [ "Automatic stack management", "stack_management.html", null ],
     [ "Using the library", "usage.html", [
       [ "Using the library with your project", "usage.html#usage_basic", null ],
@@ -47,7 +41,14 @@ var NAVTREE =
       [ "Lua 5.2", "compatibility.html#compatibility_5_2", null ]
     ] ],
     [ "External links", "external_links.html", null ],
+    [ "FAQ", "faq.html", [
+      [ "Compatibility", "faq.html#faq_compat", [
+        [ "Which versions of Lua does this library support?", "faq.html#faq_compat_versions", null ],
+        [ "Is this library compatible with LuaJIT?", "faq.html#faq_compat_luajit", null ]
+      ] ]
+    ] ],
     [ "Changelog", "changelog.html", [
+      [ "2014-08-28-0", "changelog.html#changes_2014_08_28_0", null ],
       [ "2014-08-18-0", "changelog.html#changes_2014_08_18_0", null ]
     ] ],
     [ "Namespace Members", "namespacemembers.html", [
@@ -55,8 +56,7 @@ var NAVTREE =
       [ "Functions", "namespacemembers_func.html", null ],
       [ "Variables", "namespacemembers_vars.html", null ],
       [ "Typedefs", "namespacemembers_type.html", null ],
-      [ "Enumerations", "namespacemembers_enum.html", null ],
-      [ "Enumerator", "namespacemembers_eval.html", null ]
+      [ "Enumerations", "namespacemembers_enum.html", null ]
     ] ],
     [ "Classes", null, [
       [ "Class List", "annotated.html", "annotated" ],

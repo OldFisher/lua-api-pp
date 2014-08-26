@@ -118,7 +118,10 @@ namespace lua {
 
 	//! @cond
 	class Retval;
-	namespace _ { int LFunctionWrapper(Retval(*)(Context&), lua_State*) noexcept; }
+	namespace _ {
+		int LFunctionWrapper(Retval(*)(Context&), lua_State*) noexcept;
+		int LFunctionUWrapper(lua_State*) noexcept;
+	}
 	//! @endcond
 
 
@@ -140,6 +143,7 @@ namespace lua {
 	class Retval final: public _::returnableByAny, public _::noNew {
 		friend class Context;
 		friend int _::LFunctionWrapper(Retval(*)(Context&), lua_State*) noexcept;
+		friend int _::LFunctionUWrapper(lua_State*) noexcept;
 
 		explicit Retval(size_t amount) noexcept:
 			rvamount(amount)
@@ -677,8 +681,10 @@ namespace lua {
 
 #ifdef DOXYGEN_ONLY
 		//! @brief Concatenation.
-		//! @note Chained concatenations are optimized into a single multi-value concatenation.
-		//! @warning The operation symbol '&' has lower priority than '+' and '-' because in C/C++ it means "bitwise AND", not "concatenation". Use parentheses to group expressions properly.
+		//! @note
+		//! @li Chained concatenations are optimized into a single multi-value concatenation;
+		//! @li multiple return values and @ref Valset "Valsets" are expanded;
+		//! @li the operation symbol '&' has lower priority than '+' and '-' because in C/C++ it means "bitwise AND", which matches priority of concatenation in Lua.
 		Temporary operator & (Valobj&& v) const noexcept;
 #else	// Not DOXYGEN_ONLY
 		template<typename ValueType> _::Lazy<_::lazyConcat<Valref, typename std::decay<ValueType>::type>> operator & (ValueType&& v) const noexcept

@@ -27,7 +27,7 @@ namespace lua {
 		State();
 
 		//! @brief Custom allocator constructor.
-		explicit State(void* (__cdecl customAllocatorFunction) (void* ud, void* ptr, size_t oldSize, size_t newSize), void* ud);
+		explicit State(void* (__cdecl customAllocatorFunction) (void* ud, void* ptr, size_t oldSize, size_t newSize), void* ud = nullptr);
 
 		//! @brief Destructor frees the associated Lua state.
 		//! @details All raw pointers to lua_State are invalidated after object destruction.
@@ -47,6 +47,14 @@ namespace lua {
 		//! @pre filename != nullptr
 		//! @throw std::runtime_error In case of execution error, what() contains additional information.
 		void runFile(const char* filename);
+
+		//! @brief Execute Lua file (text or bytecode).
+		//! @throw std::runtime_error In case of execution error, what() contains additional information.
+		//! @overload
+		void runFile(const std::string& filename)
+		{
+			runFile(filename.c_str());
+		}
 
 		//! @brief Execute a string.
 		//! @pre expression != nullptr

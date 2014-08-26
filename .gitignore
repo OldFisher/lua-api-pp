@@ -10,11 +10,7 @@
 
 !doc/**/*.*
 !doxyfile
-!page_main
-!page_concepts
-!page_faq
-!page_other
-!page_changelog
+!*.doxypage
 
 !**/license.txt
 

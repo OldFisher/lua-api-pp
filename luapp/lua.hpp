@@ -74,6 +74,7 @@ namespace lua {
 	//! CFunction cf = mkcf<someFunction>;
 	//! @endcode
 	//! Note the lack of round parentheses when using mkcf template.
+	//! @note Unlike @ref Context::closure "closure" function, mkcf creates individual wrapper for each LFunctions. It doesn't reserve first upvalue for internal use.
 	template<LFunction F>
 	int mkcf(lua_State* l)
 	{
@@ -130,10 +131,6 @@ namespace lua {
 //! @note Use this macro outside of namespaces, functions, classes etc.
 //! @see lua::Context::wrap
 #define LUAPP_RV_CONVERT(rv_type, body) namespace lua { namespace _ { namespace wrap { template<> inline lua::Retval rvCvt<rv_type>(rv_type&& val, lua::Context& context) body }}}
-
-
-
-//! @var Nil nil;
 
 
 #ifdef LUAPP_HEADER_ONLY

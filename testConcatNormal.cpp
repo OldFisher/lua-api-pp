@@ -56,6 +56,8 @@ BOOST_FIXTURE_TEST_CASE(Single, fxConcatNormal)
 BOOST_FIXTURE_TEST_CASE(Multiple, fxConcatNormal)
 {
 	BOOST_CHECK_EQUAL((l & v & 1 & "A" & 2.2).cast<string>(), "3.14abc1A2.2");
+	context.runString("function fn() return 2, 3, 4; end");
+	BOOST_CHECK_EQUAL((l & context.global["fn"]() & v ).cast<string>(), "3.14234abc");
 }
 
 

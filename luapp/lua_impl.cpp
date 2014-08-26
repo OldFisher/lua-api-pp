@@ -45,6 +45,22 @@ namespace lua {
 
 
 
+		LUAPP_HO_INLINE int LFunctionUWrapper(lua_State* s) noexcept
+		{
+			LFunction f = reinterpret_cast<LFunction>(lua_touserdata(s, lua_upvalueindex(1)));
+			if(!f)
+				return luaL_error(s, "LFunction wrapper: function pointer upvalue at index 1 is invalid");
+			try {
+				Context S(s, Context::initializeExplicitly);
+				return f(S).rvamount;
+			} catch(std::exception& e) {
+				return luaL_error(s, (std::string("Lua function terminated with an exception: ") + e.what()).c_str());
+			} catch(...) {
+				return luaL_error(s, "Lua function terminated with an unknown exception");
+			}
+		}
+
+
 //### call and pcall ########################################################################################################
 
 		LUAPP_HO_INLINE void lazyCallUtils::call(lua_State* L, size_t oldtop, int rvAmount) noexcept
@@ -116,22 +132,7 @@ namespace lua {
 		namespace wrap {
 			LUAPP_HO_INLINE StrippedFptr getAddress(lua_State* L)
 			{
-				/*static*/ if(sizeof(void*) == sizeof(StrippedFptr))		// Can store function ptr in LightUserData
-				{
-			//		void* const p = lua_touserdata(L, lua_upvalueindex(1));
-			//		if(!p)
-			//			throw std::runtime_error("Lua function wrapper: pointer to wrapped function is null");
-			//		return reinterpret_cast<const StrippedFptr&>(p);
-					return reinterpret_cast<StrippedFptr>(lua_touserdata(L, lua_upvalueindex(1)));
-				} else {	// must store function ptr as full userdata
-			//		StrippedFptr* const rv = reinterpret_cast<StrippedFptr*>(lua_touserdata(L, lua_upvalueindex(1)));
-			//		if(!rv)
-			//			throw std::runtime_error("Lua function wrapper: upvalue 1 is not a userdata");
-			//		if(!*rv)
-			//			throw std::runtime_error("Lua function wrapper: pointer to wrapped function is null");
-			//		return *rv;
-					return *reinterpret_cast<StrippedFptr*>(lua_touserdata(L, lua_upvalueindex(1)));
-				}
+				return reinterpret_cast<StrippedFptr>(lua_touserdata(L, lua_upvalueindex(1)));
 			}
 		}
 

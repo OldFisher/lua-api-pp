@@ -214,14 +214,14 @@ namespace lua {
 
 #if(LUAPP_API_VERSION >= 52)
 		template<typename Policy>
-		inline Lazy<lazyLenTemp<Policy>> Lazy<Policy>::len()
+		inline Lazy<lazyLenTemp<Policy>> Lazy<Policy>::len() &&
 		{
 			return Lazy<lazyLenTemp<Policy>>(S, std::move(*this));
 		}
 #endif	// V52+
 
 		template<typename Policy>
-		inline Lazy<lazyMtTemp<Policy>> Lazy<Policy>::mt()
+		inline Lazy<lazyMtTemp<Policy>> Lazy<Policy>::mt() &&
 		{
 			return Lazy<lazyMtTemp<Policy>>(S, std::move(*this));
 		}

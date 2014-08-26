@@ -99,24 +99,24 @@ namespace lua{
 			//! @{
 
 			//! Explicit conversion to supported types.
-			template<typename T> T cast()
+			template<typename T> T cast() &&
 			{
 				return toTemporary().cast<T>();
 			}
 
 			//! Explicit conversion to supported types.
-			template<typename T> T optcast(const T& backupValue = T())
+			template<typename T> T optcast(const T& backupValue = T()) &&
 			{
 				return toTemporary().optcast<T>(backupValue);
 			}
 
 			//! Check if the value is of given type or convertible.
-			template<typename T> bool is()
+			template<typename T> bool is() &&
 			{
 				return toTemporary().is<T>();
 			}
 
-			ValueType type()
+			ValueType type() &&
 			{
 				return toTemporary().type();
 			}
@@ -126,42 +126,42 @@ namespace lua{
 				return toTemporary();
 			}
 
-			operator int ()
+			operator int () &&
 			{
 				return toTemporary();
 			}
 
-			operator unsigned int()
+			operator unsigned int() &&
 			{
 				return toTemporary();
 			}
 
-			operator float()
+			operator float() &&
 			{
 				return toTemporary();
 			}
 
-			operator double()
+			operator double() &&
 			{
 				return toTemporary();
 			}
 
-			operator const char* ()
+			operator const char* () &&
 			{
 				return toTemporary();
 			}
 
-			operator std::string ()
+			operator std::string () &&
 			{
 				return toTemporary();
 			}
 
-			operator CFunction ()
+			operator CFunction () &&
 			{
 				return toTemporary();
 			}
 
-			operator LightUserData()
+			operator LightUserData() &&
 			{
 				return toTemporary();
 			}
@@ -175,7 +175,7 @@ namespace lua{
 
 			//! Assignment is enabled only if the policy has void assign(Context&, const ValueType&)
 			//! Policies have no assignment by default. Indexers do have it.
-			template <typename ValueType> void operator = (ValueType&& val)
+			template <typename ValueType> void operator = (ValueType&& val) &&
 			{
 				static_assert(!std::is_same<::lua::Table&&, decltype(std::forward<ValueType>(val))>::value, "Using anonymous Table object");
 				static_assert(!std::is_same<::lua::Value&&, decltype(std::forward<ValueType>(val))>::value, "Using anonymous Value object");
@@ -186,28 +186,28 @@ namespace lua{
 
 			//! Indexation.
 			template <typename IndexType>
-			Lazy<lazyTempIndexer<Lazy<Policy>, typename std::decay<IndexType>::type>> operator [] (IndexType&& index) noexcept
+			Lazy<lazyTempIndexer<Lazy<Policy>, typename std::decay<IndexType>::type>> operator [] (IndexType&& index) && noexcept
 			{
 				return Lazy<lazyTempIndexer<Lazy<Policy>, typename std::decay<IndexType>::type>>(S, std::move(*this), std::forward<IndexType>(index));
 			}
 
 			//! Generic call.
 			template<typename ... Args>
-			Lazy<lazyCall<Lazy<Policy>, Args...>> operator () (Args&& ... args) noexcept
+			Lazy<lazyCall<Lazy<Policy>, Args...>> operator () (Args&& ... args) && noexcept
 			{
 				return Lazy<lazyCall<Lazy<Policy>, Args...>>(S, std::move(*this), std::forward<Args>(args)...);
 			}
 
 			//! Call function
 			template<typename ... Args>
-			Lazy<lazyCall<Lazy<Policy>, Args...>> call(Args&& ... args) noexcept
+			Lazy<lazyCall<Lazy<Policy>, Args...>> call(Args&& ... args) && noexcept
 			{
 				return Lazy<lazyCall<Lazy<Policy>, Args...>>(S, std::move(*this), std::forward<Args>(args)...);
 			}
 
 			//! Protected call function
 			template<typename ... Args>
-			Lazy<lazyPCall<Lazy<Policy>, Args...>> pcall(Args&& ... args) noexcept
+			Lazy<lazyPCall<Lazy<Policy>, Args...>> pcall(Args&& ... args) && noexcept
 			{
 				return Lazy<lazyPCall<Lazy<Policy>, Args...>>(S, std::move(*this), std::forward<Args>(args)...);
 			}
@@ -217,79 +217,79 @@ namespace lua{
 			//! @{
 
 
-			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator == (ValueType&& rhs)
+			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator == (ValueType&& rhs) &&
 			{
 				return toTemporary().Valref::operator == (std::forward<ValueType>(rhs));
 			}
 
 
-			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator != (ValueType&& rhs)
+			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator != (ValueType&& rhs) &&
 			{
 				return toTemporary().Valref::operator != (std::forward<ValueType>(rhs));
 			}
 
 
-			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator < (ValueType&& rhs)
+			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator < (ValueType&& rhs) &&
 			{
 				return toTemporary().Valref::operator < (std::forward<ValueType>(rhs));
 			}
 
 
-			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator > (ValueType&& rhs)
+			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator > (ValueType&& rhs) &&
 			{
 				return toTemporary().Valref::operator > (std::forward<ValueType>(rhs));
 			}
 
 
-			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator <= (ValueType&& rhs)
+			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator <= (ValueType&& rhs) &&
 			{
 				return toTemporary().Valref::operator <= (std::forward<ValueType>(rhs));
 			}
 
 
-			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator >= (ValueType&& rhs)
+			template<typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value, bool>::type operator >= (ValueType&& rhs) &&
 			{
 				return toTemporary().Valref::operator >= (std::forward<ValueType>(rhs));
 			}
 
 
 			template<typename Policy2>
-			bool operator == (Lazy<Policy2>&& rhs)
+			bool operator == (Lazy<Policy2>&& rhs) &&
 			{
 				return toTemporary().Valref::operator == (std::move(rhs));
 			}
 
 
 			template<typename Policy2>
-			bool operator != (Lazy<Policy2>&& rhs)
+			bool operator != (Lazy<Policy2>&& rhs) &&
 			{
 				return toTemporary().Valref::operator != (std::move(rhs));
 			}
 
 
 			template<typename Policy2>
-			bool operator < (Lazy<Policy2>&& rhs)
+			bool operator < (Lazy<Policy2>&& rhs) &&
 			{
 				return toTemporary().Valref::operator < (std::move(rhs));
 			}
 
 
 			template<typename Policy2>
-			bool operator > (Lazy<Policy2>&& rhs)
+			bool operator > (Lazy<Policy2>&& rhs) &&
 			{
 				return toTemporary().Valref::operator > (std::move(rhs));
 			}
 
 
 			template<typename Policy2>
-			bool operator <= (Lazy<Policy2>&& rhs)
+			bool operator <= (Lazy<Policy2>&& rhs) &&
 			{
 				return toTemporary().Valref::operator <= (std::move(rhs));
 			}
 
 
 			template<typename Policy2>
-			bool operator >= (Lazy<Policy2>&& rhs)
+			bool operator >= (Lazy<Policy2>&& rhs) &&
 			{
 				return toTemporary().Valref::operator >= (std::move(rhs));
 			}
@@ -302,20 +302,20 @@ namespace lua{
 
 			//! Length
 #if(LUAPP_API_VERSION >= 52)
-			Lazy<lazyLenTemp<Policy>> len();
+			Lazy<lazyLenTemp<Policy>> len() &&;
 #else	// V51-
-			size_t len()
+			size_t len() &&
 			{
 				return toTemporary().len();
 			}
 #endif	// V52+
 
 			//! Metatable read/write
-			Lazy<lazyMtTemp<Policy>> mt();
+			Lazy<lazyMtTemp<Policy>> mt() &&;
 
 			//! Concatenation
 			template<typename ValueType>
-			Lazy<lazyConcat<Lazy<Policy>, typename std::decay<ValueType>::type>> operator & (ValueType&& v) noexcept
+			Lazy<lazyConcat<Lazy<Policy>, typename std::decay<ValueType>::type>> operator & (ValueType&& v) && noexcept
 			{
 				return Lazy<lazyConcat<Lazy<Policy>, typename std::decay<ValueType>::type>>(S, std::move(*this), std::forward<ValueType>(v));
 			}
@@ -325,7 +325,7 @@ namespace lua{
 
 
 #if(LUAPP_API_VERSION >= 52)
-			Lazy<lazyArithmetics<Lazy<Policy>, void, Arithmetics::UnaryMinus>> operator - () noexcept
+			Lazy<lazyArithmetics<Lazy<Policy>, void, Arithmetics::UnaryMinus>> operator - () && noexcept
 			{
 				return Lazy<lazyArithmetics<Lazy<Policy>, void, Arithmetics::UnaryMinus>>(S, std::move(*this));
 			}
@@ -334,7 +334,7 @@ namespace lua{
 			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Add>> lua::operator + (ValueType&& lhs, const Valref& rhs) noexcept;
 
 			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Add>> operator + (ValueType&& rhs) noexcept
+			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Add>> operator + (ValueType&& rhs) && noexcept
 			{
 				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Add>>(S, std::move(*this), std::forward<ValueType>(rhs));
 			}
@@ -343,7 +343,7 @@ namespace lua{
 			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Sub>> lua::operator - (ValueType&& lhs, const Valref& rhs) noexcept;
 
 			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Sub>> operator - (ValueType&& rhs) noexcept
+			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Sub>> operator - (ValueType&& rhs) && noexcept
 			{
 				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Sub>>(S, std::move(*this), std::forward<ValueType>(rhs));
 			}
@@ -352,7 +352,7 @@ namespace lua{
 			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Multiply>> lua::operator * (ValueType&& lhs, const Valref& rhs) noexcept;
 
 			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Multiply>> operator * (ValueType&& rhs) noexcept
+			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Multiply>> operator * (ValueType&& rhs) && noexcept
 			{
 				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Multiply>>(S, std::move(*this), std::forward<ValueType>(rhs));
 			}
@@ -361,7 +361,7 @@ namespace lua{
 			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Divide>> lua::operator / (ValueType&& lhs, const Valref& rhs) noexcept;
 
 			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Divide>> operator / (ValueType&& rhs) noexcept
+			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Divide>> operator / (ValueType&& rhs) && noexcept
 			{
 				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Divide>>(S, std::move(*this), std::forward<ValueType>(rhs));
 			}
@@ -370,7 +370,7 @@ namespace lua{
 			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Modulo>> lua::operator % (ValueType&& lhs, const Valref& rhs) noexcept;
 
 			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Modulo>> operator % (ValueType&& rhs) noexcept
+			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Modulo>> operator % (ValueType&& rhs) && noexcept
 			{
 				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Modulo>>(S, std::move(*this), std::forward<ValueType>(rhs));
 			}
@@ -379,7 +379,7 @@ namespace lua{
 			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Power>> lua::operator ^ (ValueType&& lhs, const Valref& rhs) noexcept;
 
 			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Power>> operator ^ (ValueType&& rhs) noexcept
+			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Power>> operator ^ (ValueType&& rhs) && noexcept
 			{
 				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Power>>(S, std::move(*this), std::forward<ValueType>(rhs));
 			}
@@ -455,32 +455,32 @@ namespace lua{
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator == (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return rhs.operator ==  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).operator ==  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator != (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return rhs.operator != <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).operator != <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator < (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return rhs.operator >  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).operator >  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator > (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return rhs.operator <  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).operator <  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator <= (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return rhs.operator >=  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).operator >=  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator >= (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return rhs.operator <=  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).operator <=  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 

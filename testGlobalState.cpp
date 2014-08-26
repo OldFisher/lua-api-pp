@@ -3,6 +3,7 @@
 #include "fixtures.h"
 #include <cstring>
 #include <stdexcept>
+using std::string;
 
 
 BOOST_AUTO_TEST_SUITE(State)
@@ -82,6 +83,10 @@ BOOST_FIXTURE_TEST_CASE(fileExecuteGood, fxSignal)
 {
 	gs.runFile("test_good.lua");
 	BOOST_REQUIRE(isSignaled());
+	signal = 0;
+	gs.runFile(string("test_good.lua"));
+	BOOST_REQUIRE(isSignaled());
+	signal = 0;
 }
 
 
@@ -89,6 +94,7 @@ BOOST_FIXTURE_TEST_CASE(fileExecuteGood, fxSignal)
 BOOST_FIXTURE_TEST_CASE(fileExecuteBad, fxSignal)
 {
 	BOOST_REQUIRE_THROW(gs.runFile("test_bad.lua"), std::runtime_error);
+	BOOST_REQUIRE_THROW(gs.runFile(string("test_bad.lua")), std::runtime_error);
 }
 
 
@@ -96,6 +102,7 @@ BOOST_FIXTURE_TEST_CASE(fileExecuteBad, fxSignal)
 BOOST_FIXTURE_TEST_CASE(fileExecuteMissing, fxSignal)
 {
 	BOOST_REQUIRE_THROW(gs.runFile("nosuchfile.lua"), std::runtime_error);
+	BOOST_REQUIRE_THROW(gs.runFile(string("nosuchfile.lua")), std::runtime_error);
 }
 
 
@@ -105,6 +112,9 @@ BOOST_FIXTURE_TEST_CASE(stringExecuteGood, fxSignal)
 	gs.runString("fnSignal()");
 	BOOST_REQUIRE(isSignaled());
 	signal = 0;
+	gs.runString(string("fnSignal()"));
+	BOOST_REQUIRE(isSignaled());
+	signal = 0;
 }
 
 
@@ -112,6 +122,7 @@ BOOST_FIXTURE_TEST_CASE(stringExecuteGood, fxSignal)
 BOOST_FIXTURE_TEST_CASE(stringExecuteBad, fxSignal)
 {
 	BOOST_REQUIRE_THROW(gs.runString("{"), std::runtime_error);
+	BOOST_REQUIRE_THROW(gs.runString(string("{")), std::runtime_error);
 }
 
 

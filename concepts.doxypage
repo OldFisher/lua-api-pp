@@ -24,10 +24,12 @@
 * as well as access to most of API features that are not directly associated with @ref basic_values "values".
 * Through @ref lua::Context "Context" you gain access to function's arguments, global values,
 * registry, upvalues, garbage collector etc. It is also used for returning values and reporting errors.
-* Function that conforms to this specification cannot be used with Lua directly and must be explicitly
+* Function that conforms to this specification can be automatically promoted to Lua or can be explicitly
 * wrapped into C-function via @ref lua::mkcf "mkcf" function using function's name as template parameter.
+* Normal, non-compliant C functions also can be automatically promoted or wrapped explicitly with @ref lua::Context::wrap "wrap" function.
 *
 * @subsection basic_state_multiret Multiple return values
+*
 * @subsubsection basic_state_multiret_return Returning multiple values
 * You can return an arbitrary number of values inside @ref lua::Retval "Retval" object created with
 * a call to @ref lua::Context::ret "ret" method of @ref lua::Context "Context" object:
@@ -78,7 +80,7 @@
 * Comparisons of value-objects is done through Lua, but produces native boolean values.\n
 * The @ref lua::Valref "Valref" class documents all operations avaliable for value-object. Though there are @ref basic_value_types "other"
 * types of value-objects, referred to as @ref lua::Temporary "Temporary", they have same interface as @ref lua::Valref "Valref".
-
+*
 * @subsection basic_values_native Native values
 * Native values are values that are used immediately in C++ code. The library recognises several basic types as native,
 * including <code><b>bool, int, unsigned, float, double, const char*</b></code> and <code>std::string</code>.
@@ -102,7 +104,7 @@
 * Even more important, they could be temporary results of some operations, which means they do not exist at all before the operation
 * and must be discarded after use. Their creation may require yet more temporary values.
 *
-* To handle such cases and free you from managing the stack manually, this library uses special types constructed via templates.
+* To handle such cases and free you from managing the stack manually, this library uses special proxy types constructed via templates.
 * You do not need to know their exact types, because they behave just like @ref lua::Valref "Valref".
 *
 * @subsection basic_value_special Special value types

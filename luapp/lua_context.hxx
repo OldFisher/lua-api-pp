@@ -17,6 +17,8 @@ namespace lua {
 	//! @cond
 	namespace _ {
 
+		int LFunctionUWrapper(lua_State*) noexcept;
+
 		namespace wrap {
 
 			typedef void (*StrippedFptr) ();
@@ -322,6 +324,12 @@ namespace lua {
 		//! @brief Create a closure from @ref lua::CFunction "C function".
 		template<typename ... UpvalueTypes> Temporary closure (CFunction fn, UpvalueTypes&& ... upvalues_) noexcept;
 
+		//! @brief Create a closure from @ref LFunction.
+		//! @details All closures created by this function share common wrapper.
+		//! @warning The wrapper is using first upvalue (index 1) internally. Provided upvalues (if any) start at index 2.
+		//! This holds true for automatically promoted LFunctions too.
+		template<typename ... UpvalueTypes> Temporary closure (CFunction fn, UpvalueTypes&& ... upvalues_) noexcept;
+
 		//! @brief Create a wrapped Lua-compatible function from generic C/C++ function.
 		//! @details This function will create a Lua function wrapper that converts Lua arguments into native values,
 		//! calls the C function with those arguments and converts the return value back into Lua value.
@@ -338,18 +346,36 @@ namespace lua {
 		Temporary vwrap(ReturnValueType (*fn)(ArgTypes...)) noexcept;
 
 		//! @brief Compile a string into a chunk.
+		//! @pre chunkText != nullptr
 		//! @throw std::runtime_error on compilation failure (syntax errors). Exception object will contain error description.
 		Temporary chunk(const char* chunkText) noexcept;
 
+		//! @brief Compile a string into a chunk.
+		//! @throw std::runtime_error on compilation failure (syntax errors). Exception object will contain error description.
+		//! @overload
+		Temporary chunk(const std::string& chunkText) noexcept;
+
 		//! @brief Load a file as chunk.
+		//! @pre fileName != nullptr
 		//! @throw std::runtime_error on compilation failure (file missing or syntax errors). Exception object will contain error description.
 		Temporary load(const char* fileName) noexcept;
+
+		//! @brief Load a file as chunk.
+		//! @throw std::runtime_error on compilation failure (file missing or syntax errors). Exception object will contain error description.
+		//! @overload
+		Temporary load(const std::string& fileName) noexcept;
 #else	// Not DOXYGEN_ONLY
 
 		template<typename ... UVTypes>
 		_::Lazy<_::lazyClosure<UVTypes...>> closure (CFunction fn, UVTypes&& ... up_values) noexcept
 		{
 			return _::Lazy<_::lazyClosure<UVTypes...>>(*this, fn, std::forward<UVTypes>(up_values)...);
+		}
+
+		template<typename ... UVTypes>
+		_::Lazy<_::lazyClosure<LightUserData, UVTypes...>> closure (LFunction fn, UVTypes&& ... up_values) noexcept
+		{
+			return _::Lazy<_::lazyClosure<LightUserData, UVTypes...>>(*this, _::LFunctionUWrapper, reinterpret_cast<LightUserData>(fn), std::forward<UVTypes>(up_values)...);
 		}
 
 		template<typename ReturnValueType, typename ... ArgTypes>
@@ -380,9 +406,20 @@ namespace lua {
 			return _::Lazy<_::lazyFileChunk>(*this, fileName);
 		}
 
+		_::Lazy<_::lazyChunk> chunk(const std::string& chunkText) noexcept
+		{
+			return _::Lazy<_::lazyChunk>(*this, chunkText.c_str());
+		}
+
+		_::Lazy<_::lazyFileChunk> load(const std::string& fileName) noexcept
+		{
+			return _::Lazy<_::lazyFileChunk>(*this, fileName.c_str());
+		}
+
 #endif	// DOXYGEN_ONLY
 
 		//! @brief Run a command string.
+		//! @pre command != nullptr
 		//! @throw std::runtime_error on compilation or execution failure. Exception object will contain error description.
 		void runString(const char* command)
 		{
@@ -390,9 +427,28 @@ namespace lua {
 			c();
 		}
 
+		//! @brief Run a command string.
+		//! @throw std::runtime_error on compilation or execution failure. Exception object will contain error description.
+		//! @overload
+		void runString(const std::string& command)
+		{
+			Value c = chunk(command);
+			c();
+		}
+
 		//! @brief Execute file.
+		//! @pre fileName != nullptr
 		//! @throw std::runtime_error on compilation or execution failure. Exception object will contain error description.
 		void runFile(const char* fileName)
+		{
+			Value f = load(fileName);
+			f();
+		}
+
+		//! @brief Execute file.
+		//! @throw std::runtime_error on compilation or execution failure. Exception object will contain error description.
+		//! @overload
+		void runFile(const std::string& fileName)
 		{
 			Value f = load(fileName);
 			f();
@@ -582,7 +638,10 @@ namespace lua {
 			l.push();
 		}
 
-		void push(LFunction);	// not implemented to produce link errors on using non-mkcf'ed LFunctions
+		void push(LFunction f)
+		{
+			push(closure(f));
+		}
 
 		void push(const Valref& cVal) noexcept
 		{
@@ -641,6 +700,13 @@ namespace lua {
 		void push(Value&&) = delete;
 		void push(Table&&) = delete;
 		void push(Valset&&) = delete;
+
+		//! autowrap and push generic C function
+		template<typename RV, typename ... Args>
+		void push(RV (*fn)(Args...))
+		{
+			push(wrap(fn));
+		}
 
 		//! duplicate a stack value and return its index
 		size_t duplicate(size_t index) noexcept;
