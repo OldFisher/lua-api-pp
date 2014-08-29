@@ -28,11 +28,10 @@ namespace lua {
 				typedef PackIndices<> type;
 			};
 
-
 			//! Default argument conversion routine (simple cast).
 			//! Specialized for certain type if necessary.
 			template<typename ValueType>
-			inline ValueType argCvt(const lua::Valref& value)
+			inline auto argCvt(const lua::Valref& value) -> decltype(std::declval<lua::Valref>().cast<ValueType>())
 			{
 				return value.cast<ValueType>();
 			}
@@ -48,8 +47,25 @@ namespace lua {
 			}
 
 
-			//! Read upvalue[1] as a pointer to function
-			StrippedFptr getAddress(lua_State* L);
+			//! Read upvalue[1] as raw pointer
+			void* getRawReserve(lua_State* L);
+
+			//! Read upvalue[1] as raw userdata
+			template<typename ImposedType>
+			inline ImposedType getReservedFptr(Context& c)
+			{
+				// Casting void* to member-pointer is tricky business
+				union HardCast {
+					ImposedType fptr;
+					void* ptr;
+					HardCast(void* val): ptr(val) {}
+				};
+
+				return
+					(sizeof(ImposedType) == sizeof(LightUserData)) ?
+					HardCast(getRawReserve(c)).fptr :
+					*reinterpret_cast<ImposedType*>(getRawReserve(c));
+			}
 
 
 			//! Make a call with argument transformation, return result
@@ -65,7 +81,7 @@ namespace lua {
 			Retval call(Context& s)
 			{
 				typedef ReturnValueType (*fp)(ArgTypes...);
-				fp f = reinterpret_cast<fp>(getAddress(s));
+				fp f = getReservedFptr<fp>(s);
 				return rvCvt<typename std::decay<ReturnValueType>::type>(makeCall(s, f, typename CreatePackIndices<sizeof...(ArgTypes)>::type()), s);
 			}
 
@@ -82,10 +98,45 @@ namespace lua {
 			Retval callv(Context& s)
 			{
 				typedef ReturnType (*fp)(ArgTypes...);
-				fp f = reinterpret_cast<fp>(getAddress(s));
+				fp f = getReservedFptr<fp>(s);
 				makeCallv(s, f, typename CreatePackIndices<sizeof...(ArgTypes)>::type());
 				return s.ret();
 			}
+
+			//! Make a call to member function with argument transformation, return result
+			template<typename Host, typename ReturnValueType, typename ... ArgTypes, size_t ... Indices>
+			inline ReturnValueType makeMemberCall(Context& c, ReturnValueType (Host::*f)(ArgTypes...), PackIndices<Indices...>)
+			{
+				return (argCvt<Host>(c.args.at(0)).*f)(argCvt<typename std::decay<ArgTypes>::type>(c.args.at(1 + Indices))...);
+			}
+
+
+			//! Make member call
+			template<typename Host, typename ReturnType, typename ... ArgTypes>
+			Retval memberCall(Context& c)
+			{
+				using fp = ReturnType (Host::*)(ArgTypes...);
+				fp f = getReservedFptr<fp>(c);
+				return rvCvt<typename std::decay<ReturnType>::type>(makeMemberCall(c, f, typename CreatePackIndices<sizeof...(ArgTypes)>::type()), c);
+			}
+
+			//! Make a call to member function with argument transformation, discard result
+			template<typename Host, typename ReturnValueType, typename ... ArgTypes, size_t ... Indices>
+			inline void makeMemberCallv(Context& c, ReturnValueType (Host::*f)(ArgTypes...), PackIndices<Indices...>)
+			{
+				(argCvt<Host>(c.args.at(0)).*f)(argCvt<typename std::decay<ArgTypes>::type>(c.args.at(1 + Indices))...);
+			}
+
+			//! Make member call for void-function
+			template<typename Host, typename ReturnType, typename ... ArgTypes>
+			Retval memberCallv(Context& c)
+			{
+				using fp = ReturnType (Host::*)(ArgTypes...);
+				fp f = getReservedFptr<fp>(c);
+				makeMemberCallv(c, f, typename CreatePackIndices<sizeof...(ArgTypes)>::type());
+				return c.ret();
+			}
+
 
 
 		}

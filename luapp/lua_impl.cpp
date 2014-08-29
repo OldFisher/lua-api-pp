@@ -130,10 +130,12 @@ namespace lua {
 //### C function wrappers ###################################################################################################
 
 		namespace wrap {
-			LUAPP_HO_INLINE StrippedFptr getAddress(lua_State* L)
+
+			LUAPP_HO_INLINE LightUserData getRawReserve(lua_State* L)
 			{
-				return reinterpret_cast<StrippedFptr>(lua_touserdata(L, lua_upvalueindex(1)));
+				return lua_touserdata(L, lua_upvalueindex(1));
 			}
+
 		}
 
 
@@ -619,15 +621,6 @@ namespace lua {
 		lua_pushlightuserdata(L, val);
 	}
 
-
-
-	LUAPP_HO_INLINE void Context::push(lua::_::wrap::StrippedFptr fn)
-	{
-		/*static*/ if(sizeof(void*) == sizeof(lua::_::wrap::StrippedFptr))		// Can store function ptr in LightUserData
-			lua_pushlightuserdata(L, reinterpret_cast<LightUserData>(fn));
-		else	// must store function ptr as full userdata
-			*reinterpret_cast<lua::_::wrap::StrippedFptr*>(lua_newuserdata(L, sizeof(lua::_::wrap::StrippedFptr))) = fn;
-	}
 
 
 

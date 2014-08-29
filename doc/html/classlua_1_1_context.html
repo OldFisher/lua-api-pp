@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-08-28-0</span>
+   &#160;<span id="projectnumber">2014-08-29-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -194,10 +194,18 @@ template&lt;typename... UpvalueTypes&gt; </td></tr>
 <tr class="memitem:affbac55a8c123d2b7bc7856a0b9004f5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#affbac55a8c123d2b7bc7856a0b9004f5">wrap</a> (ReturnValueType(*fn)(ArgTypes...)) noexcept</td></tr>
 <tr class="memdesc:affbac55a8c123d2b7bc7856a0b9004f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a wrapped Lua-compatible function from generic C/C++ function.  <a href="#affbac55a8c123d2b7bc7856a0b9004f5">More...</a><br /></td></tr>
 <tr class="separator:affbac55a8c123d2b7bc7856a0b9004f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae477d6fbf9e48497a758c9e8d6ecca34"><td class="memTemplParams" colspan="2">template&lt;typename Host , typename ReturnValueType , typename... ArgTypes&gt; </td></tr>
+<tr class="memitem:ae477d6fbf9e48497a758c9e8d6ecca34"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#ae477d6fbf9e48497a758c9e8d6ecca34">wrap</a> (ReturnValueType(Host::*fn)(ArgTypes...)) noexcept</td></tr>
+<tr class="memdesc:ae477d6fbf9e48497a758c9e8d6ecca34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a wrapped Lua-compatible function from member function.  <a href="#ae477d6fbf9e48497a758c9e8d6ecca34">More...</a><br /></td></tr>
+<tr class="separator:ae477d6fbf9e48497a758c9e8d6ecca34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe48daa5eee3659d8a4735176ff773ba"><td class="memTemplParams" colspan="2">template&lt;typename ReturnValueType , typename... ArgTypes&gt; </td></tr>
 <tr class="memitem:abe48daa5eee3659d8a4735176ff773ba"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#abe48daa5eee3659d8a4735176ff773ba">vwrap</a> (ReturnValueType(*fn)(ArgTypes...)) noexcept</td></tr>
 <tr class="memdesc:abe48daa5eee3659d8a4735176ff773ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a wrapped Lua-compatible function from generic C++ function discarding the call result.  <a href="#abe48daa5eee3659d8a4735176ff773ba">More...</a><br /></td></tr>
 <tr class="separator:abe48daa5eee3659d8a4735176ff773ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51f45045f66d09e81e14614e5ec900e0"><td class="memTemplParams" colspan="2">template&lt;typename Host , typename ReturnValueType , typename... ArgTypes&gt; </td></tr>
+<tr class="memitem:a51f45045f66d09e81e14614e5ec900e0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#a51f45045f66d09e81e14614e5ec900e0">vwrap</a> (ReturnValueType(Host::*fn)(ArgTypes...)) noexcept</td></tr>
+<tr class="memdesc:a51f45045f66d09e81e14614e5ec900e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a wrapped Lua-compatible function from member function discarding the call result.  <a href="#a51f45045f66d09e81e14614e5ec900e0">More...</a><br /></td></tr>
+<tr class="separator:a51f45045f66d09e81e14614e5ec900e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a007b86314fbbbe2fd83f1c4419636116"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#a007b86314fbbbe2fd83f1c4419636116">chunk</a> (const char *chunkText) noexcept</td></tr>
 <tr class="memdesc:a007b86314fbbbe2fd83f1c4419636116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compile a string into a chunk.  <a href="#a007b86314fbbbe2fd83f1c4419636116">More...</a><br /></td></tr>
 <tr class="separator:a007b86314fbbbe2fd83f1c4419636116"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -509,6 +517,35 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae477d6fbf9e48497a758c9e8d6ecca34"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a> wrap </td>
+          <td>(</td>
+          <td class="paramtype">ReturnValueType(Host::*)(ArgTypes...)&#160;</td>
+          <td class="paramname"><em>fn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a wrapped Lua-compatible function from member function. </p>
+<p>This function will create a Lua function wrapper that converts Lua arguments into native values, calls the C function with those arguments and converts the return value back into Lua value. First argument is expected to be convertible to Host. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="lua_8hpp.html#ad25819f0651a9390dee1d23b6c9335fa" title="Argument conversion binder. ">LUAPP_ARG_CONVERT</a> </dd>
+<dd>
+<a class="el" href="lua_8hpp.html#ace2dd220e8d4481f58a9e115d9e227bc" title="Return value conversion binder. ">LUAPP_RV_CONVERT</a> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="abe48daa5eee3659d8a4735176ff773ba"></a>
 <div class="memitem">
 <div class="memproto">
@@ -533,6 +570,33 @@ Static Public Attributes</h2></td></tr>
 
 <p>Create a wrapped Lua-compatible function from generic C++ function discarding the call result. </p>
 <p>This function will create a Lua function wrapper that converts Lua arguments into native values, calls the C function with those arguments, discards call result and returns nothing. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="lua_8hpp.html#ad25819f0651a9390dee1d23b6c9335fa" title="Argument conversion binder. ">LUAPP_ARG_CONVERT</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a51f45045f66d09e81e14614e5ec900e0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a> vwrap </td>
+          <td>(</td>
+          <td class="paramtype">ReturnValueType(Host::*)(ArgTypes...)&#160;</td>
+          <td class="paramname"><em>fn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a wrapped Lua-compatible function from member function discarding the call result. </p>
+<p>This function will create a Lua function wrapper that converts Lua arguments into native values, calls the C function with those arguments and converts the return value back into Lua value. First argument is expected to be convertible to Host. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="lua_8hpp.html#ad25819f0651a9390dee1d23b6c9335fa" title="Argument conversion binder. ">LUAPP_ARG_CONVERT</a> </dd></dl>
 
 </div>
 </div>
@@ -917,7 +981,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelua.html">lua</a></li><li class="navelem"><a class="el" href="classlua_1_1_context.html">Context</a></li>
-    <li class="footer">Generated on Thu Aug 28 2014 13:25:33 for Lua-API++ by
+    <li class="footer">Generated on Fri Aug 29 2014 13:31:54 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

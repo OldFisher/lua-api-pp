@@ -21,14 +21,30 @@ namespace lua {
 
 		namespace wrap {
 
-			typedef void (*StrippedFptr) ();
-
 			template<typename, typename ...>
 			Retval call(Context&);
+
+			template<typename, typename, typename ...>
+			Retval memberCall(Context&);
 
 			template<typename, typename ...>
 			Retval callv(Context&);
 
+			template<typename, typename, typename ...>
+			Retval memberCallv(Context&);
+
+			//! Envelope for wrapping member function pointers as raw userdata
+			template<typename T>
+			struct Envelope {
+
+				T data;
+
+				template<typename S>
+				Envelope(S&& src):
+					data(std::forward<S>(src))
+				{
+				}
+			};
 		}
 
 
@@ -338,12 +354,29 @@ namespace lua {
 		template<typename ReturnValueType, typename ... ArgTypes>
 		Temporary wrap(ReturnValueType (*fn)(ArgTypes...)) noexcept;
 
+		//! @brief Create a wrapped Lua-compatible function from member function.
+		//! @details This function will create a Lua function wrapper that converts Lua arguments into native values,
+		//! calls the C function with those arguments and converts the return value back into Lua value. First argument
+		//! is expected to be convertible to Host.
+		//! @sa LUAPP_ARG_CONVERT
+		//! @sa LUAPP_RV_CONVERT
+		template<typename Host, typename ReturnValueType, typename ... ArgTypes>
+		Temporary wrap(ReturnValueType (Host::*fn)(ArgTypes...)) noexcept;
+
 		//! @brief Create a wrapped Lua-compatible function from generic C++ function discarding the call result.
 		//! @details This function will create a Lua function wrapper that converts Lua arguments into native values,
 		//! calls the C function with those arguments, discards call result and returns nothing.
 		//! @sa LUAPP_ARG_CONVERT
 		template<typename ReturnValueType, typename ... ArgTypes>
 		Temporary vwrap(ReturnValueType (*fn)(ArgTypes...)) noexcept;
+
+		//! @brief Create a wrapped Lua-compatible function from member function discarding the call result.
+		//! @details This function will create a Lua function wrapper that converts Lua arguments into native values,
+		//! calls the C function with those arguments and converts the return value back into Lua value. First argument
+		//! is expected to be convertible to Host.
+		//! @sa LUAPP_ARG_CONVERT
+		template<typename Host, typename ReturnValueType, typename ... ArgTypes>
+		Temporary vwrap(ReturnValueType (Host::*fn)(ArgTypes...)) noexcept;
 
 		//! @brief Compile a string into a chunk.
 		//! @pre chunkText != nullptr
@@ -373,27 +406,63 @@ namespace lua {
 		}
 
 		template<typename ... UVTypes>
-		_::Lazy<_::lazyClosure<LightUserData, UVTypes...>> closure (LFunction fn, UVTypes&& ... up_values) noexcept
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<LFunction>, UVTypes...>> closure (LFunction fn, UVTypes&& ... up_values) noexcept
 		{
-			return _::Lazy<_::lazyClosure<LightUserData, UVTypes...>>(*this, _::LFunctionUWrapper, reinterpret_cast<LightUserData>(fn), std::forward<UVTypes>(up_values)...);
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<LFunction>, UVTypes...>>(*this, _::LFunctionUWrapper, fn, std::forward<UVTypes>(up_values)...);
 		}
 
 		template<typename ReturnValueType, typename ... ArgTypes>
-		_::Lazy<_::lazyClosure<_::wrap::StrippedFptr>> wrap(ReturnValueType (*fn)(ArgTypes...)) noexcept
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<ReturnValueType(*)(ArgTypes...)>>> wrap(ReturnValueType (*fn)(ArgTypes...)) noexcept
 		{
-			return _::Lazy<_::lazyClosure<_::wrap::StrippedFptr>>(*this, mkcf<_::wrap::call<ReturnValueType, ArgTypes...>>, reinterpret_cast<_::wrap::StrippedFptr>(fn));
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<decltype(fn)>>>(*this, mkcf<_::wrap::call<ReturnValueType, ArgTypes...>>, fn);
+		}
+
+		template<typename Host, typename ReturnValueType, typename ... ArgTypes>
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<ReturnValueType(Host::*)(ArgTypes...)>>> wrap(ReturnValueType (Host::*fn)(ArgTypes...)) noexcept
+		{
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<decltype(fn)>>>(*this, mkcf<_::wrap::memberCall<Host, ReturnValueType, ArgTypes...>>, fn);
+		}
+
+		template<typename Host, typename ReturnValueType, typename ... ArgTypes>
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<ReturnValueType(Host::*)(ArgTypes...) const>>> wrap(ReturnValueType (Host::*fn)(ArgTypes...) const) noexcept
+		{
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<decltype(fn)>>>(*this, mkcf<_::wrap::memberCall<Host, ReturnValueType, ArgTypes...>>, fn);
 		}
 
 		template<typename ... ArgTypes>
-		_::Lazy<_::lazyClosure<_::wrap::StrippedFptr>> wrap(void (*fn)(ArgTypes...)) noexcept
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<void (*)(ArgTypes...)>>> wrap(void (*fn)(ArgTypes...)) noexcept
 		{
-			return _::Lazy<_::lazyClosure<_::wrap::StrippedFptr>>(*this, mkcf<_::wrap::callv<void, ArgTypes...>>, reinterpret_cast<_::wrap::StrippedFptr>(fn));
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<decltype(fn)>>>(*this, mkcf<_::wrap::callv<void, ArgTypes...>>, fn);
+		}
+
+		template<typename Host, typename ... ArgTypes>
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<void (Host::*)(ArgTypes...)>>> wrap(void (Host::*fn)(ArgTypes...)) noexcept
+		{
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<decltype(fn)>>>(*this, mkcf<_::wrap::memberCallv<Host, void, ArgTypes...>>, fn);
+		}
+
+		template<typename Host, typename ... ArgTypes>
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<void (Host::*)(ArgTypes...) const>>> wrap(void (Host::*fn)(ArgTypes...) const) noexcept
+		{
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<decltype(fn)>>>(*this, mkcf<_::wrap::memberCallv<Host, void, ArgTypes...>>, fn);
 		}
 
 		template<typename ReturnValueType, typename ... ArgTypes>
-		_::Lazy<_::lazyClosure<_::wrap::StrippedFptr>> vwrap(ReturnValueType (*fn)(ArgTypes...)) noexcept
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<ReturnValueType(*)(ArgTypes...)>>> vwrap(ReturnValueType (*fn)(ArgTypes...)) noexcept
 		{
-			return _::Lazy<_::lazyClosure<_::wrap::StrippedFptr>>(*this, mkcf<_::wrap::callv<ReturnValueType, ArgTypes...>>, reinterpret_cast<_::wrap::StrippedFptr>(fn));
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<decltype(fn)>>>(*this, mkcf<_::wrap::callv<ReturnValueType, ArgTypes...>>, fn);
+		}
+
+		template<typename Host, typename ReturnValueType, typename ... ArgTypes>
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<ReturnValueType(Host::*)(ArgTypes...)>>> vwrap(ReturnValueType (Host::*fn)(ArgTypes...)) noexcept
+		{
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<decltype(fn)>>>(*this, mkcf<_::wrap::memberCallv<Host, ReturnValueType, ArgTypes...>>, fn);
+		}
+
+		template<typename Host, typename ReturnValueType, typename ... ArgTypes>
+		_::Lazy<_::lazyClosure<_::wrap::Envelope<ReturnValueType(Host::*)(ArgTypes...) const>>> vwrap(ReturnValueType (Host::*fn)(ArgTypes...) const) noexcept
+		{
+			return _::Lazy<_::lazyClosure<_::wrap::Envelope<decltype(fn)>>>(*this, mkcf<_::wrap::memberCallv<Host, ReturnValueType, ArgTypes...>>, fn);
 		}
 
 		_::Lazy<_::lazyChunk> chunk(const char* chunkText) noexcept
@@ -681,8 +750,15 @@ namespace lua {
 			setupUD(UserData<typename _::strip<UDT>::type>::classname);
 		}
 
-		//! Stripped function push
-		void push(const _::wrap::StrippedFptr fn);
+		//! Enveloped function ptr push
+		template<typename T>
+		void push(const _::wrap::Envelope<T>& fptr)
+		{
+			if(sizeof(T) == sizeof(LightUserData))
+				push(reinterpret_cast<LightUserData>(fptr.data));
+			else
+				*reinterpret_cast<T*>(allocateUD(sizeof(T))) = fptr.data;
+		}
 
 		//! Mass-push all arguments
 		template<typename VT, typename ... OVT>
@@ -704,6 +780,20 @@ namespace lua {
 		//! autowrap and push generic C function
 		template<typename RV, typename ... Args>
 		void push(RV (*fn)(Args...))
+		{
+			push(wrap(fn));
+		}
+
+		//! autowrap and push member function
+		template<typename Host, typename RV, typename ... Args>
+		void push(RV (Host::*fn)(Args...))
+		{
+			push(wrap(fn));
+		}
+
+		//! autowrap and push const member function
+		template<typename Host, typename RV, typename ... Args>
+		void push(RV (Host::*fn)(Args...) const)
 		{
 			push(wrap(fn));
 		}
