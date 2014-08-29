@@ -71,7 +71,9 @@ static Retval doReturn(Context& c)
 		vs[0],
 		v,
 		t,
-		c.global["val"]
+		c.global["val"],
+		-64ll,
+		65ull
 	);
 }
 
@@ -79,7 +81,7 @@ BOOST_FIXTURE_TEST_CASE(ReturnedTypes, fxContext)
 {
 	context.mt<Udata>() = Table::records(context);
 	Valset rv = context.closure(mkcf<doReturn>)();
-	BOOST_CHECK_EQUAL(rv.size(), 16);
+	BOOST_CHECK_EQUAL(rv.size(), 18);
 	BOOST_CHECK(rv[0].is<Nil>());
 	BOOST_CHECK(rv[1].is<bool>());
 	BOOST_CHECK(rv[1].cast<bool>());
@@ -110,6 +112,10 @@ BOOST_FIXTURE_TEST_CASE(ReturnedTypes, fxContext)
 	BOOST_CHECK(rv[14].is<Table>());
 	BOOST_CHECK(rv[15].is<double>());
 	BOOST_CHECK_EQUAL(rv[15].cast<double>(), 3.14);
+	BOOST_CHECK(rv[16].is<long long>());
+	BOOST_CHECK_EQUAL(rv[16].cast<long long>(), -64ll);
+	BOOST_CHECK(rv[17].is<unsigned long long>());
+	BOOST_CHECK_EQUAL(rv[17].cast<unsigned long long>(), 65ull);
 }
 
 

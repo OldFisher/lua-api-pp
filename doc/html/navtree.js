@@ -23,6 +23,7 @@ var NAVTREE =
         [ "Value set", "basic_concepts.html#basic_value_valset", null ]
       ] ]
     ] ],
+    [ "Motivational example", "motivational_example.html", null ],
     [ "Automatic stack management", "stack_management.html", null ],
     [ "Using the library", "usage.html", [
       [ "Using the library with your project", "usage.html#usage_basic", null ],

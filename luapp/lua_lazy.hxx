@@ -136,6 +136,16 @@ namespace lua{
 				return toTemporary();
 			}
 
+			operator long long () &&
+			{
+				return toTemporary();
+			}
+
+			operator unsigned long long() &&
+			{
+				return toTemporary();
+			}
+
 			operator float() &&
 			{
 				return toTemporary();

@@ -1,0 +1,152 @@
+/*
+* This file is part of Lua API++ library (https://github.com/OldFisher/lua-api-pp)
+* distributed under MIT License (http://opensource.org/licenses/MIT).
+* See license.txt for details.
+* (c) 2014 OldFisher
+*/
+
+/**
+* @page motivational_example Motivational example
+* To get a feeling of how the library is used, let's write a simple
+* example program. It will be line interpreter working with standard input
+* stream, with support of fixed-size numeric arrays.
+* We assume that Lua and Lua-API++ are already set up in our project.
+*
+* First, we start with the interpreter part. The @ref lua::State "State"
+* object will create Lua state and interpret strings.
+*
+* @code{.cpp}
+* #include <iostream>
+* #include <string>
+* #include <stdexcept>
+* using namespace std;
+*
+* #include <luapp/lua.hpp>
+* using namespace lua;
+*
+* void interpretLine(State& state, const string& line)
+* {
+*   try {
+*     state.runString(line); // Attempt to execute string
+*   } catch(std::exception& e) {
+*     cerr << e.what();  // Show error message in case of execution failure
+*   }
+* }
+*
+* void interpretStream(State& state, istream& in)
+* {
+*   string currentLine;
+*   while(!in.eof()) {  // Read and interpret lines from given stream
+*     getline(in, currentLine);
+*     interpretLine(state, currentLine);
+*   }
+* }
+*
+* int main(int argc, const char* argv[])
+* {
+*   State state;
+*   interpretStream(state, cin);
+* }
+* @endcode
+*
+* With this part done,  we can add support of arrays. We will use @c vector of <c><b>double</b></c> as
+* underlying native type. The simple Lua interface of our arrays will be as follows:
+* - global Lua function @c createArray will create array objects of given size;
+* - array objects will be accessed with integer indices for reading and writing elements;
+* - wrong index will produce an error;
+* - length operator will return amount of elements in the array.
+*
+* We can salvage some of the functions @c vector already has, so we need
+* only to register userdata and write a couple of functions.
+* @code{.cpp}
+* using namespace lua;
+*
+* #include <vector>
+* using dvec = vector<double>;  // Nice comfy name for array type
+* LUAPP_USERDATA(dvec, "numeric_array") // Register dvec as user data
+*
+* dvec aCreate(unsigned int size) // Function to create array
+* {
+*   return dvec(size);  // Created object gets moved into Lua-allocated storage, no expensive reallocations occur.
+* }
+*
+* void aWrite(dvec& self, unsigned int index, double val)  // Write a number into array
+* {
+*   self.at(index) = val;  // Use .at() for checked access
+* }
+* @endcode
+*
+* Now we are ready for the final step: setting up the environment.
+* It will require two things: associate metatable with dvec and define array-creating function.
+* The function that does it needs access to Lua state, so it has to be @ref lua::LFunction "LFunction".
+* @code{.cpp}
+* using namespace lua;  // For automatic link generation
+* Retval setup(Context& c)
+* {
+*   c.mt<dvec>() = // Context's mt() function gives access to userdata metatable
+*     Table::records(ctx,        // Assign to MT newly created table filled with key-value pairs
+*     "__index",    dvec::at,    // For reading values with index checking, salvage vector::at()
+*     "__newindex", aWrite,      // Checked write
+*     "__len",      dvec::size,  // Salvage vector::size for length operator
+*     "__gc",       dvec::~dvec  // Salvage vector's destructor for garbage collection
+*   );
+*   c.global["createArray"] = aCreate;  // Array creation function is a global value
+* }
+* @endcode
+*
+* This setup function will have to be called from main() by @ref lua::State "State" object,
+* so it will need to be transformed into Lua compatible C function with @ref lua::mkcf "mkcf" template.
+* Here is the final result:
+* @code{.cpp}
+* #include <iostream>
+* #include <string>
+* #include <vector>
+* #include <stdexcept>
+* using namespace std;
+*
+* #include <luapp/lua.hpp>
+* using namespace lua;
+*
+* using dvec = vector<double>;
+* LUAPP_USERDATA(dvec, "Number array")
+*
+* dvec aCreate(unsigned int size) { return dvec(size); }
+* void aWrite(dvec& self, unsigned int index, double val) { self.at(index) = val; }
+*
+* Retval setup(Context& c)
+* {
+*   ctx.mt<dvec>() = Table::records(c,
+*     "__index",    dvec::at,
+*     "__newindex", aWrite,
+*     "__len",      dvec::size,
+*     "__gc",       dvec::~dvec
+*   );
+*   c.global["createArray"] = aCreate;
+* }
+*
+* void interpretLine(State& state, const string& line)
+* {
+*   try {
+*     state.runString(line);
+*   } catch(std::exception& e) {
+*     cerr << e.what();
+*   }
+* }
+*
+* void interpretStream(State& state, istream& in)
+* {
+*   string currentLine;
+*   while(!in.eof()){
+*     getline(in, currentLine);
+*     interpretLine(state, currentLine);
+*   }
+* }
+*
+* int main(int argc, const char* argv[])
+* {
+*   State state;
+*   state.call(mkcf<setup>);
+*   interpretStream(state, cin);
+* }
+* @endcode
+*/

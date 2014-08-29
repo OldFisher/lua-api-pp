@@ -9,16 +9,18 @@
 * @page changelog Changelog
 *
 * @section changes_2014_08_29_0 2014-08-29-0
-* @li Added auto-wrapping of member functions.
+* @li Added auto-wrapping of member functions;
+* @li added support for <b>long long</b> and <b>unsigned long long</b> native types;
+* @li added motivational example.
 *
 * @section changes_2014_08_28_0 2014-08-28-0
-* @li Temporary interface marked as rvalue-only
-* @li Added missing std::string counterparts to some functions in @ref lua::State "State"
-* and @ref lua::Context "Context"
-* @li Added creation of @ref lua::Context::closure "closures" from @ref lua::LFunction "LFunction"
-* and automatic promotion of @ref lua::LFunction "LFunction".
-* @li Added automatic promotion of generic C functions.
+* @li Temporary interface marked as rvalue-only;
+* @li added missing std::string counterparts to some functions in @ref lua::State "State"
+* and @ref lua::Context "Context";
+* @li added creation of @ref lua::Context::closure "closures" from @ref lua::LFunction "LFunction"
+* and automatic promotion of @ref lua::LFunction "LFunction";
+* @li added automatic promotion of generic C functions.
 *
 * @section changes_2014_08_18_0 2014-08-18-0
-* - Initial release.
+* @li Initial release.
 */

@@ -681,6 +681,16 @@ namespace lua {
 			push(double(val));
 		}
 
+		void push(long long val) noexcept
+		{
+			push(double(val));
+		}
+
+		void push(unsigned long long val) noexcept
+		{
+			push(double(val));
+		}
+
 		void push(float val) noexcept
 		{
 			push(double(val));

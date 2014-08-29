@@ -94,7 +94,9 @@
 * with @ref LUAPP_USERDATA macro are recognised as such and can be implicitly promoted to Lua values. Lua values
 * can be converted to reference to user type explicitly, using @ref lua::Valref::cast "cast" method.
 *
-* Be sure to @ref lua::Context::mt "assign" individual metatables to all userdata types when initializing environment: metatables are used to identify userdata properly.
+* Be sure to @ref lua::Context::mt "assign" individual metatables to all userdata types when
+* initializing environment: metatables are used to identify userdata properly. Casting to userdata
+* without assigned metatable will always fail.
 * When a new userdata is created, it is automatically assigned corresponding metatable.
 *
 * @subsection basic_value_types Temporary value handling

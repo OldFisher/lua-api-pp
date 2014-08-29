@@ -320,6 +320,38 @@ namespace lua {
 	}
 
 
+	template<> LUAPP_HO_INLINE long long Valref::cast<long long>() const
+	{
+#if(LUAPP_API_VERSION >= 52)
+		int isnum = 0;
+		lua_Number n = lua_tonumberx(context, index, &isnum);
+		if(!isnum)
+			throw std::runtime_error("Lua: bad cast to number (long long)");
+#else
+		if(!lua_isnumber(context, index))
+			throw std::runtime_error("Lua: bad cast to number (long long)");
+		lua_Number n = lua_tonumber(context, index);
+#endif
+		return static_cast<long long>(n);
+	}
+
+
+	template<> LUAPP_HO_INLINE unsigned long long Valref::cast<unsigned long long>() const
+	{
+#if(LUAPP_API_VERSION >= 52)
+		int isnum = 0;
+		lua_Number n = lua_tonumberx(context, index, &isnum);
+		if(!isnum)
+			throw std::runtime_error("Lua: bad cast to number (unsigned long long)");
+#else
+		if(!lua_isnumber(context, index))
+			throw std::runtime_error("Lua: bad cast to number (unsigned long long)");
+		lua_Number n = lua_tonumber(context, index);
+#endif
+		return static_cast<unsigned long long>(n);
+	}
+
+
 	template<> LUAPP_HO_INLINE float Valref::cast<float>() const
 	{
 #if(LUAPP_API_VERSION >= 52)
@@ -413,6 +445,16 @@ namespace lua {
 		return lua_isnumber(context, index) != 0;
 	}
 
+	template<> LUAPP_HO_INLINE bool Valref::is<long long>() const noexcept
+	{
+		return lua_isnumber(context, index) != 0;
+	}
+
+	template<> LUAPP_HO_INLINE bool Valref::is<unsigned long long>() const noexcept
+	{
+		return lua_isnumber(context, index) != 0;
+	}
+
 	template<> LUAPP_HO_INLINE bool Valref::is<float>() const noexcept
 	{
 		return lua_isnumber(context, index) != 0;
@@ -484,6 +526,8 @@ namespace lua {
 	LUAPP_HO_INLINE Valref::operator bool () const {return cast<bool>();}
 	LUAPP_HO_INLINE Valref::operator int () const {return cast<int>();}
 	LUAPP_HO_INLINE Valref::operator unsigned int() const {return cast<unsigned int>();}
+	LUAPP_HO_INLINE Valref::operator long long () const {return cast<long long>();}
+	LUAPP_HO_INLINE Valref::operator unsigned long long() const {return cast<unsigned long long>();}
 	LUAPP_HO_INLINE Valref::operator float() const {return cast<float>();}
 	LUAPP_HO_INLINE Valref::operator double() const {return cast<double>();}
 	LUAPP_HO_INLINE Valref::operator const char* () const  {return cast<const char*>();}

@@ -196,6 +196,8 @@ namespace lua {
 
 	template struct UserData<int>;
 	template struct UserData<unsigned int>;
+	template struct UserData<long long>;
+	template struct UserData<unsigned long long>;
 	template struct UserData<void>;
 	template struct UserData<float>;
 	template struct UserData<double>;
@@ -244,6 +246,16 @@ namespace lua {
 	};
 
 	template <> struct TypeID<unsigned int>
+	{
+		static constexpr ValueType typeID = ValueType::Number;
+	};
+
+	template <> struct TypeID<long long>
+	{
+		static constexpr ValueType typeID = ValueType::Number;
+	};
+
+	template <> struct TypeID<unsigned long long>
 	{
 		static constexpr ValueType typeID = ValueType::Number;
 	};
@@ -512,6 +524,8 @@ namespace lua {
 		operator bool () const;			//!< @details Never fails.
 		operator int () const;			//!< @throw std::runtime_error if the value type is incompatible. @note Strings may be converted to numbers.
 		operator unsigned int() const;	//!< @throw std::runtime_error if the value type is incompatible. @note Strings may be converted to numbers.
+		operator long long() const;			//!< @throw std::runtime_error if the value type is incompatible. @note Strings may be converted to numbers.
+		operator unsigned long long() const;	//!< @throw std::runtime_error if the value type is incompatible. @note Strings may be converted to numbers.
 		operator float() const;			//!< @throw std::runtime_error if the value type is incompatible. @note Strings may be converted to numbers.
 		operator double() const;			//!< @throw std::runtime_error if the value type is incompatible. @note Strings may be converted to numbers.
 		operator CFunction () const;		//!< @throw std::runtime_error if the value type is incompatible.

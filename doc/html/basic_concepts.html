@@ -149,7 +149,7 @@ Native values</h2>
 <h2><a class="anchor" id="basic_values_user"></a>
 User values</h2>
 <p>Lua API++ library supports user-type handling in a minimally intrusive way. Objects of type that is bound as user-data with <a class="el" href="lua_8hpp.html#aa5b908481d9041fe334bfd1674ded658">LUAPP_USERDATA</a> macro are recognised as such and can be implicitly promoted to Lua values. Lua values can be converted to reference to user type explicitly, using <a class="el" href="classlua_1_1_valref.html#a5c6a91e9b5e988939974679033c337dc">cast</a> method.</p>
-<p>Be sure to <a class="el" href="classlua_1_1_context.html#a1e702413d170d8cdc00ae9374d7664c7">assign</a> individual metatables to all userdata types when initializing environment: metatables are used to identify userdata properly. When a new userdata is created, it is automatically assigned corresponding metatable.</p>
+<p>Be sure to <a class="el" href="classlua_1_1_context.html#a1e702413d170d8cdc00ae9374d7664c7">assign</a> individual metatables to all userdata types when initializing environment: metatables are used to identify userdata properly. Casting to userdata without assigned metatable will always fail. When a new userdata is created, it is automatically assigned corresponding metatable.</p>
 <h2><a class="anchor" id="basic_value_types"></a>
 Temporary value handling</h2>
 <p>This documentation includes numerous references to <a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a> type. What is it?</p>
@@ -174,7 +174,7 @@ Value set</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Aug 29 2014 13:31:54 for Lua-API++ by
+    <li class="footer">Generated on Fri Aug 29 2014 15:18:01 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

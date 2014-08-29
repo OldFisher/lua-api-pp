@@ -125,6 +125,68 @@ BOOST_FIXTURE_TEST_CASE(UnsignedInt, fxGlobalVal)
 
 
 
+BOOST_FIXTURE_TEST_CASE(LongLong, fxGlobalVal)
+{
+    const long long src = -42;
+    v = src;
+	BOOST_CHECK(v.type() == lua::ValueType::Number);
+	BOOST_CHECK(v.is<long long>());
+	BOOST_CHECK(v.cast<bool>() == true);
+	{
+		const long long converted = v;
+		BOOST_CHECK(converted == src);
+	}
+	BOOST_CHECK(v.cast<long long>() == src);
+	BOOST_CHECK(v.optcast<long long>(src - 1) == src);
+	BOOST_CHECK(v.optcast<lua::LightUserData>(nullptr) == nullptr);
+
+    l = src;
+	BOOST_CHECK(l.type() == lua::ValueType::Number);
+	BOOST_CHECK(l.is<long long>());
+	BOOST_CHECK(l.cast<bool>() == true);
+	{
+		const long long converted = l;
+		BOOST_CHECK(converted == src);
+	}
+	BOOST_CHECK(l.cast<long long>() == src);
+	BOOST_CHECK(l.optcast<long long>(src - 1) == src);
+	BOOST_CHECK(l.optcast<lua::LightUserData>(nullptr) == nullptr);
+}
+
+
+
+
+BOOST_FIXTURE_TEST_CASE(UnsignedLongLong, fxGlobalVal)
+{
+    const unsigned long long src = 42;
+    v = src;
+	BOOST_CHECK(v.type() == lua::ValueType::Number);
+	BOOST_CHECK(v.is<unsigned long long>());
+	BOOST_CHECK(v.cast<bool>() == true);
+	{
+		const unsigned long long converted = v;
+		BOOST_CHECK(converted == src);
+	}
+	BOOST_CHECK(v.cast<unsigned long long>() == src);
+	BOOST_CHECK(v.optcast<unsigned long long>(src - 1) == src);
+	BOOST_CHECK(v.optcast<lua::LightUserData>(nullptr) == nullptr);
+
+    l = src;
+	BOOST_CHECK(l.type() == lua::ValueType::Number);
+	BOOST_CHECK(l.is<unsigned long long>());
+	BOOST_CHECK(l.cast<bool>() == true);
+	{
+		const unsigned long long converted = l;
+		BOOST_CHECK(converted == src);
+	}
+	BOOST_CHECK(l.cast<unsigned long long>() == src);
+	BOOST_CHECK(l.optcast<unsigned long long>(src - 1) == src);
+	BOOST_CHECK(l.optcast<lua::LightUserData>(nullptr) == nullptr);
+}
+
+
+
+
 BOOST_FIXTURE_TEST_CASE(Float, fxGlobalVal)
 {
     const float src = 3.14f;

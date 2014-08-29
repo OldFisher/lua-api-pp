@@ -24,16 +24,17 @@
 *
 * The library requires C++11 compatible compiler.
 *
-* To get acquainted, read about @ref basic_concepts "basic concepts" or @ref usage "how to use" it.
+* To get acquainted, read about @ref basic_concepts "basic concepts",
+* @ref motivational_example "motivational example" or @ref usage "how to use" it.
 *
 * This library is @ref main_license "licensed" under terms of MIT license (same as <a href="http://www.lua.org/">Lua</a> itself)
 * and maintained on <a href="https://github.com/OldFisher/lua-api-pp">GitHub</a>
-*                   
+*
 * @page main_license License
 * The MIT License (MIT) <a href="http://opensource.org/licenses/MIT">http://opensource.org/licenses/MIT</a>
 *
 * Copyright (c) 2014 OldFisher
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 *  of this software and associated documentation files (the "Software"), to deal
 *  in the Software without restriction, including without limitation the rights

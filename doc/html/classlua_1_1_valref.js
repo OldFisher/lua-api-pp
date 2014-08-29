@@ -7,6 +7,8 @@ var classlua_1_1_valref =
     [ "operator bool", "classlua_1_1_valref.html#aa385aa18f5e42db5a415c25a90f4193d", null ],
     [ "operator int", "classlua_1_1_valref.html#a6a6c0aaee2d785b48a1e57710ceb586b", null ],
     [ "operator unsigned int", "classlua_1_1_valref.html#ad3458486e208bbd7b782352192c6af82", null ],
+    [ "operator long long", "classlua_1_1_valref.html#abd8274a978e8e537087d8016adf70098", null ],
+    [ "operator unsigned long long", "classlua_1_1_valref.html#aeccf843b2fc5269ee8cf274a32f9714d", null ],
     [ "operator float", "classlua_1_1_valref.html#ae80f6077a5ac6ce1710cda5b30039890", null ],
     [ "operator double", "classlua_1_1_valref.html#a5665dbc337111463ad23d3dba99f7ce3", null ],
     [ "operator CFunction", "classlua_1_1_valref.html#aa43f86f5bacedf496c2494ac7eb2f692", null ],
