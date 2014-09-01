@@ -115,13 +115,14 @@
 *
 * Retval setup(Context& c)
 * {
-*   ctx.mt<dvec>() = Table::records(c,
+*   c.mt<dvec>() = Table::records(c,
 *     "__index",    dvec::at,
 *     "__newindex", aWrite,
 *     "__len",      dvec::size,
 *     "__gc",       dvec::~dvec
 *   );
 *   c.global["createArray"] = aCreate;
+*   return c.ret();
 * }
 *
 * void interpretLine(State& state, const string& line)

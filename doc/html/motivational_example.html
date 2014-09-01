@@ -185,13 +185,14 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="line"></div>
 <div class="line"><a class="code" href="classlua_1_1_retval.html">Retval</a> setup(<a class="code" href="classlua_1_1_context.html">Context</a>&amp; c)</div>
 <div class="line">{</div>
-<div class="line">  ctx.mt&lt;dvec&gt;() = Table::records(c,</div>
+<div class="line">  c.<a class="code" href="classlua_1_1_context.html#a1e702413d170d8cdc00ae9374d7664c7">mt</a>&lt;dvec&gt;() = Table::records(c,</div>
 <div class="line">    <span class="stringliteral">&quot;__index&quot;</span>,    dvec::at,</div>
 <div class="line">    <span class="stringliteral">&quot;__newindex&quot;</span>, aWrite,</div>
 <div class="line">    <span class="stringliteral">&quot;__len&quot;</span>,      dvec::size,</div>
 <div class="line">    <span class="stringliteral">&quot;__gc&quot;</span>,       dvec::~dvec</div>
 <div class="line">  );</div>
 <div class="line">  c.<a class="code" href="classlua_1_1_context.html#a7c0195836dcfe548f10ec4db184cde4b">global</a>[<span class="stringliteral">&quot;createArray&quot;</span>] = aCreate;</div>
+<div class="line">  <span class="keywordflow">return</span> c.<a class="code" href="classlua_1_1_context.html#a3c8e9a2e4b05f93984c482ce00f2781a">ret</a>();</div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line"><span class="keywordtype">void</span> interpretLine(<a class="code" href="classlua_1_1_state.html">State</a>&amp; state, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; line)</div>
@@ -223,7 +224,7 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Aug 29 2014 15:18:01 for Lua-API++ by
+    <li class="footer">Generated on Mon Sep 1 2014 08:46:07 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
