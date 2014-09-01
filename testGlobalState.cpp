@@ -119,12 +119,33 @@ BOOST_FIXTURE_TEST_CASE(stringExecuteGood, fxSignal)
 
 
 
-BOOST_FIXTURE_TEST_CASE(stringExecuteBad, fxSignal)
+BOOST_FIXTURE_TEST_CASE(stringExecuteBad, fxState)
 {
 	BOOST_REQUIRE_THROW(gs.runString("{"), std::runtime_error);
 	BOOST_REQUIRE_THROW(gs.runString(string("{")), std::runtime_error);
 }
 
 
+
+#ifdef LUAPP_SAFE_EXCEPTIONS
+static void fnNestedError()
+{
+	throw std::logic_error("Nested error");
+}
+
+lua::Retval lNestedError(lua::Context& c)
+{
+	fnNestedError();
+	return c.ret();
+}
+
+BOOST_FIXTURE_TEST_CASE(nestedErrors, fxContext)
+{
+	BOOST_REQUIRE_THROW(gs.call(lua::mkcf<lNestedError>), std::runtime_error);
+	BOOST_MESSAGE("mkcf call successful");
+	context.global["fn"] = fnNestedError;
+	BOOST_REQUIRE_THROW(gs.runString("fn()"), std::runtime_error);
+}
+#endif // LUAPP_SAFE_EXCEPTIONS
 
 BOOST_AUTO_TEST_SUITE_END()

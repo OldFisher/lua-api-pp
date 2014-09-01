@@ -8,6 +8,9 @@
 /*!
 * @page changelog Changelog
 *
+* @section changes_2014_09_01_0 2014-09-01-0
+* @li Fixed issue with wrapping functions that returned a reference.
+*
 * @section changes_2014_08_29_0 2014-08-29-0
 * @li Added auto-wrapping of member functions;
 * @li added support for <b>long long</b> and <b>unsigned long long</b> native types;

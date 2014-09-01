@@ -130,7 +130,7 @@ namespace lua {
 //! @endcode
 //! @note Use this macro outside of namespaces, functions, classes etc.
 //! @see lua::Context::wrap
-#define LUAPP_RV_CONVERT(rv_type, body) namespace lua { namespace _ { namespace wrap { template<> inline lua::Retval rvCvt<rv_type>(rv_type&& val, lua::Context& context) body }}}
+#define LUAPP_RV_CONVERT(rv_type, body) namespace lua { namespace _ { namespace wrap { template<> inline lua::Retval rvCvt<rv_type>(rv_type val, lua::Context& context) body }}}
 
 
 #ifdef LUAPP_HEADER_ONLY

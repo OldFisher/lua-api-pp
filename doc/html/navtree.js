@@ -46,9 +46,13 @@ var NAVTREE =
       [ "Compatibility", "faq.html#faq_compat", [
         [ "Which versions of Lua does this library support?", "faq.html#faq_compat_versions", null ],
         [ "Is this library compatible with LuaJIT?", "faq.html#faq_compat_luajit", null ]
+      ] ],
+      [ "Known problems", "faq.html#faq_known_problems", [
+        [ "SJLJ exceptions", "faq.html#faq_known_problems_exceptions", null ]
       ] ]
     ] ],
     [ "Changelog", "changelog.html", [
+      [ "2014-09-01-0", "changelog.html#changes_2014_09_01_0", null ],
       [ "2014-08-29-0", "changelog.html#changes_2014_08_29_0", null ],
       [ "2014-08-28-0", "changelog.html#changes_2014_08_28_0", null ],
       [ "2014-08-18-0", "changelog.html#changes_2014_08_18_0", null ]

@@ -17,11 +17,12 @@
 * @subsection faq_compat_luajit Is this library compatible with LuaJIT?
 * Yes, all tests pass with LuaJIT in @ref compatibility_5_1 "5.1" compatibility mode.
 *
-*
-*
-*
-*
-*
+* @section faq_known_problems Known problems
+* @subsection faq_known_problems_exceptions SJLJ exceptions
+* Using SJLJ mechanism for exceptions may create conflicts with Lua error reporting mechanism.
+* It happens on chained exception-error-exception conversions (most probable point
+* being State::call and State::run functions that encounter exception-raising error in
+* Lua-API++ powered functions).
 *
 *
 *

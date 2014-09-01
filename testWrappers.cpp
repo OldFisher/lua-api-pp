@@ -141,6 +141,11 @@ static int vwrapped(const string& x, int y)
 	return 0;
 }
 
+static void failWrapped()
+{
+	throw std::runtime_error("Wrapped fail");
+}
+
 BOOST_FIXTURE_TEST_CASE(SimpleWrappers, fxContext)
 {
 	signal = 0;
@@ -170,6 +175,42 @@ BOOST_FIXTURE_TEST_CASE(SimpleWrappers, fxContext)
 	context.global["fn"] = context.vwrap(vwrapped);
 	context.global["fn"]("12345", 4);
 	BOOST_CHECK_EQUAL(signal, 9);
+
+	context.global["fn"] = context.wrap(failWrapped);
+	{
+		Valset vs = context.global["fn"].pcall();
+		BOOST_CHECK(!vs.success());
+		BOOST_CHECK(vs[0].cast<string>().find("Wrapped fail") != string::npos);
+	}
+}
+
+
+
+static const double cd1 = 3.14, cd2 = 2.7;
+static double d1 = 3.14, d2 = 2.7;
+
+static const double& crefwrapped(int idx)
+{
+	return idx ? cd1 : cd2;
+}
+
+static double& refwrapped(int idx)
+{
+	return idx ? d1 : d2;
+}
+
+BOOST_FIXTURE_TEST_CASE(ReturningReferences, fxContext)
+{
+	context.global["fn"] = context.wrap(crefwrapped);
+	const double crv1 = context.global["fn"](1);
+	BOOST_CHECK_EQUAL(crv1, 3.14);
+	const double crv2 = context.global["fn"](0);
+	BOOST_CHECK_EQUAL(crv2, 2.7);
+	context.global["fn"] = context.wrap(refwrapped);
+	const double rv1 = context.global["fn"](1);
+	BOOST_CHECK_EQUAL(crv1, 3.14);
+	const double rv2 = context.global["fn"](0);
+	BOOST_CHECK_EQUAL(crv2, 2.7);
 }
 
 

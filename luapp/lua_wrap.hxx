@@ -41,7 +41,7 @@ namespace lua {
 			//! Pushes the value "as is".
 			//! Specialize if necessary.
 			template<typename ResultType>
-			inline Retval rvCvt(ResultType&& rv, Context& s)
+			inline Retval rvCvt(ResultType rv, Context& s)
 			{
 				return s.ret(rv);
 			}

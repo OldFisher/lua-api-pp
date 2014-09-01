@@ -17,11 +17,8 @@
 *
 * @code{.cpp}
 * #include <iostream>
-* #include <string>
-* #include <stdexcept>
-* using namespace std;
-*
 * #include <luapp/lua.hpp>
+* using namespace std;
 * using namespace lua;
 *
 * void interpretLine(State& state, const string& line)
@@ -29,7 +26,7 @@
 *   try {
 *     state.runString(line); // Attempt to execute string
 *   } catch(std::exception& e) {
-*     cerr << e.what();  // Show error message in case of execution failure
+*     cerr << e.what() << endl;  // Show error message in case of execution failure
 *   }
 * }
 *
@@ -70,6 +67,11 @@
 *   return dvec(size);  // Created object gets moved into Lua-allocated storage, no expensive reallocations occur.
 * }
 *
+* void aDestroy(dvec& self) // Destruction function is required because taking destructor address is forbidden
+* {
+*   self.~dvec();  // Explicitly destroy object placed in memory allocated by Lua
+* }
+*
 * void aWrite(dvec& self, unsigned int index, double val)  // Write a number into array
 * {
 *   self.at(index) = val;  // Use .at() for checked access
@@ -85,10 +87,10 @@
 * {
 *   c.mt<dvec>() = // Context's mt() function gives access to userdata metatable
 *     Table::records(ctx,        // Assign to MT newly created table filled with key-value pairs
-*     "__index",    dvec::at,    // For reading values with index checking, salvage vector::at()
+*     "__index",    static_cast<double& (dvec::*)(size_t)>(&dvec::at),    // Explicitly select non-const overload
 *     "__newindex", aWrite,      // Checked write
 *     "__len",      dvec::size,  // Salvage vector::size for length operator
-*     "__gc",       dvec::~dvec  // Salvage vector's destructor for garbage collection
+*     "__gc",       aDestroy     // Salvage vector's destructor for garbage collection
 *   );
 *   c.global["createArray"] = aCreate;  // Array creation function is a global value
 * }
@@ -99,27 +101,25 @@
 * Here is the final result:
 * @code{.cpp}
 * #include <iostream>
-* #include <string>
 * #include <vector>
-* #include <stdexcept>
-* using namespace std;
-*
 * #include <luapp/lua.hpp>
 * using namespace lua;
+* using namespace std;
 *
 * using dvec = vector<double>;
 * LUAPP_USERDATA(dvec, "Number array")
 *
 * dvec aCreate(unsigned int size) { return dvec(size); }
+* void aDestroy(dvec& self) {self.~dvec();}
 * void aWrite(dvec& self, unsigned int index, double val) { self.at(index) = val; }
 *
 * Retval setup(Context& c)
 * {
 *   c.mt<dvec>() = Table::records(c,
-*     "__index",    dvec::at,
+*     "__index",    static_cast<double& (dvec::*)(size_t)>(&dvec::at),
 *     "__newindex", aWrite,
 *     "__len",      dvec::size,
-*     "__gc",       dvec::~dvec
+*     "__gc",       aDestroy
 *   );
 *   c.global["createArray"] = aCreate;
 *   return c.ret();
@@ -130,7 +130,7 @@
 *   try {
 *     state.runString(line);
 *   } catch(std::exception& e) {
-*     cerr << e.what();
+*     cerr << e.what() << endl;
 *   }
 * }
 *

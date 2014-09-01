@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-08-29-0</span>
+   &#160;<span id="projectnumber">2014-09-01-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -105,11 +105,8 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="textblock"><p>To get a feeling of how the library is used, let's write a simple example program. It will be line interpreter working with standard input stream, with support of fixed-size numeric arrays. We assume that Lua and Lua-API++ are already set up in our project.</p>
 <p>First, we start with the interpreter part. The <a class="el" href="classlua_1_1_state.html">State</a> object will create Lua state and interpret strings.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
-<div class="line"><span class="keyword">using namespace </span><a class="code" href="namespacestd.html">std</a>;</div>
-<div class="line"></div>
 <div class="line"><span class="preprocessor">#include &lt;<a class="code" href="lua_8hpp.html">luapp/lua.hpp</a>&gt;</span></div>
+<div class="line"><span class="keyword">using namespace </span><a class="code" href="namespacestd.html">std</a>;</div>
 <div class="line"><span class="keyword">using namespace </span><a class="code" href="namespacelua.html">lua</a>;</div>
 <div class="line"></div>
 <div class="line"><span class="keywordtype">void</span> interpretLine(<a class="code" href="classlua_1_1_state.html">State</a>&amp; state, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; line)</div>
@@ -117,7 +114,7 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="line">  <span class="keywordflow">try</span> {</div>
 <div class="line">    state.<a class="code" href="classlua_1_1_state.html#aba8b923ec2ff1b88ccb75ab9cf24bf6d">runString</a>(line); <span class="comment">// Attempt to execute string</span></div>
 <div class="line">  } <span class="keywordflow">catch</span>(std::exception&amp; e) {</div>
-<div class="line">    cerr &lt;&lt; e.what();  <span class="comment">// Show error message in case of execution failure</span></div>
+<div class="line">    cerr &lt;&lt; e.what() &lt;&lt; endl;  <span class="comment">// Show error message in case of execution failure</span></div>
 <div class="line">  }</div>
 <div class="line">}</div>
 <div class="line"></div>
@@ -152,6 +149,11 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="line">  <span class="keywordflow">return</span> dvec(size);  <span class="comment">// Created object gets moved into Lua-allocated storage, no expensive reallocations occur.</span></div>
 <div class="line">}</div>
 <div class="line"></div>
+<div class="line"><span class="keywordtype">void</span> aDestroy(dvec&amp; <span class="keyword">self</span>) <span class="comment">// Destruction function is required because taking destructor address is forbidden</span></div>
+<div class="line">{</div>
+<div class="line">  <span class="keyword">self</span>.~dvec();  <span class="comment">// Explicitly destroy object placed in memory allocated by Lua</span></div>
+<div class="line">}</div>
+<div class="line"></div>
 <div class="line"><span class="keywordtype">void</span> aWrite(dvec&amp; <span class="keyword">self</span>, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, <span class="keywordtype">double</span> val)  <span class="comment">// Write a number into array</span></div>
 <div class="line">{</div>
 <div class="line">  <span class="keyword">self</span>.at(index) = val;  <span class="comment">// Use .at() for checked access</span></div>
@@ -161,35 +163,33 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="line">{</div>
 <div class="line">  c.<a class="code" href="classlua_1_1_context.html#a1e702413d170d8cdc00ae9374d7664c7">mt</a>&lt;dvec&gt;() = <span class="comment">// Context&#39;s mt() function gives access to userdata metatable</span></div>
 <div class="line">    <a class="code" href="classlua_1_1_table.html#a196b5d9f1a833e25aa4d80536f279b0a">Table::records</a>(ctx,        <span class="comment">// Assign to MT newly created table filled with key-value pairs</span></div>
-<div class="line">    <span class="stringliteral">&quot;__index&quot;</span>,    dvec::at,    <span class="comment">// For reading values with index checking, salvage vector::at()</span></div>
+<div class="line">    <span class="stringliteral">&quot;__index&quot;</span>,    <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span>&amp; (dvec::*)(<span class="keywordtype">size_t</span>)<span class="keyword">&gt;</span>(&amp;dvec::at),    <span class="comment">// Explicitly select non-const overload</span></div>
 <div class="line">    <span class="stringliteral">&quot;__newindex&quot;</span>, aWrite,      <span class="comment">// Checked write</span></div>
 <div class="line">    <span class="stringliteral">&quot;__len&quot;</span>,      dvec::size,  <span class="comment">// Salvage vector::size for length operator</span></div>
-<div class="line">    <span class="stringliteral">&quot;__gc&quot;</span>,       dvec::~dvec  <span class="comment">// Salvage vector&#39;s destructor for garbage collection</span></div>
+<div class="line">    <span class="stringliteral">&quot;__gc&quot;</span>,       aDestroy     <span class="comment">// Salvage vector&#39;s destructor for garbage collection</span></div>
 <div class="line">  );</div>
 <div class="line">  c.<a class="code" href="classlua_1_1_context.html#a7c0195836dcfe548f10ec4db184cde4b">global</a>[<span class="stringliteral">&quot;createArray&quot;</span>] = aCreate;  <span class="comment">// Array creation function is a global value</span></div>
 <div class="line">}</div>
 </div><!-- fragment --><p>This setup function will have to be called from main() by <a class="el" href="classlua_1_1_state.html">State</a> object, so it will need to be transformed into Lua compatible C function with <a class="el" href="namespacelua.html#a0fb38d48b0f92faa1fb0b9cf2553ebd9">mkcf</a> template. Here is the final result: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
-<div class="line"><span class="keyword">using namespace </span><a class="code" href="namespacestd.html">std</a>;</div>
-<div class="line"></div>
 <div class="line"><span class="preprocessor">#include &lt;<a class="code" href="lua_8hpp.html">luapp/lua.hpp</a>&gt;</span></div>
 <div class="line"><span class="keyword">using namespace </span><a class="code" href="namespacelua.html">lua</a>;</div>
+<div class="line"><span class="keyword">using namespace </span><a class="code" href="namespacestd.html">std</a>;</div>
 <div class="line"></div>
 <div class="line"><span class="keyword">using</span> dvec = vector&lt;double&gt;;</div>
 <div class="line"><a class="code" href="lua_8hpp.html#aa5b908481d9041fe334bfd1674ded658">LUAPP_USERDATA</a>(dvec, <span class="stringliteral">&quot;Number array&quot;</span>)</div>
 <div class="line"></div>
 <div class="line">dvec aCreate(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size) { <span class="keywordflow">return</span> dvec(size); }</div>
+<div class="line"><span class="keywordtype">void</span> aDestroy(dvec&amp; <span class="keyword">self</span>) {<span class="keyword">self</span>.~dvec();}</div>
 <div class="line"><span class="keywordtype">void</span> aWrite(dvec&amp; <span class="keyword">self</span>, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, <span class="keywordtype">double</span> val) { <span class="keyword">self</span>.at(index) = val; }</div>
 <div class="line"></div>
 <div class="line"><a class="code" href="classlua_1_1_retval.html">Retval</a> setup(<a class="code" href="classlua_1_1_context.html">Context</a>&amp; c)</div>
 <div class="line">{</div>
-<div class="line">  c.<a class="code" href="classlua_1_1_context.html#a1e702413d170d8cdc00ae9374d7664c7">mt</a>&lt;dvec&gt;() = Table::records(c,</div>
-<div class="line">    <span class="stringliteral">&quot;__index&quot;</span>,    dvec::at,</div>
+<div class="line">  c.<a class="code" href="classlua_1_1_context.html#a1e702413d170d8cdc00ae9374d7664c7">mt</a>&lt;dvec&gt;() = <a class="code" href="classlua_1_1_table.html#a196b5d9f1a833e25aa4d80536f279b0a">Table::records</a>(c,</div>
+<div class="line">    <span class="stringliteral">&quot;__index&quot;</span>,    <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span>&amp; (dvec::*)(<span class="keywordtype">size_t</span>)<span class="keyword">&gt;</span>(&amp;dvec::at),</div>
 <div class="line">    <span class="stringliteral">&quot;__newindex&quot;</span>, aWrite,</div>
 <div class="line">    <span class="stringliteral">&quot;__len&quot;</span>,      dvec::size,</div>
-<div class="line">    <span class="stringliteral">&quot;__gc&quot;</span>,       dvec::~dvec</div>
+<div class="line">    <span class="stringliteral">&quot;__gc&quot;</span>,       aDestroy</div>
 <div class="line">  );</div>
 <div class="line">  c.<a class="code" href="classlua_1_1_context.html#a7c0195836dcfe548f10ec4db184cde4b">global</a>[<span class="stringliteral">&quot;createArray&quot;</span>] = aCreate;</div>
 <div class="line">  <span class="keywordflow">return</span> c.<a class="code" href="classlua_1_1_context.html#a3c8e9a2e4b05f93984c482ce00f2781a">ret</a>();</div>
@@ -200,7 +200,7 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="line">  <span class="keywordflow">try</span> {</div>
 <div class="line">    state.<a class="code" href="classlua_1_1_state.html#aba8b923ec2ff1b88ccb75ab9cf24bf6d">runString</a>(line);</div>
 <div class="line">  } <span class="keywordflow">catch</span>(std::exception&amp; e) {</div>
-<div class="line">    cerr &lt;&lt; e.what();</div>
+<div class="line">    cerr &lt;&lt; e.what() &lt;&lt; endl;</div>
 <div class="line">  }</div>
 <div class="line">}</div>
 <div class="line"></div>
@@ -224,7 +224,7 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Sep 1 2014 08:46:07 for Lua-API++ by
+    <li class="footer">Generated on Mon Sep 1 2014 13:41:19 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
