@@ -52,6 +52,7 @@ var NAVTREE =
       ] ]
     ] ],
     [ "Changelog", "changelog.html", [
+      [ "2014-09-09-0", "changelog.html#changes_2014_09_09_0", null ],
       [ "2014-09-01-0", "changelog.html#changes_2014_09_01_0", null ],
       [ "2014-08-29-0", "changelog.html#changes_2014_08_29_0", null ],
       [ "2014-08-28-0", "changelog.html#changes_2014_08_28_0", null ],

@@ -154,7 +154,7 @@ namespace lua {
 
 		//! @brief Create a copy of referenced value in owned slot.
 		//! @throw std::runtime_error if the source is not a table.
-		explicit Table(const Valref& val):
+		Table(const Valref& val):
 			Anchor(val), raw(Anchor)
 		{
 			checkTableness();

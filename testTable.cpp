@@ -43,6 +43,17 @@ BOOST_FIXTURE_TEST_CASE(Creation, fxContext)
 		Table t(context, 3, 4);
 		BOOST_CHECK(static_cast<Valref&>(t).is<Table>());
 	}
+	{
+		Value v = context.global["val"];
+		Table t = v;
+		BOOST_CHECK(static_cast<Valref&>(t).is<Table>());
+	}
+	{
+		lua::Valset vs(context);
+		vs.push_back(context.global["val"]);
+		Table t = vs[0];
+		BOOST_CHECK(static_cast<Valref&>(t).is<Table>());
+	}
 }
 
 

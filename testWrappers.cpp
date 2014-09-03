@@ -141,6 +141,11 @@ static int vwrapped(const string& x, int y)
 	return 0;
 }
 
+static void wrapped0nc(Udata& x)
+{
+	signal = ++x.x;
+}
+
 static void failWrapped()
 {
 	throw std::runtime_error("Wrapped fail");
@@ -167,6 +172,14 @@ BOOST_FIXTURE_TEST_CASE(SimpleWrappers, fxContext)
 	context.global["fn"] = context.wrap(wrapped0);
 	context.global["fn"](Udata{3});
 	BOOST_CHECK_EQUAL(signal, 3);
+	{
+		Valset vs = context.global["fn"].pcall(1);
+		BOOST_REQUIRE(!vs.success());
+	}
+
+	context.global["fn"] = context.wrap(wrapped0nc);
+	context.global["fn"](Udata{3});
+	BOOST_CHECK_EQUAL(signal, 4);
 	{
 		Valset vs = context.global["fn"].pcall(1);
 		BOOST_REQUIRE(!vs.success());
