@@ -25,7 +25,7 @@
 * {
 *   try {
 *     state.runString(line); // Attempt to execute string
-*   } catch(std::exception& e) {
+*   } catch(exception& e) {
 *     cerr << e.what() << endl;  // Show error message in case of execution failure
 *   }
 * }
@@ -110,7 +110,7 @@
 * LUAPP_USERDATA(dvec, "Number array")
 *
 * dvec aCreate(unsigned int size) { return dvec(size); }
-* void aDestroy(dvec& self) {self.~dvec();}
+* void aDestroy(dvec& self) { self.~dvec(); }
 * void aWrite(dvec& self, unsigned int index, double val) { self.at(index) = val; }
 *
 * Retval setup(Context& c)
@@ -129,7 +129,7 @@
 * {
 *   try {
 *     state.runString(line);
-*   } catch(std::exception& e) {
+*   } catch(exception& e) {
 *     cerr << e.what() << endl;
 *   }
 * }
@@ -143,7 +143,7 @@
 *   }
 * }
 *
-* int main(int argc, const char* argv[])
+* int main()
 * {
 *   State state;
 *   state.call(mkcf<setup>);

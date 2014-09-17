@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-09-09-0</span>
+   &#160;<span id="projectnumber">2014-09-18-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -119,6 +119,9 @@ $(document).ready(function(){initNavTree('namespacelua.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:structlua_1_1_closure_info"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelua.html#structlua_1_1_closure_info">ClosureInfo</a></td></tr>
+<tr class="memdesc:structlua_1_1_closure_info"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closure properties.  <a href="namespacelua.html#structlua_1_1_closure_info">More...</a><br /></td></tr>
+<tr class="separator:structlua_1_1_closure_info"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html">Context</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access point to Lua context.  <a href="classlua_1_1_context.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +206,41 @@ Variables</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Every thing in Lua API++ library is contained inside this namespace. </p>
 </div><hr/><h2 class="groupheader">Class Documentation</h2>
+<a name="structlua_1_1_closure_info" id="structlua_1_1_closure_info"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct lua::ClosureInfo</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="textblock"><p>Closure properties. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classlua_1_1_valref.html#af44f1135c2b710e1907044889c7d9783" title="Retrieve information about closure. ">lua::Valref::getClosureInfo</a> </dd></dl>
+</div><table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="a90ec8b42e6384aae829564afe25f6509"></a>size_t</td>
+<td class="fieldname">
+nUpvalues</td>
+<td class="fielddoc">
+Amount of upvalues. </td></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="a70dada50816e99086d756ecf375e5ac8"></a>size_t</td>
+<td class="fieldname">
+nParameters</td>
+<td class="fielddoc">
+Amount of parameters. </td></tr>
+<tr><td class="fieldtype">
+<a class="anchor" id="a60ec08c2807aa833254f3f84dd139ea0"></a>bool</td>
+<td class="fieldname">
+variadic</td>
+<td class="fielddoc">
+Whether function accepts variable number of arguments. </td></tr>
+</table>
+
+</div>
+</div>
 <a name="classlua_1_1_nil" id="classlua_1_1_nil"></a>
 <div class="memitem">
 <div class="memproto">
@@ -227,7 +265,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <div class="textblock"><p><a class="el" href="namespacelua.html#classlua_1_1_temporary" title="Temporary Lua value. ">Temporary</a> Lua value. </p>
-<p>This is not an actual type, see the <a class="el" href="basic_concepts.html#basic_value_types">specifics of value handling</a> section. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classlua_1_1_valref.html" title="Non-owning reference to Lua value. ">lua::Valref</a> </dd></dl>
+<p>This is not an actual type, see the <a class="el" href="basic_concepts.html#basic_values_temporary">explanation</a>. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classlua_1_1_valref.html" title="Non-owning reference to Lua value. ">lua::Valref</a> </dd></dl>
 </div>
 </div>
 </div>
@@ -407,7 +445,7 @@ This template converts <a class="el" href="namespacelua.html#a1d08ef8a7b1a72e59f
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelua.html">lua</a></li>
-    <li class="footer">Generated on Tue Sep 9 2014 10:13:52 for Lua-API++ by
+    <li class="footer">Generated on Thu Sep 18 2014 15:24:45 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-09-09-0</span>
+   &#160;<span id="projectnumber">2014-09-18-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('faq.html','');});
 <li class="level2"><a href="#faq_compat_luajit">Is this library compatible with LuaJIT?</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#faq_known_problems">Known problems</a><ul><li class="level2"><a href="#faq_known_problems_exceptions">SJLJ exceptions</a></li>
+<li class="level1"><a href="#faq_known_problems">Technical issues</a><ul><li class="level2"><a href="#faq_known_problems_sjlj">I compiled the motivational example and it crashes on out-of-bound array access.</a></li>
 </ul>
 </li>
 </ul>
@@ -122,16 +122,19 @@ Which versions of Lua does this library support?</h2>
 Is this library compatible with LuaJIT?</h2>
 <p>Yes, all tests pass with LuaJIT in <a class="el" href="compatibility.html#compatibility_5_1">5.1</a> compatibility mode.</p>
 <h1><a class="anchor" id="faq_known_problems"></a>
-Known problems</h1>
-<h2><a class="anchor" id="faq_known_problems_exceptions"></a>
-SJLJ exceptions</h2>
-<p>Using SJLJ mechanism for exceptions may create conflicts with Lua error reporting mechanism. It happens on chained exception-error-exception conversions (most probable point being State::call and State::run functions that encounter exception-raising error in Lua-API++ powered functions). </p>
+Technical issues</h1>
+<h2><a class="anchor" id="faq_known_problems_sjlj"></a>
+I compiled the motivational example and it crashes on out-of-bound array access.</h2>
+<p>Using SJLJ mechanism for exceptions may create conflicts with Lua error reporting mechanism because it uses SJLJ too. It happens on chained exception-error-exception conversions (most probable point being State::call and State::run functions that encounter exception-raising error in Lua-API++ powered functions). How to avoid that problem: </p><ul>
+<li>use compiler with another exception mechanism (SJLJ isn't that good anyway); </li>
+<li>make sure that pieces of code executed with <a class="el" href="classlua_1_1_state.html#aba8b923ec2ff1b88ccb75ab9cf24bf6d">runString</a> / <a class="el" href="classlua_1_1_state.html#a9064a9c6b0d3ad4edd7de6f4f039db43">runFile</a> have simple error-free skeleton that protects calls to main code. </li>
+</ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Sep 9 2014 10:13:52 for Lua-API++ by
+    <li class="footer">Generated on Thu Sep 18 2014 15:24:45 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

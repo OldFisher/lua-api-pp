@@ -276,6 +276,26 @@ namespace lua {
 #endif
 
 
+
+		// const ext-upvalue indexer
+
+        LUAPP_HO_INLINE void lazyExtConstUpvalue::doPush(lua_State* s, int closureRef, size_t index)
+        {
+        	const auto rv = lua_getupvalue(s, closureRef, static_cast<int>(index));
+        	if(rv == nullptr)
+				throw std::runtime_error("Upvalue external read: wrong index (" + std::to_string(index) + ").");
+        }
+
+        LUAPP_HO_INLINE void lazyExtConstUpvalue::doAssign(lua_State* s, int closureRef, size_t index)
+        {
+        	const auto rv = lua_setupvalue(s, closureRef, static_cast<int>(index));
+        	if(rv == nullptr){
+				lua_pop(s, 1);
+				throw std::runtime_error("Upvalue external write: wrong index (" + std::to_string(index) + ").");
+        	}
+        }
+
+
 	}
 
 
@@ -576,6 +596,19 @@ namespace lua {
 	}
 #endif	// V51-
 
+
+	LUAPP_HO_INLINE const char* Valref::readUv(lua_State* s, int closure, size_t index)
+	{
+		return lua_getupvalue(s, closure, index);
+	}
+
+
+	LUAPP_HO_INLINE ClosureInfo Valref::retrieveClosureInfo(lua_State* s) noexcept
+	{
+		lua_Debug ld{};
+		lua_getinfo(s, ">u", &ld);
+		return ClosureInfo{ld.nups, ld.nparams, ld.isvararg != 0};
+	}
 
 
 //### Context ###############################################################################################################

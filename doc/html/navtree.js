@@ -14,17 +14,22 @@ var NAVTREE =
       [ "Lua values", "basic_concepts.html#basic_values", [
         [ "Native values", "basic_concepts.html#basic_values_native", null ],
         [ "User values", "basic_concepts.html#basic_values_user", null ],
-        [ "Temporary value handling", "basic_concepts.html#basic_value_types", null ],
-        [ "Special value types", "basic_concepts.html#basic_value_special", [
-          [ "Valref", "basic_concepts.html#basic_value_special_valref", null ],
-          [ "Value", "basic_concepts.html#basic_values_special_value", null ],
-          [ "Table", "basic_concepts.html#basic_values_special_table", null ]
-        ] ],
-        [ "Value set", "basic_concepts.html#basic_value_valset", null ]
+        [ "Temporary value handling", "basic_concepts.html#basic_values_temporary", null ],
+        [ "Valref", "basic_concepts.html#basic_values_valref", null ],
+        [ "Anchor value types", "basic_concepts.html#basic_values_anchors", [
+          [ "Value", "basic_concepts.html#basic_values_anchors_value", null ],
+          [ "Table", "basic_concepts.html#basic_values_anchors_table", null ],
+          [ "Valset", "basic_concepts.html#basic_values_anchors_valset", null ]
+        ] ]
       ] ]
     ] ],
     [ "Motivational example", "motivational_example.html", null ],
-    [ "Automatic stack management", "stack_management.html", null ],
+    [ "Automatic stack management", "stack_management.html", [
+      [ "Passing values to and returning from functions", "stack_management.html#stack_management_function", [
+        [ "References", "stack_management.html#stack_management_function_valref", null ],
+        [ "Anchors", "stack_management.html#stack_management_function_anchor", null ]
+      ] ]
+    ] ],
     [ "Using the library", "usage.html", [
       [ "Using the library with your project", "usage.html#usage_basic", null ],
       [ "Building the tests (for library development)", "usage.html#usage_tests", null ],
@@ -47,11 +52,12 @@ var NAVTREE =
         [ "Which versions of Lua does this library support?", "faq.html#faq_compat_versions", null ],
         [ "Is this library compatible with LuaJIT?", "faq.html#faq_compat_luajit", null ]
       ] ],
-      [ "Known problems", "faq.html#faq_known_problems", [
-        [ "SJLJ exceptions", "faq.html#faq_known_problems_exceptions", null ]
+      [ "Technical issues", "faq.html#faq_known_problems", [
+        [ "I compiled the motivational example and it crashes on out-of-bound array access.", "faq.html#faq_known_problems_sjlj", null ]
       ] ]
     ] ],
     [ "Changelog", "changelog.html", [
+      [ "2014-09-18-0", "changelog.html#changes_2014_09_18_0", null ],
       [ "2014-09-09-0", "changelog.html#changes_2014_09_09_0", null ],
       [ "2014-09-01-0", "changelog.html#changes_2014_09_01_0", null ],
       [ "2014-08-29-0", "changelog.html#changes_2014_08_29_0", null ],

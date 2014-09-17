@@ -29,7 +29,7 @@ namespace lua {
 	};
 
 	//! @brief Temporary Lua value.
-	//! @details This is not an actual type, see the @ref basic_value_types "specifics of value handling" section.
+	//! @details This is not an actual type, see the @ref basic_values_temporary "explanation".
 	//! @sa lua::Valref
 	class Temporary{
 	private:
@@ -393,6 +393,7 @@ namespace lua {
 		template<typename, typename ...> class lazyCall;
 		template<typename, typename ...> class lazyPCall;
 		class uvIndexer;
+		class lazyExtConstUpvalue;
 #if(LUAPP_API_VERSION >= 52)
 		class lazyLen;
 #endif	// V52+
@@ -407,6 +408,15 @@ namespace lua {
 	}
 	//! @endcond
 
+
+
+	//! @brief Closure properties.
+	//! @see lua::Valref::getClosureInfo
+	struct ClosureInfo {
+		size_t nUpvalues;		//!< Amount of upvalues.
+		size_t nParameters;	//!< Amount of parameters.
+		bool variadic;			//!< Whether function accepts variable number of arguments.
+	};
 
 
 
@@ -448,6 +458,8 @@ namespace lua {
 	//! @details This is a reference to a specific slot on Lua stack. The operations with Lua value inside that slot are performed through this object.
 	//! @note This class also covers values that are not actually on the stack but are addressed with pseudo-indices.
 	class Valref {
+
+		template<typename> friend class _::Lazy;
 		friend class lua::Context;
 		friend class lua::Valset;
 		friend class lua::Value;
@@ -619,7 +631,6 @@ namespace lua {
 		//! @}
 
 
-
 		//! @name Function calls
 		//! @{
 
@@ -661,6 +672,37 @@ namespace lua {
 		}
 
 #endif	// DOXYGEN_ONLY
+		//! @}
+
+		//! @name Closure handling
+		//! @{
+
+#ifdef DOXYGEN_ONLY
+		//! @brief Upvalue access inside closures.
+		//! @details You can read and write upvalues inside closures with this function.
+		//! @param index 1-based index of accessed upvalue.
+		//! @pre this->is<LFunction>()
+		//! @throw std::runtime_error on wrong index.
+		Temporary upvalue(size_t index) const noexcept;#else	// Not DOXYGEN_ONLY
+#else	// Not DOXYGEN_ONLY
+		_::Lazy<_::lazyExtConstUpvalue> upvalue(size_t index_) const noexcept;
+#endif	// DOXYGEN_ONLY
+
+		//! @brief Retrieve upvalues and their names.
+		//! @details This function returns values and names of all closure upvalues.
+		//! Upvalues are always named "" in C closures. Upvalue ordering in Lua functions is undefined.
+		//! @pre this->is<LFunction>()
+		//! @return Value-name pairs for each upvalue.
+		Valset getUpvalues() const noexcept;
+
+		//! @brief Retrieve information about closure.
+		//! @details This function is applicable only to closures.
+		//! It returns number of upvalues, parameters and whether function
+		//! is variadic (accepts variable number of arguments).
+		//! @pre this->is<LFunction>()
+		//! @note For closures made from C functions @c nParameters is
+		//! always 0 and @c variadic is always <b><code>true</code></b>.
+		ClosureInfo getClosureInfo() const noexcept;
 		//! @}
 
 
@@ -808,6 +850,13 @@ namespace lua {
 		void* readUserData(const char* classname) const;
 		//! Check if value is userdata of given type
 		bool isUserData(const char* classname) const noexcept;
+
+		//! Push all upvalues to the stack
+		void pushUpvalues() const noexcept;
+
+		//! Push single upvalue to the stack
+		static const char* readUv(lua_State*, int, size_t);
+		static ClosureInfo retrieveClosureInfo(lua_State*) noexcept;
 
 		// data
 		Context& context;

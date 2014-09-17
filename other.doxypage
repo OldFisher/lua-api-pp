@@ -20,21 +20,34 @@
 * Many unsafe operations are already disabled for those objects, but there are still some ways left to break their proper functioning.
 *
 * In short, it is useful to remember this:
-* @li @ref lua::State "State" cannot be copied or moved;
+* @li @ref lua::State "State" cannot be copied or moved.
 * @li @ref lua::Context "Context" is given to function, it cannot be copied, moved, stored or created
-* (exception: Context can be created explicitly in special situations);
-* @li @ref lua::Retval "Retvals" can only be created by calling @ref lua::Context::ret "return function" in a return-statement.
-* They cannot be copied or moved, but can be returned from functions;
-* @li non-owning @ref lua::Valref "value references" may be freely copied and passed around, but their
-* lifetime must never extend the lifetime of stack slot they refer to (and most certainly they mustn't survive function termination);
-* @li @ref lua::Value "value anchors", @ref lua::Table "table objects" and @ref lua::Valset "value sets" must not be stored, moved,
-* or be created anonymously, unless returned from functions;
-* @li @ref basic_values "value-like temporaries" that are created as results of operations must not be copied, stored, moved or
-* assigned to <code><b>auto</b></code> variables (assign to @ref lua::Value "Value", @ref lua::Table "Table" or @ref lua::Valset "Valset" to store operation result).
+* (exception: Context can be created explicitly if necessary).
+* @li @ref lua::Retval "Retvals" can only be created by calling @ref lua::Context::ret "ret" in <b><code>return</code></b> statement.
+* They cannot be copied or moved, but can be returned from functions.
+* @li Non-owning @ref lua::Valref "value references" may be freely copied and passed around, but their
+* lifetime must never extend the lifetime of @ref basic_values_anchors "anchor objects" they refer to.
+* @li @ref basic_values_anchors "Value anchors" are designed to be used as local variables only,
+* to preserve correct push/pop order. They may be @ref stack_management_function "passed to and returned from" functions,
+* but only in one direction.
+* @li @ref basic_values "Temporaries" that are created as result of operation are designed to be used as temporaries only.
+* If you want to capture their value, @ref basic_values_anchors "anchor" it, because <b><code>auto</code></b> won't work.
 *
 * @note The possibility to return Retvals and anchor objects from functions is built around compiler feature
 * named <a href="http://en.wikipedia.org/wiki/Return_value_optimization">RVO</a>. You may get link errors if your compiler doesn't support it,
 * or it was disabled, or failed to work properly.
+*
+* @section stack_management_function Passing values to and returning from functions
+* It is possible to pass into functions and return @ref basic_values_anchors "anchor objects" and @ref lua::Valref "value references",
+* but not as freely as normal values:
+* @subsection stack_management_function_valref References
+* Returned @ref lua::Valref "value references" must reference only anchor objects existing outside of called function.
+* @subsection stack_management_function_anchor Anchors
+* Function may have @ref basic_values_anchors "anchor object" as return type or in parameters, but not both.
+* You may easily memorize this rule as "one-way rule" or "in or out rule". While both of these actions make sense
+* and are useful, doing them simultaneously will break the stack and cause incorrect behavior, so it's usability over safety choice.
+* A good reason to have @ref basic_values_anchors "anchors" as parameters or return type is their ability to capture
+* the contents of @ref basic_values "temporaries" (so a temporary-producing expression may be passed into function or returned from it).
 *
 * @page usage Using the library
 * @section usage_basic Using the library with your project
@@ -110,7 +123,7 @@
 * @li the @ref lua::Table::raw "raw accessor" does not use specialized pointer get/set functions.
 *
 * @section compatibility_5_2 Lua 5.2
-* Turned on by default ro with @b LUAPP_COMPATIBILITY_V52.
+* Turned on by default or with @b LUAPP_COMPATIBILITY_V52.
 *
 *
 * @page external_links External links

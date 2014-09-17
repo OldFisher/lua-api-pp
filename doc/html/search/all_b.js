@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['lua_5fstate_20_2a',['lua_State *',['../classlua_1_1_context.html#a13069e4b06e9467e094b9c5a2709ea61',1,'lua::Context']]],
   ['operator_20bool',['operator bool',['../classlua_1_1_valref.html#aa385aa18f5e42db5a415c25a90f4193d',1,'lua::Valref']]],
   ['operator_20cfunction',['operator CFunction',['../classlua_1_1_valref.html#aa43f86f5bacedf496c2494ac7eb2f692',1,'lua::Valref']]],
   ['operator_20const_20char_20_2a',['operator const char *',['../classlua_1_1_valref.html#abdd0820f8401e11e09a1e92ab7f4d864',1,'lua::Valref']]],
@@ -9,7 +10,6 @@ var searchData=
   ['operator_20int',['operator int',['../classlua_1_1_valref.html#a6a6c0aaee2d785b48a1e57710ceb586b',1,'lua::Valref']]],
   ['operator_20lightuserdata',['operator LightUserData',['../classlua_1_1_valref.html#a55754bb9d056b440f0c54de0f1b715a7',1,'lua::Valref']]],
   ['operator_20long_20long',['operator long long',['../classlua_1_1_valref.html#abd8274a978e8e537087d8016adf70098',1,'lua::Valref']]],
-  ['operator_20lua_5fstate_20_2a',['operator lua_State *',['../classlua_1_1_context.html#ab2b161af254844507c852b803bfad336',1,'lua::Context']]],
   ['operator_20unsigned_20int',['operator unsigned int',['../classlua_1_1_valref.html#ad3458486e208bbd7b782352192c6af82',1,'lua::Valref']]],
   ['operator_20unsigned_20long_20long',['operator unsigned long long',['../classlua_1_1_valref.html#aeccf843b2fc5269ee8cf274a32f9714d',1,'lua::Valref']]],
   ['operator_20valref_20_26',['operator Valref &amp;',['../classlua_1_1_table.html#a9188d251ec9911ef3ee49b8df9070388',1,'lua::Table']]],

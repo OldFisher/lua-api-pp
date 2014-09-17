@@ -4,6 +4,13 @@
 #include <stdexcept>
 
 
+using lua::Retval;
+using lua::Context;
+using lua::Value;
+using lua::Valset;
+using lua::mkcf;
+using std::string;
+
 struct fxIndexing: public fxContext {
 	fxIndexing()
 	{
@@ -82,4 +89,6 @@ BOOST_FIXTURE_TEST_CASE(Discard, fxIndexing)
 }
 
 
+
 BOOST_AUTO_TEST_SUITE_END()
+

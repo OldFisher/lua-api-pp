@@ -17,16 +17,16 @@
 * @subsection faq_compat_luajit Is this library compatible with LuaJIT?
 * Yes, all tests pass with LuaJIT in @ref compatibility_5_1 "5.1" compatibility mode.
 *
-* @section faq_known_problems Known problems
-* @subsection faq_known_problems_exceptions SJLJ exceptions
-* Using SJLJ mechanism for exceptions may create conflicts with Lua error reporting mechanism.
+* @section faq_known_problems Technical issues
+* @subsection faq_known_problems_sjlj I compiled the motivational example and it crashes on out-of-bound array access.
+* Using SJLJ mechanism for exceptions may create conflicts with Lua error reporting mechanism because it uses SJLJ too.
 * It happens on chained exception-error-exception conversions (most probable point
 * being State::call and State::run functions that encounter exception-raising error in
 * Lua-API++ powered functions).
-*
-*
-*
-*
+* How to avoid that problem:
+* @li use compiler with another exception mechanism (SJLJ isn't that good anyway);
+* @li make sure that pieces of code executed with @ref lua::State::runString(const char*) "runString" / @ref lua::State::runFile(const char*) "runFile"
+* have simple error-free skeleton that protects calls to main code.
 *
 *
 *

@@ -186,6 +186,43 @@ namespace lua {
 
 
 
+	inline _::Lazy<_::lazyExtConstUpvalue> Valref::upvalue(size_t index_) const noexcept
+	{
+		return _::Lazy<_::lazyExtConstUpvalue>(context, index, index_);
+	}
+
+
+
+	inline void Valref::pushUpvalues() const noexcept
+	{
+		const char* name = nullptr;
+		size_t uvIndex = 0;
+		do {
+			++uvIndex;
+			name = readUv(context, index, uvIndex);
+			if(name)
+				context.push(name);
+		} while(name);
+	}
+
+
+	inline Valset Valref::getUpvalues() const noexcept
+	{
+		Valset rv(context);
+		pushUpvalues();
+		rv.Size = context.getTop() - rv.Idx + 1;
+		return rv;
+	}
+
+
+	inline ClosureInfo Valref::getClosureInfo() const noexcept
+	{
+		context.duplicate(index);
+		return retrieveClosureInfo(context);
+	}
+
+
+
 //#####################  tValue  ###############################################
 
 
@@ -225,6 +262,26 @@ namespace lua {
 		{
 			return Lazy<lazyMtTemp<Policy>>(S, std::move(*this));
 		}
+
+		template<typename Policy>
+		inline Valset Lazy<Policy>::getUpvalues() &&
+		{
+			Valset rv(S);
+			this->pushSingle();
+			rv[0].pushUpvalues();
+			S.remove(rv.Idx);
+			rv.Size = S.getTop() - rv.Idx + 1;
+			return rv;
+		}
+
+
+		template<typename Policy>
+		ClosureInfo Lazy<Policy>::getClosureInfo() &&
+		{
+			this->pushSingle();
+			return ::lua::Valref::retrieveClosureInfo(S.L);
+		}
+
 
 //#####################  lazySeries  ###########################################
 
@@ -540,6 +597,50 @@ namespace lua {
 
 
 
+//#####################  lazyExtConstUpvalue  ##################################
+
+		inline void lazyExtConstUpvalue::push(Context& c)
+		{
+			doPush(c, closureRef, index);
+		}
+
+		template<typename ValueType>
+		inline void lazyExtConstUpvalue::assign(Context& c, ValueType&& v)
+		{
+			c.ipush(std::forward<ValueType>(v));
+			doAssign(c, closureRef, index);
+		}
+
+//#####################  lazyExtTempUpvalue  ###################################
+
+		template<typename Policy>
+		inline void lazyExtTempUpvalue<Policy>::push(Context& c)
+		{
+			c.ipush(std::move(srcLazy));
+			try { lazyExtConstUpvalue::doPush(c, c.getTop(), index); }
+			catch(...) {
+				c.pop();
+				throw;
+			}
+			c.remove(c.getTop() - 1);
+		}
+
+		template<typename Policy>
+		template<typename ValueType>
+		inline void lazyExtTempUpvalue<Policy>::assign(Context& c, ValueType&& v)
+		{
+			const auto oldTop = c.getTop();
+			try {
+				c.ipush(std::move(srcLazy));
+				c.ipush(std::forward<ValueType>(v));
+				lazyExtConstUpvalue::doAssign(c,  c.getTop() - 1, index); }
+			catch(...) {
+				c.pop(c.getTop() - oldTop);
+				throw;
+			}
+			c.pop();
+		}
+
 //#####################  lazyCall  #############################################
 
 		template<typename Function, typename ... Args>
@@ -803,7 +904,7 @@ namespace lua {
 	inline Valset::~Valset() noexcept
 	{
 #ifdef LUAPP_WATCH_STACK
-		if(S.getCheckedTop() != Idx + Size - 1)
+		if(size_t(S.getCheckedTop()) != Idx + Size - 1)
 			throw std::runtime_error("Lua stack integrity compromised");
 #endif // LUAPP_WATCH_STACK
 		S.pop(Size);

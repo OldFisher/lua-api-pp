@@ -79,6 +79,8 @@ namespace lua {
 		friend class ::lua::_::lazyGlobalIndexer;
 		template<typename, typename> friend class ::lua::_::lazyTempIndexer;
 		template<typename> friend class ::lua::_::lazyRawIndexer;
+		friend class ::lua::_::lazyExtConstUpvalue;
+		template<typename> friend class ::lua::_::lazyExtTempUpvalue;
 		template<typename, typename ...> friend class ::lua::_::lazyCall;
 		template<typename, typename ...> friend class ::lua::_::lazyPCall;
 #if(LUAPP_API_VERSION >= 52)
@@ -557,11 +559,12 @@ namespace lua {
 #endif	// V52+
 #endif	// DOXYGEN_ONLY
 		//! @}
+
 		//! @name Direct Lua API interaction
 		//! @{
 
 		//! @brief Access to raw state pointer via implicit conversion.
-		operator lua_State* () const noexcept
+		operator ::lua_State* () const noexcept
 		{
 			return L;
 		}

@@ -31,7 +31,7 @@ var classlua_1_1_context =
     [ "runFile", "classlua_1_1_context.html#a9bf1b10b891443e9ddb57ef3991ee865", null ],
     [ "mt", "classlua_1_1_context.html#a1e702413d170d8cdc00ae9374d7664c7", null ],
     [ "getVersion", "classlua_1_1_context.html#aae3aca3ea7e6fc496ee22c79fe3d328f", null ],
-    [ "operator lua_State *", "classlua_1_1_context.html#ab2b161af254844507c852b803bfad336", null ],
+    [ "operator::lua_State *", "classlua_1_1_context.html#a13069e4b06e9467e094b9c5a2709ea61", null ],
     [ "getTop", "classlua_1_1_context.html#a1562fbda0b030a4aaa8c18ab575434c1", null ],
     [ "initializeExplicitly", "classlua_1_1_context.html#a0d31247fb1ab095fc5cb091b63a26996", null ],
     [ "global", "classlua_1_1_context.html#a7c0195836dcfe548f10ec4db184cde4b", null ],

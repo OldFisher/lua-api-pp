@@ -7,6 +7,7 @@ var searchData=
   ['changelog',['Changelog',['../changelog.html',1,'']]],
   ['chunk',['chunk',['../classlua_1_1_context.html#a007b86314fbbbe2fd83f1c4419636116',1,'lua::Context::chunk(const char *chunkText) noexcept'],['../classlua_1_1_context.html#ad718fbd2e368462ada91de2de5558faf',1,'lua::Context::chunk(const std::string &amp;chunkText) noexcept']]],
   ['closure',['closure',['../classlua_1_1_context.html#adcd9f971fedc47659d88a08f81f4432a',1,'lua::Context::closure(CFunction fn, UpvalueTypes &amp;&amp;...upvalues_) noexcept'],['../classlua_1_1_context.html#adcd9f971fedc47659d88a08f81f4432a',1,'lua::Context::closure(CFunction fn, UpvalueTypes &amp;&amp;...upvalues_) noexcept']]],
+  ['closureinfo',['ClosureInfo',['../namespacelua.html#structlua_1_1_closure_info',1,'lua']]],
   ['compatibility',['Compatibility',['../compatibility.html',1,'']]],
   ['configuring_20the_20library',['Configuring the library',['../configuring.html',1,'']]],
   ['const_5fiterator',['const_iterator',['../classlua_1_1_valset.html#a95953f069ed477e973b4065f3eafa397',1,'lua::Valset']]],

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-09-09-0</span>
+   &#160;<span id="projectnumber">2014-09-18-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -105,20 +105,29 @@ $(document).ready(function(){initNavTree('stack_management.html','');});
 <div class="textblock"><p>The library aims to free you of tedious stack management completely. You can freely use indexing, function calls, arithmetics, concatenation and so on, with nesting operation results and never worry about placing temporary values on the stack in correct order or removing those you no longer need. It is done by Lua API++ objects.</p>
 <p>These objects allow smooth operations when used correctly. There are some limitations on how these objects can be used without breaking the stack integrity. These objects are responsible for allocating and freeing space on Lua stack. In order to do so, these objects must have strictly controlled lifetime (only be declared as local variables), must not be copied, moved (with some safe exceptions like creating a <a class="el" href="classlua_1_1_value.html">value anchor</a> by assignment), stored in containers or be inherited from. Many unsafe operations are already disabled for those objects, but there are still some ways left to break their proper functioning.</p>
 <p>In short, it is useful to remember this: </p><ul>
-<li><a class="el" href="classlua_1_1_state.html">State</a> cannot be copied or moved; </li>
-<li><a class="el" href="classlua_1_1_context.html">Context</a> is given to function, it cannot be copied, moved, stored or created (exception: Context can be created explicitly in special situations); </li>
-<li><a class="el" href="classlua_1_1_retval.html">Retvals</a> can only be created by calling <a class="el" href="classlua_1_1_context.html#a3c8e9a2e4b05f93984c482ce00f2781a">return function</a> in a return-statement. They cannot be copied or moved, but can be returned from functions; </li>
-<li>non-owning <a class="el" href="classlua_1_1_valref.html">value references</a> may be freely copied and passed around, but their lifetime must never extend the lifetime of stack slot they refer to (and most certainly they mustn't survive function termination); </li>
-<li><a class="el" href="classlua_1_1_value.html">value anchors</a>, <a class="el" href="classlua_1_1_table.html">table objects</a> and <a class="el" href="classlua_1_1_valset.html">value sets</a> must not be stored, moved, or be created anonymously, unless returned from functions; </li>
-<li><a class="el" href="basic_concepts.html#basic_values">value-like temporaries</a> that are created as results of operations must not be copied, stored, moved or assigned to <code><b>auto</b></code> variables (assign to <a class="el" href="classlua_1_1_value.html">Value</a>, <a class="el" href="classlua_1_1_table.html">Table</a> or <a class="el" href="classlua_1_1_valset.html">Valset</a> to store operation result).</li>
+<li><a class="el" href="classlua_1_1_state.html">State</a> cannot be copied or moved. </li>
+<li><a class="el" href="classlua_1_1_context.html">Context</a> is given to function, it cannot be copied, moved, stored or created (exception: Context can be created explicitly if necessary). </li>
+<li><a class="el" href="classlua_1_1_retval.html">Retvals</a> can only be created by calling <a class="el" href="classlua_1_1_context.html#a3c8e9a2e4b05f93984c482ce00f2781a">ret</a> in <b><code>return</code></b> statement. They cannot be copied or moved, but can be returned from functions. </li>
+<li>Non-owning <a class="el" href="classlua_1_1_valref.html">value references</a> may be freely copied and passed around, but their lifetime must never extend the lifetime of <a class="el" href="basic_concepts.html#basic_values_anchors">anchor objects</a> they refer to. </li>
+<li><a class="el" href="basic_concepts.html#basic_values_anchors">Value anchors</a> are designed to be used as local variables only, to preserve correct push/pop order. They may be <a class="el" href="stack_management.html#stack_management_function">passed to and returned from</a> functions, but only in one direction. </li>
+<li><a class="el" href="basic_concepts.html#basic_values">Temporaries</a> that are created as result of operation are designed to be used as temporaries only. If you want to capture their value, <a class="el" href="basic_concepts.html#basic_values_anchors">anchor</a> it, because <b><code>auto</code></b> won't work.</li>
 </ul>
-<dl class="section note"><dt>Note</dt><dd>The possibility to return Retvals and anchor objects from functions is built around compiler feature named <a href="http://en.wikipedia.org/wiki/Return_value_optimization">RVO</a>. You may get link errors if your compiler doesn't support it, or it was disabled, or failed to work properly. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The possibility to return Retvals and anchor objects from functions is built around compiler feature named <a href="http://en.wikipedia.org/wiki/Return_value_optimization">RVO</a>. You may get link errors if your compiler doesn't support it, or it was disabled, or failed to work properly.</dd></dl>
+<h1><a class="anchor" id="stack_management_function"></a>
+Passing values to and returning from functions</h1>
+<p>It is possible to pass into functions and return <a class="el" href="basic_concepts.html#basic_values_anchors">anchor objects</a> and <a class="el" href="classlua_1_1_valref.html">value references</a>, but not as freely as normal values: </p>
+<h2><a class="anchor" id="stack_management_function_valref"></a>
+References</h2>
+<p>Returned <a class="el" href="classlua_1_1_valref.html">value references</a> must reference only anchor objects existing outside of called function. </p>
+<h2><a class="anchor" id="stack_management_function_anchor"></a>
+Anchors</h2>
+<p>Function may have <a class="el" href="basic_concepts.html#basic_values_anchors">anchor object</a> as return type or in parameters, but not both. You may easily memorize this rule as "one-way rule" or "in or out rule". While both of these actions make sense and are useful, doing them simultaneously will break the stack and cause incorrect behavior, so it's usability over safety choice. A good reason to have <a class="el" href="basic_concepts.html#basic_values_anchors">anchors</a> as parameters or return type is their ability to capture the contents of <a class="el" href="basic_concepts.html#basic_values">temporaries</a> (so a temporary-producing expression may be passed into function or returned from it). </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Sep 9 2014 10:13:52 for Lua-API++ by
+    <li class="footer">Generated on Thu Sep 18 2014 15:24:45 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

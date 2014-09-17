@@ -519,7 +519,67 @@ namespace lua {
 		};
 
 
+
+//#####################  lazyExtConstUpvalue  ##################################
+
+
+		class lazyExtConstUpvalue final: public _::lazyPolicy{
+			template<typename> friend class _::Lazy;
+			template<typename> friend class lazyExtTempUpvalue;
+
+		private:
+			lazyExtConstUpvalue(Context&, int closureRef_, size_t index_):
+				closureRef(closureRef_),
+				index(index_)
+			{
+			}
+
+			void push(Context&);
+
+			void pushSingle(Context& c)
+			{
+				push(c);
+			}
+
+			template<typename ValueType> void assign(Context& c, ValueType&& v);
+
+			const int closureRef;
+			const size_t index;
+
+			static void doPush(lua_State* s, int closureRef, size_t index);
+			static void doAssign(lua_State* s, int closureRef, size_t index);
+		};
+
+
+//#####################  lazyExtTempUpvalue  ##################################
+
+
+		template<typename Policy> class lazyExtTempUpvalue final: public _::lazyPolicy {
+			template<typename> friend class _::Lazy;
+		private:
+			lazyExtTempUpvalue(Context&, Lazy<Policy>&& src, size_t index_):
+				srcLazy(std::move(src)),
+				index(index_)
+			{
+			}
+
+			void push(Context&);
+
+			void pushSingle(Context& c)
+			{
+				push(c);
+			}
+
+			template<typename ValueType> void assign(Context& c, ValueType&& v);
+
+			Lazy<Policy> srcLazy;
+			size_t index;
+		};
+
+
 	}
+
+
 	//! @endcond
 
 }

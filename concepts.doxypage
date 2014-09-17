@@ -78,7 +78,7 @@
 * Arithmetic operations (not available in Lua 5.1 compatibility mode) with value-objects is done with Lua and produces yet another value-object.\n
 * Concatenation is supported with the <code><b>&</b></code> operation, chain concatenations being optimized into a single operation.\n
 * Comparisons of value-objects is done through Lua, but produces native boolean values.\n
-* The @ref lua::Valref "Valref" class documents all operations avaliable for value-object. Though there are @ref basic_value_types "other"
+* The @ref lua::Valref "Valref" class documents all operations avaliable for value-object. Though there are @ref basic_values_temporary "other"
 * types of value-objects, referred to as @ref lua::Temporary "Temporary", they have same interface as @ref lua::Valref "Valref".
 *
 * @subsection basic_values_native Native values
@@ -99,8 +99,8 @@
 * without assigned metatable will always fail.
 * When a new userdata is created, it is automatically assigned corresponding metatable.
 *
-* @subsection basic_value_types Temporary value handling
-* This documentation includes numerous references to @ref lua::Temporary "Temporary" type. What is it?
+* @subsection basic_values_temporary Temporary value handling
+* This documentation includes numerous references to @ref lua::Temporary "Temporary" type.
 *
 * The Lua values may be stored in different places: stack, global variables, upvalues, registry etc.
 * Even more important, they could be temporary results of some operations, which means they do not exist at all before the operation
@@ -109,25 +109,33 @@
 * To handle such cases and free you from managing the stack manually, this library uses special proxy types constructed via templates.
 * You do not need to know their exact types, because they behave just like @ref lua::Valref "Valref".
 *
-* @subsection basic_value_special Special value types
-* @subsubsection basic_value_special_valref Valref
-* The @ref lua::Valref "Valref" type represents a reference to a value that exists on Lua stack and isn't supposed to be removed any time soon
-* (to be exact, no reference is supposed to outlive referenced value). Function arguments are perfect example of such values.
+* @subsection basic_values_valref Valref
+* The @ref lua::Valref "Valref" type represents a reference to an existing @ref basic_values_anchors "anchor object". It is
+* safe to pass around as long as it doesn't outlive the anchor object it references.
 *
-* @subsubsection basic_values_special_value Value
+* @subsection basic_values_anchors Anchor value types
+* Anchor types provide permanent residence for Lua values (that is, anchor object reserves one or several stack slots for itself for as long as it exist).
+* They "anchor" a value to the stack for future reference, hence such a name.
+*
+* @subsubsection basic_values_anchors_value Value
 * The @ref lua::Value "Value" type represents a single Lua value on the stack. This type is intended to be used to anchor
 * result of some cumbersome operation for subsequent use without repeating that operation again. Because Value object represents
 * more an anchor to a position in stack rather than its content, the actual value at that position can be replaced at any time
-* with simple assignment. The only difference with @ref basic_value_special_valref "Valref" is that a Value object is considered
+* with simple assignment. The only difference with @ref basic_values_valref "Valref" is that a Value object is considered
 * a new entity and when Value object expires, the referenced slot is removed from the stack.
 *
-* @subsubsection basic_values_special_table Table
-* The @ref lua::Table "Table" type represents a single specific subtype of Lua value: a table on the stack. This type has reduced set of
-* available operations, leaving only those applicable to tables and adding some more.
+* @subsubsection basic_values_anchors_table Table
+* The @ref lua::Table "Table" type represents a single specific subtype of Lua value: a table. This type has reduced set of
+* available operations, leaving only those applicable to tables, but in addition it has
+* @ref lua::Table::raw "raw" access and allows to @ref lua::Table::iterate "iterate" over the contents.
 *
-* @subsection basic_value_valset Value set
+* This type also has static functions, @ref lua::Table::array "array" and @ref lua::Table::records "records"
+* that create filled table with the values you provide.
+*
+* @subsubsection basic_values_anchors_valset Valset
 * The @ref lua::Valset "Valset" object represents a contiguous set of values on the stack. The main purpose of this type is
-* to hold multiple values returned from function call. The arguments for the function are also represented as a read-only Valset object.
-* It is possible to grow Valset gradually in order to collect an arbitrary number of values, and returning single Valset from
-* function is a special case where members of the set are used directly as multiple return values without copying.
+* to hold multiple values returned from function call, also it captures the success status of protected calls.
+* The @ref lua::Context::args "arguments" for the function are also represented as a read-only @ref lua::Valset "Valset" object.
+* It is possible to grow or shrink @ref lua::Valset "Valset" gradually in order to collect an arbitrary number of values,
+* and returning single @ref lua::Valset "Valset" from function is a special case: contents of the set is used directly rather than being copied.
 */

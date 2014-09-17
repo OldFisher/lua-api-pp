@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-09-09-0</span>
+   &#160;<span id="projectnumber">2014-09-18-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -113,7 +113,7 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="line">{</div>
 <div class="line">  <span class="keywordflow">try</span> {</div>
 <div class="line">    state.<a class="code" href="classlua_1_1_state.html#aba8b923ec2ff1b88ccb75ab9cf24bf6d">runString</a>(line); <span class="comment">// Attempt to execute string</span></div>
-<div class="line">  } <span class="keywordflow">catch</span>(std::exception&amp; e) {</div>
+<div class="line">  } <span class="keywordflow">catch</span>(exception&amp; e) {</div>
 <div class="line">    cerr &lt;&lt; e.what() &lt;&lt; endl;  <span class="comment">// Show error message in case of execution failure</span></div>
 <div class="line">  }</div>
 <div class="line">}</div>
@@ -180,7 +180,7 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="line"><a class="code" href="lua_8hpp.html#aa5b908481d9041fe334bfd1674ded658">LUAPP_USERDATA</a>(dvec, <span class="stringliteral">&quot;Number array&quot;</span>)</div>
 <div class="line"></div>
 <div class="line">dvec aCreate(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size) { <span class="keywordflow">return</span> dvec(size); }</div>
-<div class="line"><span class="keywordtype">void</span> aDestroy(dvec&amp; <span class="keyword">self</span>) {<span class="keyword">self</span>.~dvec();}</div>
+<div class="line"><span class="keywordtype">void</span> aDestroy(dvec&amp; <span class="keyword">self</span>) { <span class="keyword">self</span>.~dvec(); }</div>
 <div class="line"><span class="keywordtype">void</span> aWrite(dvec&amp; <span class="keyword">self</span>, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index, <span class="keywordtype">double</span> val) { <span class="keyword">self</span>.at(index) = val; }</div>
 <div class="line"></div>
 <div class="line"><a class="code" href="classlua_1_1_retval.html">Retval</a> setup(<a class="code" href="classlua_1_1_context.html">Context</a>&amp; c)</div>
@@ -199,7 +199,7 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="line">{</div>
 <div class="line">  <span class="keywordflow">try</span> {</div>
 <div class="line">    state.<a class="code" href="classlua_1_1_state.html#aba8b923ec2ff1b88ccb75ab9cf24bf6d">runString</a>(line);</div>
-<div class="line">  } <span class="keywordflow">catch</span>(std::exception&amp; e) {</div>
+<div class="line">  } <span class="keywordflow">catch</span>(exception&amp; e) {</div>
 <div class="line">    cerr &lt;&lt; e.what() &lt;&lt; endl;</div>
 <div class="line">  }</div>
 <div class="line">}</div>
@@ -213,7 +213,7 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <div class="line">  }</div>
 <div class="line">}</div>
 <div class="line"></div>
-<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[])</div>
+<div class="line"><span class="keywordtype">int</span> main()</div>
 <div class="line">{</div>
 <div class="line">  <a class="code" href="classlua_1_1_state.html">State</a> state;</div>
 <div class="line">  state.<a class="code" href="classlua_1_1_state.html#a24c948f536af9c1ee55a4475f8f52538">call</a>(mkcf&lt;setup&gt;);</div>
@@ -224,7 +224,7 @@ $(document).ready(function(){initNavTree('motivational_example.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Sep 9 2014 10:13:52 for Lua-API++ by
+    <li class="footer">Generated on Thu Sep 18 2014 15:24:45 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

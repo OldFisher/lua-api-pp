@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-09-09-0</span>
+   &#160;<span id="projectnumber">2014-09-18-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -211,6 +211,16 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;=</b> (<a
 <tr class="memitem:ab97fba2e43785d6aa0ce6b0592ec13e0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#ab97fba2e43785d6aa0ce6b0592ec13e0">pcall</a> (Args &amp;&amp;...args) const noexcept</td></tr>
 <tr class="memdesc:ab97fba2e43785d6aa0ce6b0592ec13e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protected call method.  <a href="#ab97fba2e43785d6aa0ce6b0592ec13e0">More...</a><br /></td></tr>
 <tr class="separator:ab97fba2e43785d6aa0ce6b0592ec13e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Closure handling</div></td></tr>
+<tr class="memitem:afe6ec98622e30bc56149f7fb42e551c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#afe6ec98622e30bc56149f7fb42e551c2">upvalue</a> (size_t index) const noexcept</td></tr>
+<tr class="memdesc:afe6ec98622e30bc56149f7fb42e551c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upvalue access inside closures.  <a href="#afe6ec98622e30bc56149f7fb42e551c2">More...</a><br /></td></tr>
+<tr class="separator:afe6ec98622e30bc56149f7fb42e551c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01e18a1361622e0ff44c1ce99915e29c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlua_1_1_valset.html">Valset</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#a01e18a1361622e0ff44c1ce99915e29c">getUpvalues</a> () const noexcept</td></tr>
+<tr class="memdesc:a01e18a1361622e0ff44c1ce99915e29c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve upvalues and their names.  <a href="#a01e18a1361622e0ff44c1ce99915e29c">More...</a><br /></td></tr>
+<tr class="separator:a01e18a1361622e0ff44c1ce99915e29c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af44f1135c2b710e1907044889c7d9783"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#structlua_1_1_closure_info">ClosureInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#af44f1135c2b710e1907044889c7d9783">getClosureInfo</a> () const noexcept</td></tr>
+<tr class="memdesc:af44f1135c2b710e1907044889c7d9783"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve information about closure.  <a href="#af44f1135c2b710e1907044889c7d9783">More...</a><br /></td></tr>
+<tr class="separator:af44f1135c2b710e1907044889c7d9783"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Miscellaneous operations</div></td></tr>
 <tr class="memitem:a4e1246286c0483be9641235e011d3c92"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e1246286c0483be9641235e011d3c92"></a>
 <a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#a4e1246286c0483be9641235e011d3c92">len</a> () const noexcept</td></tr>
@@ -778,6 +788,99 @@ Related Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="afe6ec98622e30bc56149f7fb42e551c2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a> upvalue </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Upvalue access inside closures. </p>
+<p>You can read and write upvalues inside closures with this function. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>1-based index of accessed upvalue. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a61c7e8fee768ec0f7d63de53c0c709bc" title="Check if the value is of given type or convertible. ">is&lt;LFunction&gt;()</a> </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>on wrong index. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a01e18a1361622e0ff44c1ce99915e29c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classlua_1_1_valset.html">Valset</a> getUpvalues </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve upvalues and their names. </p>
+<p>This function returns values and names of all closure upvalues. Upvalues are always named "" in C closures. Upvalue ordering in Lua functions is undefined. </p><dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a61c7e8fee768ec0f7d63de53c0c709bc" title="Check if the value is of given type or convertible. ">is&lt;LFunction&gt;()</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Value-name pairs for each upvalue. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af44f1135c2b710e1907044889c7d9783"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacelua.html#structlua_1_1_closure_info">ClosureInfo</a> getClosureInfo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve information about closure. </p>
+<p>This function is applicable only to closures. It returns number of upvalues, parameters and whether function is variadic (accepts variable number of arguments). </p><dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a61c7e8fee768ec0f7d63de53c0c709bc" title="Check if the value is of given type or convertible. ">is&lt;LFunction&gt;()</a> </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>For closures made from C functions <code>nParameters</code> is always 0 and <code>variadic</code> is always <b><code>true</code></b>. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="acadbfe8792299ba4fafaa646403e5b8c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1317,7 +1420,7 @@ Related Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelua.html">lua</a></li><li class="navelem"><a class="el" href="classlua_1_1_valref.html">Valref</a></li>
-    <li class="footer">Generated on Tue Sep 9 2014 10:13:52 for Lua-API++ by
+    <li class="footer">Generated on Thu Sep 18 2014 15:24:45 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -1,5 +1,6 @@
 var namespacelua =
 [
+    [ "ClosureInfo", "namespacelua.html#structlua_1_1_closure_info", "namespacelua_structlua_1_1_closure_info_dup" ],
     [ "Context", "classlua_1_1_context.html", "classlua_1_1_context" ],
     [ "Nil", "namespacelua.html#classlua_1_1_nil", null ],
     [ "Retval", "classlua_1_1_retval.html", null ],

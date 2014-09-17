@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-09-09-0</span>
+   &#160;<span id="projectnumber">2014-09-18-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -142,7 +142,7 @@ Lua values</h1>
 <p>Lua values, as opposed to <a class="el" href="basic_concepts.html#basic_values_native">native values</a>, are values stored inside Lua state. They are handled with value-objects, which incapsulate all available operations over values. In this documentation, "value" means a value-object unless specified otherwise. Values can be indexed with <code><b>[]</b></code> and called with <code><b>()</b></code> to same effect as in Lua code, producing another value(s). Arithmetic operations (not available in Lua 5.1 compatibility mode) with value-objects is done with Lua and produces yet another value-object.<br />
 Concatenation is supported with the <code><b>&amp;</b></code> operation, chain concatenations being optimized into a single operation.<br />
 Comparisons of value-objects is done through Lua, but produces native boolean values.<br />
-The <a class="el" href="classlua_1_1_valref.html">Valref</a> class documents all operations avaliable for value-object. Though there are <a class="el" href="basic_concepts.html#basic_value_types">other</a> types of value-objects, referred to as <a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>, they have same interface as <a class="el" href="classlua_1_1_valref.html">Valref</a>.</p>
+The <a class="el" href="classlua_1_1_valref.html">Valref</a> class documents all operations avaliable for value-object. Though there are <a class="el" href="basic_concepts.html#basic_values_temporary">other</a> types of value-objects, referred to as <a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>, they have same interface as <a class="el" href="classlua_1_1_valref.html">Valref</a>.</p>
 <h2><a class="anchor" id="basic_values_native"></a>
 Native values</h2>
 <p>Native values are values that are used immediately in C++ code. The library recognises several basic types as native, including <code><b>bool, int, unsigned, float, double, const char*</b></code> and <code>std::string</code>. Native values of supported types can be implicitly promoted to Lua values when used in a context that expects a Lua value: function parameters, indices, operands etc. Lua values can be converted to appropriate native type implicitly or explicitly with <a class="el" href="classlua_1_1_valref.html#a5c6a91e9b5e988939974679033c337dc">cast</a> method. This documentation refers collectively to anything that is or can be promoted to Lua value as <a class="el" href="namespacelua.html#classlua_1_1_valobj">Valobj</a>.</p>
@@ -150,31 +150,33 @@ Native values</h2>
 User values</h2>
 <p>Lua API++ library supports user-type handling in a minimally intrusive way. Objects of type that is bound as user-data with <a class="el" href="lua_8hpp.html#aa5b908481d9041fe334bfd1674ded658">LUAPP_USERDATA</a> macro are recognised as such and can be implicitly promoted to Lua values. Lua values can be converted to reference to user type explicitly, using <a class="el" href="classlua_1_1_valref.html#a5c6a91e9b5e988939974679033c337dc">cast</a> method.</p>
 <p>Be sure to <a class="el" href="classlua_1_1_context.html#a1e702413d170d8cdc00ae9374d7664c7">assign</a> individual metatables to all userdata types when initializing environment: metatables are used to identify userdata properly. Casting to userdata without assigned metatable will always fail. When a new userdata is created, it is automatically assigned corresponding metatable.</p>
-<h2><a class="anchor" id="basic_value_types"></a>
+<h2><a class="anchor" id="basic_values_temporary"></a>
 Temporary value handling</h2>
-<p>This documentation includes numerous references to <a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a> type. What is it?</p>
+<p>This documentation includes numerous references to <a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a> type.</p>
 <p>The Lua values may be stored in different places: stack, global variables, upvalues, registry etc. Even more important, they could be temporary results of some operations, which means they do not exist at all before the operation and must be discarded after use. Their creation may require yet more temporary values.</p>
 <p>To handle such cases and free you from managing the stack manually, this library uses special proxy types constructed via templates. You do not need to know their exact types, because they behave just like <a class="el" href="classlua_1_1_valref.html">Valref</a>.</p>
-<h2><a class="anchor" id="basic_value_special"></a>
-Special value types</h2>
-<h3><a class="anchor" id="basic_value_special_valref"></a>
-Valref</h3>
-<p>The <a class="el" href="classlua_1_1_valref.html">Valref</a> type represents a reference to a value that exists on Lua stack and isn't supposed to be removed any time soon (to be exact, no reference is supposed to outlive referenced value). Function arguments are perfect example of such values.</p>
-<h3><a class="anchor" id="basic_values_special_value"></a>
+<h2><a class="anchor" id="basic_values_valref"></a>
+Valref</h2>
+<p>The <a class="el" href="classlua_1_1_valref.html">Valref</a> type represents a reference to an existing <a class="el" href="basic_concepts.html#basic_values_anchors">anchor object</a>. It is safe to pass around as long as it doesn't outlive the anchor object it references.</p>
+<h2><a class="anchor" id="basic_values_anchors"></a>
+Anchor value types</h2>
+<p>Anchor types provide permanent residence for Lua values (that is, anchor object reserves one or several stack slots for itself for as long as it exist). They "anchor" a value to the stack for future reference, hence such a name.</p>
+<h3><a class="anchor" id="basic_values_anchors_value"></a>
 Value</h3>
-<p>The <a class="el" href="classlua_1_1_value.html">Value</a> type represents a single Lua value on the stack. This type is intended to be used to anchor result of some cumbersome operation for subsequent use without repeating that operation again. Because Value object represents more an anchor to a position in stack rather than its content, the actual value at that position can be replaced at any time with simple assignment. The only difference with <a class="el" href="basic_concepts.html#basic_value_special_valref">Valref</a> is that a Value object is considered a new entity and when Value object expires, the referenced slot is removed from the stack.</p>
-<h3><a class="anchor" id="basic_values_special_table"></a>
+<p>The <a class="el" href="classlua_1_1_value.html">Value</a> type represents a single Lua value on the stack. This type is intended to be used to anchor result of some cumbersome operation for subsequent use without repeating that operation again. Because Value object represents more an anchor to a position in stack rather than its content, the actual value at that position can be replaced at any time with simple assignment. The only difference with <a class="el" href="basic_concepts.html#basic_values_valref">Valref</a> is that a Value object is considered a new entity and when Value object expires, the referenced slot is removed from the stack.</p>
+<h3><a class="anchor" id="basic_values_anchors_table"></a>
 Table</h3>
-<p>The <a class="el" href="classlua_1_1_table.html">Table</a> type represents a single specific subtype of Lua value: a table on the stack. This type has reduced set of available operations, leaving only those applicable to tables and adding some more.</p>
-<h2><a class="anchor" id="basic_value_valset"></a>
-Value set</h2>
-<p>The <a class="el" href="classlua_1_1_valset.html">Valset</a> object represents a contiguous set of values on the stack. The main purpose of this type is to hold multiple values returned from function call. The arguments for the function are also represented as a read-only Valset object. It is possible to grow Valset gradually in order to collect an arbitrary number of values, and returning single Valset from function is a special case where members of the set are used directly as multiple return values without copying. </p>
+<p>The <a class="el" href="classlua_1_1_table.html">Table</a> type represents a single specific subtype of Lua value: a table. This type has reduced set of available operations, leaving only those applicable to tables, but in addition it has <a class="el" href="classlua_1_1_table.html#a5035d6acb9b556155dbf648a4f534fae">raw</a> access and allows to <a class="el" href="classlua_1_1_table.html#a0a60280b157e0a680274815dc9dba65b">iterate</a> over the contents.</p>
+<p>This type also has static functions, <a class="el" href="classlua_1_1_table.html#a5a4a30eeb0e060e041f8e52fff89ec4a">array</a> and <a class="el" href="classlua_1_1_table.html#a196b5d9f1a833e25aa4d80536f279b0a">records</a> that create filled table with the values you provide.</p>
+<h3><a class="anchor" id="basic_values_anchors_valset"></a>
+Valset</h3>
+<p>The <a class="el" href="classlua_1_1_valset.html">Valset</a> object represents a contiguous set of values on the stack. The main purpose of this type is to hold multiple values returned from function call, also it captures the success status of protected calls. The <a class="el" href="classlua_1_1_context.html#ab737cde142498f1a45ee2a2430b5e980">arguments</a> for the function are also represented as a read-only <a class="el" href="classlua_1_1_valset.html">Valset</a> object. It is possible to grow or shrink <a class="el" href="classlua_1_1_valset.html">Valset</a> gradually in order to collect an arbitrary number of values, and returning single <a class="el" href="classlua_1_1_valset.html">Valset</a> from function is a special case: contents of the set is used directly rather than being copied. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Sep 9 2014 10:13:52 for Lua-API++ by
+    <li class="footer">Generated on Thu Sep 18 2014 15:24:45 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

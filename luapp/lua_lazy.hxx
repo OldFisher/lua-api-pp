@@ -25,6 +25,7 @@ namespace lua{
 		template<typename...> class lazySeries;
 		template<typename> class lazyImmediateValue;
 		template<typename>  class lazyConstIndexer;
+		template<typename> class lazyExtTempUpvalue;
 		class lazyGlobalIndexer;
 		class globalIndexer;
 		class lazyUpvalueIndexer;
@@ -200,6 +201,19 @@ namespace lua{
 			{
 				return Lazy<lazyTempIndexer<Lazy<Policy>, typename std::decay<IndexType>::type>>(S, std::move(*this), std::forward<IndexType>(index));
 			}
+
+
+			//! Upvalue access
+			Lazy<lazyExtTempUpvalue<Policy>> upvalue(size_t index) && noexcept
+			{
+				return Lazy<lazyExtTempUpvalue<Policy>>(S, std::move(*this), index);
+			}
+
+			//! Read upvalues.
+			Valset getUpvalues() &&;
+
+			//! Closure properties
+			ClosureInfo getClosureInfo() &&;
 
 			//! Generic call.
 			template<typename ... Args>
