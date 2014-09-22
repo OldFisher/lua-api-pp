@@ -603,13 +603,21 @@ namespace lua {
 	}
 
 
+#if(LUAPP_API_VERSION < 52)
+	LUAPP_HO_INLINE size_t Valref::retrieveClosureInfo(lua_State* s) noexcept
+	{
+		lua_Debug ld{};
+		lua_getinfo(s, ">u", &ld);
+		return ld.nups;
+	}
+#else // V52+
 	LUAPP_HO_INLINE ClosureInfo Valref::retrieveClosureInfo(lua_State* s) noexcept
 	{
 		lua_Debug ld{};
 		lua_getinfo(s, ">u", &ld);
 		return ClosureInfo{ld.nups, ld.nparams, ld.isvararg != 0};
 	}
-
+#endif
 
 //### Context ###############################################################################################################
 

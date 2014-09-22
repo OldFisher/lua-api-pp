@@ -80,17 +80,25 @@ BOOST_FIXTURE_TEST_CASE(ClosureInfoConst, fxContext)
 	Value v = context.global["fn"];
 	{
 		const auto result = v.getClosureInfo();
+#if(LUAPP_API_VERSION > 51)
 		BOOST_CHECK_EQUAL(result.nUpvalues, 1);
 		BOOST_CHECK_EQUAL(result.nParameters, 3);
 		BOOST_CHECK_EQUAL(result.variadic, false);
+#else
+		BOOST_CHECK_EQUAL(result, 1);
+#endif
 	}
 
 	v = context.closure(mkcf<giveUpvalue>, "one", "two");
 	{
 		const auto result = v.getClosureInfo();
+#if(LUAPP_API_VERSION > 51)
 		BOOST_CHECK_EQUAL(result.nUpvalues, 2);
 		BOOST_CHECK_EQUAL(result.nParameters, 0);
 		BOOST_CHECK_EQUAL(result.variadic, true);
+#else
+		BOOST_CHECK_EQUAL(result, 2);
+#endif
 	}
 }
 
@@ -101,17 +109,25 @@ BOOST_FIXTURE_TEST_CASE(ClosureInfoTemp, fxContext)
 	context.runString("local uv = \"ExtUpvalue\"; function fn(a, b, c) return uv; end");
 	{
 		const auto result = context.global["fn"].getClosureInfo();
+#if(LUAPP_API_VERSION > 51)
 		BOOST_CHECK_EQUAL(result.nUpvalues, 1);
 		BOOST_CHECK_EQUAL(result.nParameters, 3);
 		BOOST_CHECK_EQUAL(result.variadic, false);
+#else
+		BOOST_CHECK_EQUAL(result, 1);
+#endif
 	}
 
 	context.global["fn"] = context.closure(mkcf<giveUpvalue>, "one", "two");
 	{
 		const auto result = context.global["fn"].getClosureInfo();
+#if(LUAPP_API_VERSION > 51)
 		BOOST_CHECK_EQUAL(result.nUpvalues, 2);
 		BOOST_CHECK_EQUAL(result.nParameters, 0);
 		BOOST_CHECK_EQUAL(result.variadic, true);
+#else
+		BOOST_CHECK_EQUAL(result, 2);
+#endif
 	}
 }
 

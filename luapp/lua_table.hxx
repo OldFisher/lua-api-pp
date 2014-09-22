@@ -300,12 +300,34 @@ namespace lua {
 		//! @name Iteration
 		//! @{
 
+#ifdef DOXYGEN_ONLY
 		//! @brief Iterate over all table elements.
 		//! @tparam IterationFunction A <b>bool</b>( @ref Valref key, @ref Valref value) function/functor.
 		//! @param ifunc Function that processes key-value pairs. Return value tells wheter to continue(<b>true</b>) or break(<b>false</b>) the iteration.
 		//! @note During iteration any existing Valset will be blocked.
 		template<typename IterationFunction>
-		void iterate(IterationFunction ifunc) const;
+		size_t iterate(IterationFunction ifunc) const;
+#else	// Not DOXYGEN_ONLY
+		template<typename IterationFunction> typename std::enable_if<
+			std::is_void<
+				decltype(std::declval<IterationFunction>()(std::declval<Valref>(), std::declval<Valref>()))
+			>::value,
+		size_t>::type iterate(IterationFunction ifunc) const;
+
+		template<typename IterationFunction> typename std::enable_if<
+			std::is_convertible<
+				bool,
+				decltype(std::declval<IterationFunction>()(std::declval<Valref>(), std::declval<Valref>()))
+			>::value,
+		size_t>::type iterate(IterationFunction ifunc) const;
+
+		template<typename T = void>
+		size_t iterate(...) const
+		{
+			static_assert(!std::is_same<T, T>::value, "The callback must be void(Valref, Valref) or bool(Valref, Valref)");
+			return 0;
+		}
+#endif	// DOXYGEN_ONLY
 		//! @}
 
 

@@ -116,7 +116,10 @@ BOOST_FIXTURE_TEST_CASE(Iteration, fxContext)
 {
 	context.runString("val = {1, 2, 3}");
 	Table t = context.global["val"];
-	t.iterate([] (Valref k, Valref v) {BOOST_CHECK_EQUAL(k.cast<double>(), v.cast<double>()); return true;});
+	const auto rv1 = t.iterate([] (Valref k, Valref v) {BOOST_CHECK_EQUAL(k.cast<double>(), v.cast<double>()); return true;});
+	BOOST_CHECK_EQUAL(rv1, 3);
+	const auto rv2 = t.iterate([] (Valref k, Valref v) {BOOST_CHECK_EQUAL(k.cast<double>(), v.cast<double>());});
+	BOOST_CHECK_EQUAL(rv2, 3);
 }
 
 

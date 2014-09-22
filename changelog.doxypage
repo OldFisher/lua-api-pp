@@ -8,6 +8,10 @@
 /*!
 * @page changelog Changelog
 *
+* @section changes_2014_09_22_0 2014-09-22-0
+* @li @ref lua::Table::iterate "Table::iterate" now accepts bool- and void-returning callbacks, and checks its compatibility with static assert;
+* @li fixed closure-handling utilities in 5.1 mode.
+*
 * @section changes_2014_09_18_0 2014-09-18-0
 * @li Added closure handling into @ref lua::Valref "value objects": read and write @ref lua::Valref::upvalue "upvalues",
 * @ref lua::Valref::getUpvalues "query" upvalue value-name pairs and @ref lua::Valref::getClosureInfo "get" general closure info.

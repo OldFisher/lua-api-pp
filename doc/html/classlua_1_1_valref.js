@@ -24,6 +24,7 @@ var classlua_1_1_valref =
     [ "upvalue", "classlua_1_1_valref.html#afe6ec98622e30bc56149f7fb42e551c2", null ],
     [ "getUpvalues", "classlua_1_1_valref.html#a01e18a1361622e0ff44c1ce99915e29c", null ],
     [ "getClosureInfo", "classlua_1_1_valref.html#af44f1135c2b710e1907044889c7d9783", null ],
+    [ "getClosureInfo", "classlua_1_1_valref.html#a231038031d909ac3c3c703755e168b62", null ],
     [ "len", "classlua_1_1_valref.html#a4e1246286c0483be9641235e011d3c92", null ],
     [ "len", "classlua_1_1_valref.html#a94c909f1f9c10e781ecf7ecd4f88280d", null ],
     [ "mt", "classlua_1_1_valref.html#acadbfe8792299ba4fafaa646403e5b8c", null ],

@@ -213,7 +213,11 @@ namespace lua{
 			Valset getUpvalues() &&;
 
 			//! Closure properties
+#if(LUAPP_API_VERSION > 51)
 			ClosureInfo getClosureInfo() &&;
+#else
+			size_t getClosureInfo() &&;
+#endif
 
 			//! Generic call.
 			template<typename ... Args>

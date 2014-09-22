@@ -410,14 +410,15 @@ namespace lua {
 
 
 
-	//! @brief Closure properties.
+#if(LUAPP_API_VERSION > 51 || defined(DOXYGEN_ONLY))
+	//! @brief Closure properties. @lv52
 	//! @see lua::Valref::getClosureInfo
 	struct ClosureInfo {
 		size_t nUpvalues;		//!< Amount of upvalues.
 		size_t nParameters;	//!< Amount of parameters.
 		bool variadic;			//!< Whether function accepts variable number of arguments.
 	};
-
+#endif
 
 
 	class Valref;
@@ -695,6 +696,7 @@ namespace lua {
 		//! @return Value-name pairs for each upvalue.
 		Valset getUpvalues() const noexcept;
 
+#if(defined(DOXYGEN_ONLY) || LUAPP_API_VERSION > 51)
 		//! @brief Retrieve information about closure.
 		//! @details This function is applicable only to closures.
 		//! It returns number of upvalues, parameters and whether function
@@ -703,6 +705,14 @@ namespace lua {
 		//! @note For closures made from C functions @c nParameters is
 		//! always 0 and @c variadic is always <b><code>true</code></b>.
 		ClosureInfo getClosureInfo() const noexcept;
+#endif
+#if(defined(DOXYGEN_ONLY) || LUAPP_API_VERSION <= 51)
+		//! @brief Retrieve information about closure.
+		//! @details This function is applicable only to closures.
+		//! @return Number of upvalues.
+		//! @pre this->is<LFunction>()
+		size_t getClosureInfo() const noexcept;
+#endif
 		//! @}
 
 
@@ -753,7 +763,7 @@ namespace lua {
 		//! @}
 
 
-		//! @name Arithmetics (Lua 5.2+ only)
+		//! @name Arithmetics @lv52.
 		//! @{
 
 #ifdef DOXYGEN_ONLY
@@ -856,8 +866,11 @@ namespace lua {
 
 		//! Push single upvalue to the stack
 		static const char* readUv(lua_State*, int, size_t);
+#if(LUAPP_API_VERSION > 51)
 		static ClosureInfo retrieveClosureInfo(lua_State*) noexcept;
-
+#else
+		static size_t retrieveClosureInfo(lua_State*) noexcept;
+#endif
 		// data
 		Context& context;
 		int index;
@@ -885,7 +898,7 @@ namespace lua {
 
 
 
-	//! @name Arithmetics (Lua 5.2+ only)
+	//! @name Arithmetics @lv52
 	//! @{
 
 #ifdef DOXYGEN_ONLY

@@ -215,12 +215,19 @@ namespace lua {
 	}
 
 
+#if(LUAPP_API_VERSION > 51)
 	inline ClosureInfo Valref::getClosureInfo() const noexcept
 	{
 		context.duplicate(index);
 		return retrieveClosureInfo(context);
 	}
-
+#else
+	inline size_t Valref::getClosureInfo() const noexcept
+	{
+		context.duplicate(index);
+		return retrieveClosureInfo(context);
+	}
+#endif
 
 
 //#####################  tValue  ###############################################
@@ -275,13 +282,21 @@ namespace lua {
 		}
 
 
+#if(LUAPP_API_VERSION > 51)
 		template<typename Policy>
 		ClosureInfo Lazy<Policy>::getClosureInfo() &&
 		{
 			this->pushSingle();
 			return ::lua::Valref::retrieveClosureInfo(S.L);
 		}
-
+#else
+		template<typename Policy>
+		size_t Lazy<Policy>::getClosureInfo() &&
+		{
+			this->pushSingle();
+			return ::lua::Valref::retrieveClosureInfo(S.L);
+		}
+#endif
 
 //#####################  lazySeries  ###########################################
 
@@ -1070,17 +1085,46 @@ namespace lua {
 
 
 	template<typename IterationFunction>
-	inline void Table::iterate(IterationFunction ifunc) const
+	inline typename std::enable_if<
+		std::is_convertible<
+			bool,
+			decltype(std::declval<IterationFunction>()(std::declval<Valref>(), std::declval<Valref>()))
+		>::value,
+	size_t>::type Table::iterate(IterationFunction ifunc) const
 	{
 		const size_t kIdx = Anchor.context.getTop() + 1, vIdx = kIdx + 1;
+		size_t iterationCount = 0;
 		beginIteration(Anchor.context);
-		while(nextIteration(Anchor))
+		while(nextIteration(Anchor)){
+			++iterationCount;
 			if(!ifunc(Valref(Anchor.context, kIdx), Valref(Anchor.context, vIdx)))
 			{
 				Anchor.context.pop(2);
 				break;
 			}
+		}
+		return iterationCount;
 	}
+
+
+
+	template<typename IterationFunction>
+	inline typename std::enable_if<
+		std::is_void<
+			decltype(std::declval<IterationFunction>()(std::declval<Valref>(), std::declval<Valref>()))
+		>::value,
+	size_t>::type Table::iterate(IterationFunction ifunc) const
+	{
+		const size_t kIdx = Anchor.context.getTop() + 1, vIdx = kIdx + 1;
+		size_t iterationCount = 0;
+		beginIteration(Anchor.context);
+		while(nextIteration(Anchor)){
+			++iterationCount;
+			ifunc(Valref(Anchor.context, kIdx), Valref(Anchor.context, vIdx));
+		}
+		return iterationCount;
+	}
+
 
 
 	template<typename IndexType>
