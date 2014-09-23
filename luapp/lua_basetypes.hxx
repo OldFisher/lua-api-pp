@@ -697,7 +697,7 @@ namespace lua {
 		Valset getUpvalues() const noexcept;
 
 #if(defined(DOXYGEN_ONLY) || LUAPP_API_VERSION > 51)
-		//! @brief Retrieve information about closure.
+		//! @brief Retrieve information about closure @lv52.
 		//! @details This function is applicable only to closures.
 		//! It returns number of upvalues, parameters and whether function
 		//! is variadic (accepts variable number of arguments).
@@ -707,7 +707,7 @@ namespace lua {
 		ClosureInfo getClosureInfo() const noexcept;
 #endif
 #if(defined(DOXYGEN_ONLY) || LUAPP_API_VERSION <= 51)
-		//! @brief Retrieve information about closure.
+		//! @brief Retrieve information about closure @lv51.
 		//! @details This function is applicable only to closures.
 		//! @return Number of upvalues.
 		//! @pre this->is<LFunction>()

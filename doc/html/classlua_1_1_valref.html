@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-09-22-0</span>
+   &#160;<span id="projectnumber">2014-09-22-1</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -219,10 +219,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;=</b> (<a
 <tr class="memdesc:a01e18a1361622e0ff44c1ce99915e29c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve upvalues and their names.  <a href="#a01e18a1361622e0ff44c1ce99915e29c">More...</a><br /></td></tr>
 <tr class="separator:a01e18a1361622e0ff44c1ce99915e29c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af44f1135c2b710e1907044889c7d9783"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#structlua_1_1_closure_info">ClosureInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#af44f1135c2b710e1907044889c7d9783">getClosureInfo</a> () const noexcept</td></tr>
-<tr class="memdesc:af44f1135c2b710e1907044889c7d9783"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve information about closure.  <a href="#af44f1135c2b710e1907044889c7d9783">More...</a><br /></td></tr>
+<tr class="memdesc:af44f1135c2b710e1907044889c7d9783"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve information about closure <em>[Lua 5.2+ only]</em>.  <a href="#af44f1135c2b710e1907044889c7d9783">More...</a><br /></td></tr>
 <tr class="separator:af44f1135c2b710e1907044889c7d9783"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a231038031d909ac3c3c703755e168b62"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#a231038031d909ac3c3c703755e168b62">getClosureInfo</a> () const noexcept</td></tr>
-<tr class="memdesc:a231038031d909ac3c3c703755e168b62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve information about closure.  <a href="#a231038031d909ac3c3c703755e168b62">More...</a><br /></td></tr>
+<tr class="memdesc:a231038031d909ac3c3c703755e168b62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve information about closure <em>[Lua 5.1 only]</em>.  <a href="#a231038031d909ac3c3c703755e168b62">More...</a><br /></td></tr>
 <tr class="separator:a231038031d909ac3c3c703755e168b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Miscellaneous operations</div></td></tr>
 <tr class="memitem:a4e1246286c0483be9641235e011d3c92"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e1246286c0483be9641235e011d3c92"></a>
@@ -878,7 +878,7 @@ Related Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Retrieve information about closure. </p>
+<p>Retrieve information about closure <em>[Lua 5.2+ only]</em>. </p>
 <p>This function is applicable only to closures. It returns number of upvalues, parameters and whether function is variadic (accepts variable number of arguments). </p><dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a61c7e8fee768ec0f7d63de53c0c709bc" title="Check if the value is of given type or convertible. ">is&lt;LFunction&gt;()</a> </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>For closures made from C functions <code>nParameters</code> is always 0 and <code>variadic</code> is always <b><code>true</code></b>. </dd></dl>
 
@@ -905,7 +905,7 @@ Related Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Retrieve information about closure. </p>
+<p>Retrieve information about closure <em>[Lua 5.1 only]</em>. </p>
 <p>This function is applicable only to closures. </p><dl class="section return"><dt>Returns</dt><dd>Number of upvalues. </dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a61c7e8fee768ec0f7d63de53c0c709bc" title="Check if the value is of given type or convertible. ">is&lt;LFunction&gt;()</a> </dd></dl>
 
@@ -1450,7 +1450,7 @@ Related Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelua.html">lua</a></li><li class="navelem"><a class="el" href="classlua_1_1_valref.html">Valref</a></li>
-    <li class="footer">Generated on Mon Sep 22 2014 11:22:50 for Lua-API++ by
+    <li class="footer">Generated on Tue Sep 23 2014 08:24:26 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

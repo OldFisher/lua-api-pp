@@ -10,7 +10,7 @@ The goal of this library is to let you operate Lua using simple expressive synta
 * easy table creation and handling;
 * automatic wrapping of functions.
 
-##Most noticeable \b unsupported features:
+##Most noticeable **unsupported** features:
 * debug;
 * coroutines;
 * string buffers.
