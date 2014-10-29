@@ -5,6 +5,7 @@ var searchData=
   ['reference',['reference',['../classlua_1_1_valset.html#ac1b4bcd9a31488015c182cd8168b8846',1,'lua::Valset']]],
   ['registry',['Registry',['../classlua_1_1_context_1_1_registry.html',1,'lua::Context']]],
   ['registry',['registry',['../classlua_1_1_context.html#a36086215a6fa5c75c34674924dbc5aa3',1,'lua::Context']]],
+  ['registrykey',['RegistryKey',['../classlua_1_1_registry_key.html',1,'lua']]],
   ['ret',['ret',['../classlua_1_1_context.html#a3c8e9a2e4b05f93984c482ce00f2781a',1,'lua::Context::ret(ValueTypes &amp;&amp;...values)'],['../classlua_1_1_context.html#a62bdcc3a90cb81b1c2f665157b524a34',1,'lua::Context::ret(const Valset &amp;vs) noexcept']]],
   ['retval',['Retval',['../classlua_1_1_retval.html',1,'lua']]],
   ['reverse_5fiterator',['reverse_iterator',['../classlua_1_1_valset.html#a92b881db836646f4039adcbb73c8595f',1,'lua::Valset']]],

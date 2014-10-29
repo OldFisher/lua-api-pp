@@ -5,6 +5,7 @@ var hierarchy =
     [ "Context::InitializeExplicitly", "classlua_1_1_context.html#structlua_1_1_context_1_1_initialize_explicitly", null ],
     [ "Nil", "namespacelua.html#classlua_1_1_nil", null ],
     [ "Context::Registry", "classlua_1_1_context_1_1_registry.html", null ],
+    [ "RegistryKey", "classlua_1_1_registry_key.html", null ],
     [ "Retval", "classlua_1_1_retval.html", null ],
     [ "State", "classlua_1_1_state.html", null ],
     [ "Table", "classlua_1_1_table.html", null ],

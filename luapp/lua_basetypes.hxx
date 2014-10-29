@@ -994,6 +994,21 @@ namespace lua {
 	}
 	//! @endcond
 
+
+
+	//! @brief Key for registry-stored values.
+	class RegistryKey {
+		friend class ::lua::Context;
+	public:
+		RegistryKey(const RegistryKey&) noexcept = default;
+	private:
+		const int value;
+		RegistryKey(int value_) noexcept:
+			value(value_)
+		{
+		}
+	};
+
 }
 
 #endif // LUA_BASETYPES_HPP_INCLUDED

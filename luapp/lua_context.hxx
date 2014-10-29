@@ -115,10 +115,10 @@ namespace lua {
 		public:
 
 			template<typename ValueType>
-			int store(ValueType&& value)
+			RegistryKey store(ValueType&& value)
 			{
 				context.push(std::forward<ValueType>(value));
-				return makeReference(context);
+				return context.makeReference();
 			}
 
 
@@ -135,13 +135,11 @@ namespace lua {
 				return (*this)[static_cast<const char*>(index)];
 			}
 
-			_::Lazy<_::lazyRawIndexer<int>> operator [] (int index) noexcept;
+			_::Lazy<_::lazyRawIndexer<int>> operator [] (RegistryKey index) noexcept;
 
 		private:
 			// data
 			Context& context;
-			// utils
-			static int makeReference(lua_State* s);
 		};
 #endif // DOXYGEN_ONLY
 
@@ -847,6 +845,9 @@ namespace lua {
 
 		//! break execution and raise Lua error
 		Retval doerror() const;
+
+		//! Store top value in the registry
+		RegistryKey makeReference();
 
 	};
 

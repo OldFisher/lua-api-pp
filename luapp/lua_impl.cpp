@@ -839,15 +839,15 @@ namespace lua {
 	}
 
 
-	LUAPP_HO_INLINE _::Lazy<_::lazyRawIndexer<int>> Context::Registry::operator [] (int index) noexcept
+	LUAPP_HO_INLINE _::Lazy<_::lazyRawIndexer<int>> Context::Registry::operator [] (RegistryKey index) noexcept
 	{
-		return _::Lazy<_::lazyRawIndexer<int>>(context, LUA_REGISTRYINDEX, index);
+		return _::Lazy<_::lazyRawIndexer<int>>(context, LUA_REGISTRYINDEX, index.value);
 	}
 
 
-	LUAPP_HO_INLINE int Context::Registry::makeReference(lua_State* s)
+	LUAPP_HO_INLINE RegistryKey Context::makeReference()
 	{
-		return luaL_ref(s, LUA_REGISTRYINDEX);
+		return RegistryKey(luaL_ref(L, LUA_REGISTRYINDEX));
 	}
 
 

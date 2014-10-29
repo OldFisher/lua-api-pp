@@ -8,6 +8,10 @@
 /*!
 * @page changelog Changelog
 *
+* @section changes_2014_10_29_0 2014-10-29-0
+* @li Breaking change: @ref lua::Context::Registry::store "store" operation for registry now returns @ref lua::RegistryKey "RegistryKey"
+* instead of <b><code>int</code></b>. It is still the same <b><code>int</code></b>, but it cannot be modified, assigned to, used in arithmetics etc.
+*
 * @section changes_2014_09_22_0 2014-09-22-0
 * @li @ref lua::Table::iterate "Table::iterate" now accepts bool- and void-returning callbacks, and checks its compatibility with static assert;
 * @li fixed closure-handling utilities in 5.1 mode.
