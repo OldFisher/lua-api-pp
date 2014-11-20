@@ -326,7 +326,7 @@ namespace lua{
 #else
 		class lazyArithmetics<T1, void, Arithmetics::UnaryMinus>: public lazyPolicy {
 #endif	// LUAPP_NONDISCARDABLE_ARITHMETICS
-			template <typename, bool> friend class _::Lazy;
+			template <typename> friend class _::Lazy;
 
 		public:
 			lazyArithmetics(lazyArithmetics<T1, void, Arithmetics::UnaryMinus>&&) noexcept = default;
@@ -380,7 +380,7 @@ namespace lua{
 //#####################  Where operation  ######################################
 
 		class lazyWhere final: public lazyPolicy {
-			template<typename, bool> friend class _::Lazy;
+			template<typename> friend class _::Lazy;
 
 		public:
 			lazyWhere(lazyWhere&&) noexcept = default;
