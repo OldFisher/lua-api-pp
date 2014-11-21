@@ -66,7 +66,7 @@ namespace lua{
 			template<typename> friend class ::lua::_::Lazy;
 			friend class ::lua::_::lazyPolicy;
 			friend class ::lua::_::lazyImmediateValue<Lazy<Policy>>;
-			template<typename, typename...> friend class ::lua::_::lazySeries;
+			template<typename...> friend class ::lua::_::lazySeries;
 			template<typename> friend class ::lua::_::lazyConstIndexer;
 			friend class ::lua::_::lazyGlobalIndexer;
 			friend class ::lua::_::lazyUpvalueIndexer;
@@ -102,19 +102,19 @@ namespace lua{
 			//! Explicit conversion to supported types.
 			template<typename T> T cast() &&
 			{
-				return toTemporary().cast<T>();
+				return toTemporary().template cast<T>();
 			}
 
 			//! Explicit conversion to supported types.
 			template<typename T> T optcast(const T& backupValue = T()) &&
 			{
-				return toTemporary().optcast<T>(backupValue);
+				return toTemporary().template optcast<T>(backupValue);
 			}
 
 			//! Check if the value is of given type or convertible.
 			template<typename T> bool is() &&
 			{
-				return toTemporary().is<T>();
+				return toTemporary().template is<T>();
 			}
 
 			ValueType type() &&
@@ -483,32 +483,32 @@ namespace lua{
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator == (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).operator ==  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).template operator ==  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator != (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).operator != <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).template operator != <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator < (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).operator >  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).template operator >  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator > (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).operator <  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).template operator <  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator <= (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).operator >=  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).template operator >=  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator >= (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).operator <=  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs).template operator <=  <ValueType> (std::forward<ValueType>(lhs));
 		}
 
 

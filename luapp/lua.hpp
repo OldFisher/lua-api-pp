@@ -15,6 +15,7 @@
 #include <utility>
 #include <functional>
 #include <algorithm>
+#include <string>
 
 
 #ifdef LUAPP_COMPATIBILITY_V51
