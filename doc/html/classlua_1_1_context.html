@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-10-29-0</span>
+   &#160;<span id="projectnumber">2014-11-24-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -250,9 +250,15 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <tr class="memdesc:a1562fbda0b030a4aaa8c18ab575434c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current stack size. <br /></td></tr>
 <tr class="separator:a1562fbda0b030a4aaa8c18ab575434c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr><td colspan="2"><div class="groupHeader">Accessor objects</div></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a0d31247fb1ab095fc5cb091b63a26996"><td class="memItemLeft" align="right" valign="top">static constexpr <br class="typebreak" />
+<a class="el" href="classlua_1_1_context.html#structlua_1_1_context_1_1_initialize_explicitly">InitializeExplicitly</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#a0d31247fb1ab095fc5cb091b63a26996">initializeExplicitly</a> {}</td></tr>
+<tr class="memdesc:a0d31247fb1ab095fc5cb091b63a26996"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicator constant used in explicit context creation.  <a href="#a0d31247fb1ab095fc5cb091b63a26996">More...</a><br /></td></tr>
+<tr class="separator:a0d31247fb1ab095fc5cb091b63a26996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
+Accessor objects and accompanying functions</h2></td></tr>
 <tr class="memitem:a7c0195836dcfe548f10ec4db184cde4b"><td class="memItemLeft" align="right" valign="top">GlobalIndexer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#a7c0195836dcfe548f10ec4db184cde4b">global</a></td></tr>
 <tr class="memdesc:a7c0195836dcfe548f10ec4db184cde4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global variable accessor.  <a href="#a7c0195836dcfe548f10ec4db184cde4b">More...</a><br /></td></tr>
 <tr class="separator:a7c0195836dcfe548f10ec4db184cde4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -265,13 +271,14 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a36086215a6fa5c75c34674924dbc5aa3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlua_1_1_context_1_1_registry.html">Registry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#a36086215a6fa5c75c34674924dbc5aa3">registry</a></td></tr>
 <tr class="memdesc:a36086215a6fa5c75c34674924dbc5aa3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classlua_1_1_context_1_1_registry.html" title="Type of registry accessor. ">Registry</a> accessor.  <a href="#a36086215a6fa5c75c34674924dbc5aa3">More...</a><br /></td></tr>
 <tr class="separator:a36086215a6fa5c75c34674924dbc5aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a0d31247fb1ab095fc5cb091b63a26996"><td class="memItemLeft" align="right" valign="top">static constexpr <br class="typebreak" />
-<a class="el" href="classlua_1_1_context.html#structlua_1_1_context_1_1_initialize_explicitly">InitializeExplicitly</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#a0d31247fb1ab095fc5cb091b63a26996">initializeExplicitly</a> {}</td></tr>
-<tr class="memdesc:a0d31247fb1ab095fc5cb091b63a26996"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicator constant used in explicit context creation.  <a href="#a0d31247fb1ab095fc5cb091b63a26996">More...</a><br /></td></tr>
-<tr class="separator:a0d31247fb1ab095fc5cb091b63a26996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeb565210f0a3397c698654eac98b286"><td class="memTemplParams" colspan="2">template&lt;typename... ArgTypes&gt; </td></tr>
+<tr class="memitem:adeb565210f0a3397c698654eac98b286"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#adeb565210f0a3397c698654eac98b286">checkArgs</a> (size_t amount=0) noexcept</td></tr>
+<tr class="memdesc:adeb565210f0a3397c698654eac98b286"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for function arguments and count.  <a href="#adeb565210f0a3397c698654eac98b286">More...</a><br /></td></tr>
+<tr class="separator:adeb565210f0a3397c698654eac98b286"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cca4edca70d09c882464096a5ffc4b0"><td class="memTemplParams" colspan="2">template&lt;typename... ArgTypes&gt; </td></tr>
+<tr class="memitem:a2cca4edca70d09c882464096a5ffc4b0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlua_1_1_context.html#a2cca4edca70d09c882464096a5ffc4b0">requireArgs</a> (size_t amount=0) noexcept</td></tr>
+<tr class="memdesc:a2cca4edca70d09c882464096a5ffc4b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for function arguments and count and report an error in case of failure.  <a href="#a2cca4edca70d09c882464096a5ffc4b0">More...</a><br /></td></tr>
+<tr class="separator:a2cca4edca70d09c882464096a5ffc4b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Access point to Lua context. </p>
@@ -887,6 +894,75 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="adeb565210f0a3397c698654eac98b286"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool checkArgs </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>amount</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check for function arguments and count. </p>
+<p>Checks <a class="el" href="classlua_1_1_context.html#ab737cde142498f1a45ee2a2430b5e980">args</a> for existence of arguments of specified types. The function checks for presence of arguments convertible to types specified in template parameters. If "amount" is bigger than the number of template parameters, the function also checks that <code>args.size() &gt;= amount</code>. Example: <code> c.checkArgs&lt;double, string&gt;(4); </code> checks that 4 arguments were passed to the function, first of which is a number and the second is a string. </p><dl class="section note"><dt>Note</dt><dd><code><b>void</b></code> is acceptable in template parameter list as a "placeholder" type, matching any type of value. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">amount</td><td>Minimum amount of arguments that must be present on the stack. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code><b>true</b></code> if required amount of arguments of required types is present, <code><b>false</b></code> otherwise. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classlua_1_1_context.html#a2cca4edca70d09c882464096a5ffc4b0" title="Check for function arguments and count and report an error in case of failure. ">requireArgs</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2cca4edca70d09c882464096a5ffc4b0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void requireArgs </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>amount</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check for function arguments and count and report an error in case of failure. </p>
+<p>Checks <a class="el" href="classlua_1_1_context.html#ab737cde142498f1a45ee2a2430b5e980">args</a> for existence of arguments of specified types. The function checks for presence of arguments convertible to types specified in template parameters. If "amount" is bigger than the number of template parameters, the function also checks that args.size() &gt;= amount. If the specification is not met, Lua error with diagnostic message is raised. </p><dl class="section note"><dt>Note</dt><dd><code><b>void</b></code> is acceptable in template parameter list as a "placeholder" type, matching any type of value. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">amount</td><td>Minimum amount of arguments that must be present on the stack. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classlua_1_1_context.html#adeb565210f0a3397c698654eac98b286" title="Check for function arguments and count. ">checkArgs</a> </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="a0d31247fb1ab095fc5cb091b63a26996"></a>
 <div class="memitem">
@@ -981,7 +1057,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelua.html">lua</a></li><li class="navelem"><a class="el" href="classlua_1_1_context.html">Context</a></li>
-    <li class="footer">Generated on Wed Oct 29 2014 10:10:58 for Lua-API++ by
+    <li class="footer">Generated on Mon Nov 24 2014 16:07:52 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

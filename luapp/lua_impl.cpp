@@ -308,6 +308,14 @@ namespace lua {
 	}
 
 
+
+	template<> LUAPP_HO_INLINE bool Valref::to<bool>() const
+	{
+		return lua_toboolean(context, index) != 0;
+	}
+
+
+
 	template<> LUAPP_HO_INLINE int Valref::cast<int>() const
 	{
 #if(LUAPP_API_VERSION >= 52)
@@ -322,6 +330,14 @@ namespace lua {
 #endif
 		return static_cast<int>(n);
 	}
+
+
+
+	template<> LUAPP_HO_INLINE int Valref::to<int>() const
+	{
+		return static_cast<int>(lua_tonumber(context, index));
+	}
+
 
 
 	template<> LUAPP_HO_INLINE unsigned int Valref::cast<unsigned int>() const
@@ -340,6 +356,14 @@ namespace lua {
 	}
 
 
+
+	template<> LUAPP_HO_INLINE unsigned int Valref::to<unsigned int>() const
+	{
+		return static_cast<unsigned int>(lua_tonumber(context, index));
+	}
+
+
+
 	template<> LUAPP_HO_INLINE long long Valref::cast<long long>() const
 	{
 #if(LUAPP_API_VERSION >= 52)
@@ -354,6 +378,14 @@ namespace lua {
 #endif
 		return static_cast<long long>(n);
 	}
+
+
+
+	template<> LUAPP_HO_INLINE long long Valref::to<long long>() const
+	{
+		return static_cast<long long>(lua_tonumber(context, index));
+	}
+
 
 
 	template<> LUAPP_HO_INLINE unsigned long long Valref::cast<unsigned long long>() const
@@ -372,6 +404,14 @@ namespace lua {
 	}
 
 
+
+	template<> LUAPP_HO_INLINE unsigned long long Valref::to<unsigned long long>() const
+	{
+		return static_cast<unsigned long long>(lua_tonumber(context, index));
+	}
+
+
+
 	template<> LUAPP_HO_INLINE float Valref::cast<float>() const
 	{
 #if(LUAPP_API_VERSION >= 52)
@@ -386,6 +426,14 @@ namespace lua {
 #endif
 		return static_cast<float>(n);
 	}
+
+
+
+	template<> LUAPP_HO_INLINE float Valref::to<float>() const
+	{
+		return static_cast<float>(lua_tonumber(context, index));
+	}
+
 
 
 	template<> LUAPP_HO_INLINE double Valref::cast<double>() const
@@ -404,6 +452,14 @@ namespace lua {
 	}
 
 
+
+	template<> LUAPP_HO_INLINE double Valref::to<double>() const
+	{
+		return static_cast<double>(lua_tonumber(context, index));
+	}
+
+
+
 	template<> LUAPP_HO_INLINE const char* Valref::cast<const char*>() const
 	{
 		const char* const rv = lua_tostring(context, index);
@@ -411,6 +467,14 @@ namespace lua {
 			throw std::runtime_error("Lua: bad cast to C string");
 		return rv;
 	}
+
+
+
+	template<> LUAPP_HO_INLINE const char* Valref::to<const char*>() const
+	{
+		return lua_tostring(context, index);
+	}
+
 
 
 	template<> LUAPP_HO_INLINE std::string Valref::cast<std::string>() const
@@ -422,6 +486,14 @@ namespace lua {
 	}
 
 
+
+	template<> LUAPP_HO_INLINE std::string Valref::to<std::string>() const
+	{
+		return lua_tostring(context, index);
+	}
+
+
+
 	template<> LUAPP_HO_INLINE CFunction Valref::cast<CFunction>() const
 	{
 		CFunction const rv = lua_tocfunction(context, index);
@@ -431,12 +503,27 @@ namespace lua {
 	}
 
 
+
+	template<> LUAPP_HO_INLINE CFunction Valref::to<CFunction>() const
+	{
+		return lua_tocfunction(context, index);
+	}
+
+
+
 	template<> bool Valref::is<LightUserData>() const noexcept;
 
 	template<> LUAPP_HO_INLINE LightUserData Valref::cast<LightUserData>() const
 	{
 		if(!is<LightUserData>())
 			throw std::runtime_error("Lua: bad cast to light userdata");
+		return lua_touserdata(context, index);
+	}
+
+
+
+	template<> LUAPP_HO_INLINE LightUserData Valref::to<LightUserData>() const
+	{
 		return lua_touserdata(context, index);
 	}
 

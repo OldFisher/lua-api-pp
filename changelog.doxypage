@@ -8,6 +8,15 @@
 /*!
 * @page changelog Changelog
 *
+* @section changes_2014_11_24_0 2014-11-24-0
+* @li Added argument-checkging functions, @ref lua::Context::checkArgs "Context::checkArgs" and @ref lua::Context::requireArgs "Context::requireArgs"
+* check types and amount of arguments passed to the function in @ref lua::Context::args "Context::args".
+* First function performs silent check and returns boolean result while the second one
+* raises Lua error with explanation if the check failed.
+* @li Added new conversion function, @ref lua::Valref::to "to". Without argument, it performs unchecked conversion.
+* Given backup value, it performs type check and returns backup if the type did not match,
+* superseding @ref lua::Valref::optcast "optcast" which is now deprecated.
+*
 * @section changes_2014_10_29_0 2014-10-29-0
 * @li Breaking change: @ref lua::Context::Registry::store "store" operation for registry now returns @ref lua::RegistryKey "RegistryKey"
 * instead of <b><code>int</code></b>. It is still the same <b><code>int</code></b>, but it cannot be modified, assigned to, used in arithmetics etc.

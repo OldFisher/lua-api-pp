@@ -33,6 +33,8 @@ var classlua_1_1_context =
     [ "getVersion", "classlua_1_1_context.html#aae3aca3ea7e6fc496ee22c79fe3d328f", null ],
     [ "operator::lua_State *", "classlua_1_1_context.html#a13069e4b06e9467e094b9c5a2709ea61", null ],
     [ "getTop", "classlua_1_1_context.html#a1562fbda0b030a4aaa8c18ab575434c1", null ],
+    [ "checkArgs", "classlua_1_1_context.html#adeb565210f0a3397c698654eac98b286", null ],
+    [ "requireArgs", "classlua_1_1_context.html#a2cca4edca70d09c882464096a5ffc4b0", null ],
     [ "initializeExplicitly", "classlua_1_1_context.html#a0d31247fb1ab095fc5cb091b63a26996", null ],
     [ "global", "classlua_1_1_context.html#a7c0195836dcfe548f10ec4db184cde4b", null ],
     [ "upvalues", "classlua_1_1_context.html#a8efd73c5a9d7207e7ced545bac6404fd", null ],

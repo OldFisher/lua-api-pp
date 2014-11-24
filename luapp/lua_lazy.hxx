@@ -105,7 +105,19 @@ namespace lua{
 				return toTemporary().template cast<T>();
 			}
 
-			//! Explicit conversion to supported types.
+			//! Unsafe conversion to supported types.
+			template<typename T> T to() &&
+			{
+				return toTemporary().template to<T>();
+			}
+
+			//! Safe conversion to supported types.
+			template<typename T> T to(const T& backupValue) &&
+			{
+				return toTemporary().template to<T>(backupValue);
+			}
+
+			//! Safe conversion to supported types (deprecated).
 			template<typename T> T optcast(const T& backupValue = T()) &&
 			{
 				return toTemporary().template optcast<T>(backupValue);

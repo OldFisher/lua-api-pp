@@ -578,7 +578,7 @@ namespace lua {
 
 	public:
 
-		//! @name Accessor objects
+		//! @name Accessor objects and accompanying functions
 		//! @{
 
 #ifdef DOXYGEN_ONLY
@@ -597,6 +597,41 @@ namespace lua {
 		//! @brief Function arguments.
 		//! @details @sa lua::Valset
 		const Valset args;
+
+		//! @brief Check for function arguments and count.
+		//! @details Checks @ref lua::Context::args "args" for existence of arguments of specified types.
+		//! The function checks for presence of arguments convertible to types specified in template parameters.
+		//! If "amount" is bigger than the number of template parameters, the function also checks that <code>args.size() >= amount</code>.
+		//! Example: <code> c.checkArgs<double, string>(4); </code> checks that 4 arguments were passed to the function,
+		//! first of which is a number and the second is a string.
+		//! @note <code><b>void</b></code> is acceptable in template parameter list as a "placeholder" type, matching any type of value.
+		//! @param amount Minimum amount of arguments that must be present on the stack.
+		//! @return <code><b>true</b></code> if required amount of arguments of required types is present, <code><b>false</b></code> otherwise.
+		//! @see requireArgs
+		template<typename ... ArgTypes>
+		bool checkArgs(size_t amount = 0) noexcept
+		{
+			if(args.size() < std::max(sizeof ... (ArgTypes), amount))
+				return false;
+			return checkArg<ArgTypes..., void>(0);
+		}
+
+		//! @brief Check for function arguments and count and report an error in case of failure.
+		//! @details Checks @ref lua::Context::args "args" for existence of arguments of specified types.
+		//! The function checks for presence of arguments convertible to types specified in template parameters.
+		//! If "amount" is bigger than the number of template parameters, the function also checks that args.size() >= amount.
+		//! If the specification is not met, Lua error with diagnostic message is raised.
+		//! @note <code><b>void</b></code> is acceptable in template parameter list as a "placeholder" type, matching any type of value.
+		//! @param amount Minimum amount of arguments that must be present on the stack.
+		//! @see checkArgs
+		template<typename ... ArgTypes>
+		void requireArgs(size_t amount = 0) noexcept
+		{
+			const auto nArgsExpected = std::max(sizeof ... (ArgTypes), amount);
+			if(args.size() < nArgsExpected)
+				error(where() & " Insufficient number of arguments (" &  nArgsExpected & " expected, " & args.size() & " passed).");
+			requireArg<ArgTypes..., void>(0);
+		}
 
 		//! @brief Registry accessor.
 		//! @details @li use <code>int key = registry.store(any_value);</code> to get integer key for stored value;
@@ -849,8 +884,39 @@ namespace lua {
 		//! Store top value in the registry
 		RegistryKey makeReference();
 
+		//! Check for argument types recursively
+		template<typename T, typename ... OtherArgTypes>
+		bool checkArg (size_t idx) noexcept
+		{
+			if(args[idx].is<T>())
+				return checkArg<OtherArgTypes ...>(idx + 1);
+			else
+				return false;
+		}
+
+		//! Require argument type recursively
+		template<typename T, typename ... OtherArgTypes>
+		void requireArg(size_t idx)
+		{
+			if(args[idx].is<T>())
+				requireArg<OtherArgTypes...>(idx + 1);
+			else
+				error(where() & " Argument " & (idx + 1) & " type is incompatible.");
+		}
+
 	};
 
+	template<>
+	inline bool Context::checkArg<void> (size_t) noexcept
+	{
+		return true;
+	}
+
+
+	template<>
+	inline void Context::requireArg<void> (size_t)
+	{
+	}
 
 }
 

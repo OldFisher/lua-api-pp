@@ -496,7 +496,7 @@ namespace lua {
 
 #ifdef DOXYGEN_ONLY
 
-		//! @brief Explicit conversion to supported types.
+		//! @brief Explicit checked conversion to supported types.
 		//! @details Call this function with type to be converted to.
 		//! @throw std::runtime_error if the value type is incompatible.
 		//! @tparam T the type to cast to, one of those:
@@ -521,17 +521,42 @@ namespace lua {
 
 
 #ifdef DOXYGEN_ONLY
-		//! @brief Safe conversion to supported types.
+		//! @brief Safe conversion to supported types (deprecated, use @ref Valref::to "to" function instead).
 		//! @return Converted value or fallback value if the conversion cannot be made.
 		//! @tparam T the type to cast to. Converts to all types supported by @ref lua::Valref::cast "cast" <b>except user data</b>.
 		template<typename T> T optcast(const T& backupValue = T()) const noexcept;
+
+		//! @brief Unchecked conversion to supported types.
+		//! @return Conversion result or unspecified value if the conversion cannot be made.
+		//! Use when you are sure what the type of value is and don't want additional checks during conversion.
+		//! @tparam T the type to cast to. Converts to all types supported by @ref lua::Valref::cast "cast" <b>including user data</b>.
+		//! @note For userdata type a reference is returned.
+		template<typename T> T to() const noexcept;
+
+		//! @brief Safe conversion to supported types.
+		//! @return Converted value or fallback value if the conversion cannot be made.
+		//! @tparam T the type to cast to. Converts to all types supported by @ref lua::Valref::cast "cast" <b>except user data</b>.
+		template<typename T> T to(const T& backupValue) const noexcept;
 
 #else	// Not DOXYGEN_ONLY
 		template<typename T>
 		T optcast(const T& backupValue = T()) const noexcept
 		{
-			return (std::is_same<T, bool>::value || is<T>()) ? cast<T>() : backupValue;
+			return to<T>(backupValue);
 		}
+
+		template<typename T> typename std::enable_if<TypeID<T>::typeID != ValueType::UserData, T>::type to() const;
+
+		template<typename UDT> UDT& to(typename UserData<UDT>::enabled * = nullptr) const
+		{
+			return *static_cast<UDT*>(to<LightUserData>());
+		}
+
+		template<typename T> T to(const T& backupValue) const noexcept
+		{
+			return (std::is_same<T, bool>::value || is<T>()) ? to<T>() : backupValue;
+		}
+
 #endif	// DOXYGEN_ONLY
 
 		operator bool () const;			//!< @details Never fails.

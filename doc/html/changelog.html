@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-10-29-0</span>
+   &#160;<span id="projectnumber">2014-11-24-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -102,7 +102,13 @@ $(document).ready(function(){initNavTree('changelog.html','');});
 <div class="title">Changelog </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="changes_2014_10_29_0"></a>
+<div class="textblock"><h1><a class="anchor" id="changes_2014_11_24_0"></a>
+2014-11-24-0</h1>
+<ul>
+<li>Added argument-checkging functions, <a class="el" href="classlua_1_1_context.html#adeb565210f0a3397c698654eac98b286">Context::checkArgs</a> and <a class="el" href="classlua_1_1_context.html#a2cca4edca70d09c882464096a5ffc4b0">Context::requireArgs</a> check types and amount of arguments passed to the function in <a class="el" href="classlua_1_1_context.html#ab737cde142498f1a45ee2a2430b5e980">Context::args</a>. First function performs silent check and returns boolean result while the second one raises Lua error with explanation if the check failed. </li>
+<li>Added new conversion function, <a class="el" href="classlua_1_1_valref.html#ac6d518173c4864a6e093701c27c99873">to</a>. Without argument, it performs unchecked conversion. Given backup value, it performs type check and returns backup if the type did not match, superseding <a class="el" href="classlua_1_1_valref.html#a1b871d50b6a2626bdb325073e3792a27">optcast</a> which is now deprecated.</li>
+</ul>
+<h1><a class="anchor" id="changes_2014_10_29_0"></a>
 2014-10-29-0</h1>
 <ul>
 <li>Breaking change: <a class="el" href="classlua_1_1_context_1_1_registry.html#a9f2a1a773e4101d40f56376ce6f1f1d0">store</a> operation for registry now returns <a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a> instead of <b><code>int</code></b>. It is still the same <b><code>int</code></b>, but it cannot be modified, assigned to, used in arithmetics etc.</li>
@@ -153,7 +159,7 @@ $(document).ready(function(){initNavTree('changelog.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Oct 29 2014 10:10:58 for Lua-API++ by
+    <li class="footer">Generated on Mon Nov 24 2014 16:07:52 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -4,6 +4,8 @@ var classlua_1_1_valref =
     [ "operator=", "classlua_1_1_valref.html#add121cf47c27c7f52c62e8bfd860c02d", null ],
     [ "cast", "classlua_1_1_valref.html#a5c6a91e9b5e988939974679033c337dc", null ],
     [ "optcast", "classlua_1_1_valref.html#a1b871d50b6a2626bdb325073e3792a27", null ],
+    [ "to", "classlua_1_1_valref.html#ac6d518173c4864a6e093701c27c99873", null ],
+    [ "to", "classlua_1_1_valref.html#a487d979874fe52076a5bf66619be38e2", null ],
     [ "operator bool", "classlua_1_1_valref.html#aa385aa18f5e42db5a415c25a90f4193d", null ],
     [ "operator int", "classlua_1_1_valref.html#a6a6c0aaee2d785b48a1e57710ceb586b", null ],
     [ "operator unsigned int", "classlua_1_1_valref.html#ad3458486e208bbd7b782352192c6af82", null ],
