@@ -56,22 +56,23 @@ BOOST_FIXTURE_TEST_CASE(RegistryAccessor, fxContext)
 
 static Retval argChecker(Context& c)
 {
-	return c.ret(c.checkArgs<double, const char*, lua::LFunction>(4));
+	return c.ret(c.checkArgs<double, void, const char*, lua::LFunction>(4));
 }
 
 BOOST_FIXTURE_TEST_CASE(ArgumentTypeCheck, fxContext)
 {
 	context.global["f"] = mkcf<argChecker>;
 	BOOST_CHECK(!context.global["f"]().cast<bool>());
-	BOOST_CHECK(!context.global["f"](1, nil, context.global["f"], true, false).cast<bool>());
-	BOOST_CHECK(context.global["f"](1, "2", context.global["f"], true).cast<bool>());
+	BOOST_CHECK(!context.global["f"](1, nil, nil, context.global["f"], true, false).cast<bool>());
+	BOOST_CHECK(context.global["f"](1, nil, "2", context.global["f"], true).cast<bool>());
+	BOOST_CHECK(context.global["f"](1, "2", "2", context.global["f"], true).cast<bool>());
 }
 
 
 
 static Retval argRequire(Context& c)
 {
-	c.requireArgs<double, const char*, lua::LFunction>(4);
+	c.requireArgs<double, void, const char*, lua::LFunction>(4);
 	return c.ret();
 }
 
@@ -84,12 +85,16 @@ BOOST_FIXTURE_TEST_CASE(ArgumentTypeRequire, fxContext)
 		BOOST_CHECK(rv[0].cast<string>().find("Insufficient number of arguments (4 expected, 0 passed).") != string::npos);
 	}
 	{
-		Valset rv = context.global["f"].pcall(1, "2", nil, true, false);
+		Valset rv = context.global["f"].pcall(1, nil, "2", nil, true, false);
 		BOOST_CHECK(!rv.success());
-		BOOST_CHECK(rv[0].cast<string>().find("Argument 3 type is incompatible.") != string::npos);
+		BOOST_CHECK(rv[0].cast<string>().find("Argument 4 type is incompatible.") != string::npos);
 	}
 	{
-		Valset rv = context.global["f"].pcall(1, "2", context.global["f"], true, false);
+		Valset rv = context.global["f"].pcall(1, nil, "2", context.global["f"], true, false);
+		BOOST_CHECK(rv.success());
+	}
+	{
+		Valset rv = context.global["f"].pcall(1, "2", "2", context.global["f"], true, false);
 		BOOST_CHECK(rv.success());
 	}
 }

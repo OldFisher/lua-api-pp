@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2014-11-24-0</span>
+   &#160;<span id="projectnumber">2014-11-24-1</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -145,7 +145,7 @@ Comparisons of value-objects is done through Lua, but produces native boolean va
 The <a class="el" href="classlua_1_1_valref.html">Valref</a> class documents all operations avaliable for value-object. Though there are <a class="el" href="basic_concepts.html#basic_values_temporary">other</a> types of value-objects, referred to as <a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>, they have same interface as <a class="el" href="classlua_1_1_valref.html">Valref</a>.</p>
 <h2><a class="anchor" id="basic_values_native"></a>
 Native values</h2>
-<p>Native values are values that are used immediately in C++ code. The library recognises several basic types as native, including <code><b>bool, int, unsigned, float, double, const char*</b></code> and <code>std::string</code>. Native values of supported types can be implicitly promoted to Lua values when used in a context that expects a Lua value: function parameters, indices, operands etc. Lua values can be converted to appropriate native type implicitly or explicitly with <a class="el" href="classlua_1_1_valref.html#a5c6a91e9b5e988939974679033c337dc">cast</a> method. This documentation refers collectively to anything that is or can be promoted to Lua value as <a class="el" href="namespacelua.html#classlua_1_1_valobj">Valobj</a>.</p>
+<p>Native values are values that are used immediately in C++ code. The library recognises several basic types as native, including <code><b>bool, int, unsigned, float, double, const char*</b></code> and <code>std::string</code>. Native values of supported types can be implicitly promoted to Lua values when used in a context that expects a Lua value: function parameters, indices, operands etc. Lua values can be converted to appropriate native type implicitly or explicitly with <a class="el" href="classlua_1_1_valref.html#a5c6a91e9b5e988939974679033c337dc">cast</a> or <a class="el" href="classlua_1_1_valref.html#ac6d518173c4864a6e093701c27c99873">to</a> methods. This documentation refers collectively to anything that is or can be promoted to Lua value as <a class="el" href="namespacelua.html#classlua_1_1_valobj">Valobj</a>.</p>
 <h2><a class="anchor" id="basic_values_user"></a>
 User values</h2>
 <p>Lua API++ library supports user-type handling in a minimally intrusive way. Objects of type that is bound as user-data with <a class="el" href="lua_8hpp.html#aa5b908481d9041fe334bfd1674ded658">LUAPP_USERDATA</a> macro are recognised as such and can be implicitly promoted to Lua values. Lua values can be converted to reference to user type explicitly, using <a class="el" href="classlua_1_1_valref.html#a5c6a91e9b5e988939974679033c337dc">cast</a> method.</p>
@@ -176,7 +176,7 @@ Valset</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Nov 24 2014 16:07:51 for Lua-API++ by
+    <li class="footer">Generated on Thu Dec 11 2014 13:24:37 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

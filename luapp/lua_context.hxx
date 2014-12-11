@@ -888,7 +888,7 @@ namespace lua {
 		template<typename T, typename ... OtherArgTypes>
 		bool checkArg (size_t idx) noexcept
 		{
-			if(args[idx].is<T>())
+			if(args[idx].is<typename std::conditional<std::is_void<T>::value, Value, T>::type>())
 				return checkArg<OtherArgTypes ...>(idx + 1);
 			else
 				return false;
@@ -898,7 +898,7 @@ namespace lua {
 		template<typename T, typename ... OtherArgTypes>
 		void requireArg(size_t idx)
 		{
-			if(args[idx].is<T>())
+			if(args[idx].is<typename std::conditional<std::is_void<T>::value, Value, T>::type>())
 				requireArg<OtherArgTypes...>(idx + 1);
 			else
 				error(where() & " Argument " & (idx + 1) & " type is incompatible.");

@@ -86,7 +86,7 @@
 * including <code><b>bool, int, unsigned, float, double, const char*</b></code> and <code>std::string</code>.
 * Native values of supported types can be implicitly promoted to Lua values when used in a context that expects a Lua value:
 * function parameters, indices, operands etc. Lua values can be converted to appropriate native type implicitly
-* or explicitly with @ref lua::Valref::cast "cast" method.
+* or explicitly with @ref lua::Valref::cast "cast" or @ref lua::Valref::to "to" methods.
 * This documentation refers collectively to anything that is or can be promoted to Lua value as @ref lua::Valobj "Valobj".
 *
 * @subsection basic_values_user User values
