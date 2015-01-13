@@ -2,6 +2,10 @@
 Lua API++ library is a C++ wrapper for [Lua](http://www.lua.org/) API.
 The goal of this library is to let you operate Lua using simple expressive syntax.
 
+##Current status
+With the final release of Lua 5.3 the work on compatibility profile has started.
+The 5.3 profile will be added in the next release and it will be made the default profile.
+
 ##Most noticeable features provided by the library:
 * automatic stack management;
 * natural expressions (indexing, calls, arithmetics, concatenation);
