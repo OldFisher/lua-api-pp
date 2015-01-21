@@ -15,8 +15,8 @@ Lua 5.3 support is added.
 * support for Lua 5.1 (compatible with LuaJIT), 5.2 and 5.3.
 
 ##Information
-The library comes fully [documented](doc/html/index.html). Dive head-in with [motivational example](doc/html/motivational_example.html),
-get acquainted with [basic concepts](doc/html/basic_concepts.html) or see what's new in the [changelog](doc/html/changelog.html).
+The library comes fully [documented](http://oldfisher.github.io/index.html). Dive head-in with [motivational example](http://oldfisher.github.io/motivational_example.html),
+get acquainted with [basic concepts](http://oldfisher.github.io/basic_concepts.html) or see what's new in the [changelog](http://oldfisher.github.io/changelog.html).
 
 ##Most noticeable **unsupported** features:
 * debug;
