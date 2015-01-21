@@ -34,15 +34,21 @@ namespace lua{
 		template<typename, typename...> class lazyCall;
 		template<typename, typename...> class lazyPCall;
 		template<typename...> class lazyClosure;
+#if(LUAPP_API_VERSION >= 52)
 		template<typename> class lazyLenTemp;
+#endif	// V52+
 		template<typename> class lazyMtTemp;
-
+#if(LUAPP_API_VERSION >= 53)
+		template<typename>  class lazyTempIntIndexer;
+		template<typename> class lazyLinkedTemp;
+#endif	// V53+
+		template<typename Policy> Context& extractContext(const Lazy<Policy>&) noexcept;
 		// Operations
 		class lazyConcatSelector;
 		template<typename, typename> class lazyConcat;
 #if(LUAPP_API_VERSION >= 52)
 		template<typename, typename, _::Arithmetics> class lazyArithmetics;
-#endif
+#endif	// V52+
 
 		template<typename T> void moveout(const T&) noexcept;
 		template<typename> class Lazy;
@@ -74,15 +80,22 @@ namespace lua{
 			template<typename, typename ...> friend class ::lua::_::lazyCall;
 			template<typename, typename ...> friend class ::lua::_::lazyPCall;
 			template<typename...> friend class ::lua::_::lazyClosure;
+			template<typename P, typename ... Args> friend Lazy<P> makeLazy(Args&& ...) noexcept;
 
 			// Operations
 			friend class ::lua::_::lazyConcatSelector;
 			template<typename, typename> friend class ::lua::_::lazyConcat;
 #if(LUAPP_API_VERSION >= 52)
 			template<typename, typename, lua::_::Arithmetics> friend class ::lua::_::lazyArithmetics;
-#endif	// V52+
+			template<typename, lua::_::Arithmetics> friend class ::lua::_::lazyArithmeticsUnary;
 			friend class ::lua::_::lazyLenTemp<Policy>;
+#endif	// V52+
 			friend class ::lua::_::lazyMtTemp<Policy>;
+#if(LUAPP_API_VERSION >= 53)
+			friend class ::lua::_::lazyLinkedTemp<Policy>;
+			template<typename> friend class ::lua::_::lazyTempIntIndexer;
+#endif	// V53+
+			friend Context& lua::_::extractContext<Policy>(const Lazy<Policy>&) noexcept;
 
 			// must be friendly to all objects that can create Lazy
 			friend class ::lua::Valref;
@@ -117,11 +130,13 @@ namespace lua{
 				return toTemporary().template to<T>(backupValue);
 			}
 
+#if(LUAPP_API_VERSION <= 52)
 			//! Safe conversion to supported types (deprecated).
 			template<typename T> T optcast(const T& backupValue = T()) &&
 			{
 				return toTemporary().template optcast<T>(backupValue);
 			}
+#endif	// V52-
 
 			//! Check if the value is of given type or convertible.
 			template<typename T> bool is() &&
@@ -214,6 +229,28 @@ namespace lua{
 				return Lazy<lazyTempIndexer<Lazy<Policy>, typename std::decay<IndexType>::type>>(S, std::move(*this), std::forward<IndexType>(index));
 			}
 
+#if(LUAPP_API_VERSION >= 53)
+			Lazy<lazyTempIntIndexer<Lazy<Policy>>> operator [] (int index) && noexcept
+			{
+				return Lazy<lazyTempIntIndexer<Lazy<Policy>>>(S, std::move(*this), index);
+			}
+
+			Lazy<lazyTempIntIndexer<Lazy<Policy>>> operator [] (long long index) && noexcept
+			{
+				return Lazy<lazyTempIntIndexer<Lazy<Policy>>>(S, std::move(*this), index);
+			}
+
+			Lazy<lazyTempIntIndexer<Lazy<Policy>>> operator [] (unsigned index) && noexcept
+			{
+				return Lazy<lazyTempIntIndexer<Lazy<Policy>>>(S, std::move(*this), index);
+			}
+
+			Lazy<lazyTempIntIndexer<Lazy<Policy>>> operator [] (unsigned long long index) && noexcept
+			{
+				return Lazy<lazyTempIntIndexer<Lazy<Policy>>>(S, std::move(*this), index);
+			}
+
+#endif	// V53+
 
 			//! Upvalue access
 			Lazy<lazyExtTempUpvalue<Policy>> upvalue(size_t index) && noexcept
@@ -353,78 +390,10 @@ namespace lua{
 			//! Metatable read/write
 			Lazy<lazyMtTemp<Policy>> mt() &&;
 
-			//! Concatenation
-			template<typename ValueType>
-			Lazy<lazyConcat<Lazy<Policy>, typename std::decay<ValueType>::type>> operator & (ValueType&& v) && noexcept
-			{
-				return Lazy<lazyConcat<Lazy<Policy>, typename std::decay<ValueType>::type>>(S, std::move(*this), std::forward<ValueType>(v));
-			}
-
-			template<typename ValueType, typename Policy_> friend Lazy<lazyConcat<typename std::enable_if< !HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy_>>> operator & (ValueType&& v, Lazy<Policy_>&& l) noexcept;
-			template<typename ValueType> friend Lazy<lazyConcat<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref>> lua::operator & (ValueType&& v, const Valref& cv)  noexcept;
-
-
-#if(LUAPP_API_VERSION >= 52)
-			Lazy<lazyArithmetics<Lazy<Policy>, void, Arithmetics::UnaryMinus>> operator - () && noexcept
-			{
-				return Lazy<lazyArithmetics<Lazy<Policy>, void, Arithmetics::UnaryMinus>>(S, std::move(*this));
-			}
-
-			template<typename Policy_, typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy_>, Arithmetics::Add>> operator + (ValueType&& lhs, Lazy<Policy_>&& rhs) noexcept;
-			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Add>> lua::operator + (ValueType&& lhs, const Valref& rhs) noexcept;
-
-			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Add>> operator + (ValueType&& rhs) && noexcept
-			{
-				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Add>>(S, std::move(*this), std::forward<ValueType>(rhs));
-			}
-
-			template<typename Policy_, typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy_>, Arithmetics::Sub>> operator - (ValueType&& lhs, Lazy<Policy_>&& rhs) noexcept;
-			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Sub>> lua::operator - (ValueType&& lhs, const Valref& rhs) noexcept;
-
-			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Sub>> operator - (ValueType&& rhs) && noexcept
-			{
-				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Sub>>(S, std::move(*this), std::forward<ValueType>(rhs));
-			}
-
-			template<typename Policy_, typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy_>, Arithmetics::Multiply>> operator * (ValueType&& lhs, Lazy<Policy_>&& rhs) noexcept;
-			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Multiply>> lua::operator * (ValueType&& lhs, const Valref& rhs) noexcept;
-
-			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Multiply>> operator * (ValueType&& rhs) && noexcept
-			{
-				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Multiply>>(S, std::move(*this), std::forward<ValueType>(rhs));
-			}
-
-			template<typename Policy_, typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy_>, Arithmetics::Divide>> operator / (ValueType&& lhs, Lazy<Policy_>&& rhs) noexcept;
-			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Divide>> lua::operator / (ValueType&& lhs, const Valref& rhs) noexcept;
-
-			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Divide>> operator / (ValueType&& rhs) && noexcept
-			{
-				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Divide>>(S, std::move(*this), std::forward<ValueType>(rhs));
-			}
-
-			template<typename Policy_, typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy_>, Arithmetics::Modulo>> operator % (ValueType&& lhs, Lazy<Policy_>&& rhs) noexcept;
-			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Modulo>> lua::operator % (ValueType&& lhs, const Valref& rhs) noexcept;
-
-			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Modulo>> operator % (ValueType&& rhs) && noexcept
-			{
-				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Modulo>>(S, std::move(*this), std::forward<ValueType>(rhs));
-			}
-
-			template<typename Policy_, typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy_>, Arithmetics::Power>> operator ^ (ValueType&& lhs, Lazy<Policy_>&& rhs) noexcept;
-			template<typename ValueType> friend Lazy<lazyArithmetics<typename std::enable_if<!HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, Arithmetics::Power>> lua::operator ^ (ValueType&& lhs, const Valref& rhs) noexcept;
-
-			template<typename ValueType>
-			Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Power>> operator ^ (ValueType&& rhs) && noexcept
-			{
-				return Lazy<lazyArithmetics<Lazy<Policy>, typename std::decay<ValueType>::type, Arithmetics::Power>>(S, std::move(*this), std::forward<ValueType>(rhs));
-			}
-#endif	// V52+
-			//! @}
+#if(LUAPP_API_VERSION >= 53)
+			//! Linked value read/write
+			Lazy<lazyLinkedTemp<Policy>> linked() &&;
+#endif	// V53+
 
 			~Lazy()
 			{

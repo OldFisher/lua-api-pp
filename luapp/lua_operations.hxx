@@ -194,13 +194,6 @@ namespace lua{
 
 
 
-		template<typename ValueType, typename Policy>
-		inline Lazy<lazyConcat<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy>>> operator & (ValueType&& v, Lazy<Policy>&& l) noexcept
-		{
-			return Lazy<lazyConcat<typename std::decay<ValueType>::type, Lazy<Policy>>>(l.S, std::forward<ValueType>(v), std::move(l));
-		}
-
-
 #if(LUAPP_API_VERSION >= 52)
 //#####################  Arithmetics  ##########################################
 
@@ -280,87 +273,47 @@ namespace lua{
 
 
 
-		template<typename Policy, typename ValueType>
-		inline Lazy<lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy>, Arithmetics::Add>> operator + (ValueType&& lhs, Lazy<Policy>&& rhs) noexcept
-		{
-			return Lazy<lazyArithmetics<typename std::decay<ValueType>::type, Lazy<Policy>, Arithmetics::Add>>(rhs.S, std::forward<ValueType>(lhs), std::move(rhs));
-		}
-
-		template<typename Policy, typename ValueType>
-		inline Lazy<lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy>, Arithmetics::Sub>> operator - (ValueType&& lhs, Lazy<Policy>&& rhs) noexcept
-		{
-			return Lazy<lazyArithmetics<typename std::decay<ValueType>::type, Lazy<Policy>, Arithmetics::Sub>>(rhs.S, std::forward<ValueType>(lhs), std::move(rhs));
-		}
-
-		template<typename Policy, typename ValueType>
-		inline Lazy<lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy>, Arithmetics::Multiply>> operator * (ValueType&& lhs, Lazy<Policy>&& rhs) noexcept
-		{
-			return Lazy<lazyArithmetics<typename std::decay<ValueType>::type, Lazy<Policy>, Arithmetics::Multiply>>(rhs.S, std::forward<ValueType>(lhs), std::move(rhs));
-		}
-
-		template<typename Policy, typename ValueType>
-		inline Lazy<lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy>, Arithmetics::Divide>> operator / (ValueType&& lhs, Lazy<Policy>&& rhs) noexcept
-		{
-			return Lazy<lazyArithmetics<typename std::decay<ValueType>::type, Lazy<Policy>, Arithmetics::Divide>>(rhs.S, std::forward<ValueType>(lhs), std::move(rhs));
-		}
-
-		template<typename Policy, typename ValueType>
-		inline Lazy<lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy>, Arithmetics::Modulo>> operator % (ValueType&& lhs, Lazy<Policy>&& rhs) noexcept
-		{
-			return Lazy<lazyArithmetics<typename std::decay<ValueType>::type, Lazy<Policy>, Arithmetics::Modulo>>(rhs.S, std::forward<ValueType>(lhs), std::move(rhs));
-		}
-
-		template<typename Policy, typename ValueType>
-		inline Lazy<lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Lazy<Policy>, Arithmetics::Power>> operator ^ (ValueType&& lhs, Lazy<Policy>&& rhs) noexcept
-		{
-			return Lazy<lazyArithmetics<typename std::decay<ValueType>::type, Lazy<Policy>, Arithmetics::Power>>(rhs.S, std::forward<ValueType>(lhs), std::move(rhs));
-		}
-
-
-
-
-
-		template<typename T1>
+		template<typename T, _::Arithmetics op>
 #ifdef LUAPP_NONDISCARDABLE_ARITHMETICS
-		class lazyArithmetics<T1, void, Arithmetics::UnaryMinus> final: public lazyPolicyNondiscardable {
+		class lazyArithmeticsUnary final: public lazyPolicyNondiscardable {
 #else
-		class lazyArithmetics<T1, void, Arithmetics::UnaryMinus>: public lazyPolicy {
+		class lazyArithmeticsUnary final: public lazyPolicyNondiscardable {
 #endif	// LUAPP_NONDISCARDABLE_ARITHMETICS
 			template <typename> friend class _::Lazy;
 
 		public:
-			lazyArithmetics(lazyArithmetics<T1, void, Arithmetics::UnaryMinus>&&) noexcept = default;
+			lazyArithmeticsUnary(lazyArithmeticsUnary<T, op>&&) noexcept = default;
 
 		private:
-			typedef Lazy<lazyImmediateValue<T1>> lazy1;
+			using SrcLazy = Lazy<lazyImmediateValue<T>>;
 
-			lazyArithmetics(Context& S, const T1& v1) noexcept:
-				L1(S, v1)
+			lazyArithmeticsUnary(Context& c, const T& v) noexcept:
+				srcLazy(c, v)
 			{
 			}
 
-			lazyArithmetics(Context& S, T1&& v1) noexcept:
-				L1(S, std::forward<T1>(v1))
+			lazyArithmeticsUnary(Context& c, T&& v) noexcept:
+				srcLazy(c, std::forward<T>(v))
 			{
 			}
 
-			void push(Context& S);
+			void push(Context& c);
 
-			void pushSingle(Context& S)
+			void pushSingle(Context& c)
 			{
-				push(S);
+				push(c);
 			}
 
 #ifdef LUAPP_NONDISCARDABLE_ARITHMETICS
 			friend class lazyPolicyNondiscardable;
-			void onDestroy(Context& S)
+			void onDestroy(Context& c)
 			{
-				lazyPolicyNondiscardable::onDestroySingle(S, *this);
+				lazyPolicyNondiscardable::onDestroySingle(c, *this);
 			}
 #else
 			void onDestroy(Context&)
 			{
-				L1.onDestroy();
+				srcLazy.onDestroy();
 			}
 #endif	// LUAPP_NONDISCARDABLE_ARITHMETICS
 
@@ -369,10 +322,10 @@ namespace lua{
 #ifdef LUAPP_NONDISCARDABLE_ARITHMETICS
 				Pushed = true;
 #endif	// LUAPP_NONDISCARDABLE_ARITHMETICS
-				L1.moveout();
+				srcLazy.moveout();
 			}
 			// data
-			lazy1 L1;
+			SrcLazy srcLazy;
 		};
 
 
@@ -393,7 +346,6 @@ namespace lua{
 				push(S);
 			}
 		};
-
 
 	}
 //! @endcond

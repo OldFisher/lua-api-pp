@@ -26,8 +26,12 @@
 #define LUAPP_API_VERSION 52
 #endif
 
+#ifdef LUAPP_COMPATIBILITY_V53
+#define LUAPP_API_VERSION 53
+#endif
+
 #ifndef LUAPP_API_VERSION
-#define LUAPP_API_VERSION 52
+#define LUAPP_API_VERSION 53
 #endif
 
 

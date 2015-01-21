@@ -8,6 +8,18 @@
 /*!
 * @page changelog Changelog
 *
+* @section changes_2015_01_21_0 2015-01-21-0
+* - added compatibility profile for Lua 5.3 featuring:
+*  + added @ref lua::Valref::linked "linked" accessor to read and write values associated with userdata;
+*  + added new Lua-side operations in function form: @ref idiv "integer division",
+* @ref band "bitwise AND", @ref bor "bitwise OR", @ref bxor "bitwise XOR",
+* @ref bneg "bitwise NOT", @ref shl "bit shift left", @ref shr "bit shift right";
+*  + transparent change: integer types are promoted to Lua number/integer subtype;
+*  + transparent change: table access with integer arguments now uses specialized geti/seti functions;
+*  + removed deprecated @ref lua::Valref::optcast "optcast" function (still accessible in 5.1 and 5.2 modes);
+* - breaking change: compatibility profile 5.3 is now default; the code targeting Lua 5.2 must @ref compatibility_5_2 "define" <code><b>LUAPP_COMPATIBILITY_V52</b></code> macro;
+* - transparent change: concatenation and arithmetics are refactored to one-definition simplifying the codebase.
+*
 * @section changes_2014_11_24_0 2014-11-24-0
 * @li Added argument-checkging functions, @ref lua::Context::checkArgs "Context::checkArgs" and @ref lua::Context::requireArgs "Context::requireArgs"
 * check types and amount of arguments passed to the function in @ref lua::Context::args "Context::args".

@@ -3,6 +3,8 @@
 #include "fixtures.h"
 #include <stdexcept>
 
+struct Udata{int x;};
+LUAPP_USERDATA(Udata, "Test.Userdata")
 
 BOOST_AUTO_TEST_SUITE(Valobj)
 
@@ -45,6 +47,39 @@ BOOST_FIXTURE_TEST_CASE(Length, fxGlobalVal)
 #endif
 }
 
+
+#if(LUAPP_API_VERSION >= 53)
+BOOST_FIXTURE_TEST_CASE(Linked, fxContext)
+{
+	using lua::Value;
+	using lua::Nil;
+	context.mt<Udata>() = lua::Table::records(context);
+	{
+		Value val{Udata{7}, context};
+		BOOST_CHECK(val.linked().is<Nil>());
+		val.linked() = 8;
+		BOOST_CHECK_EQUAL(val.linked().to<int>(), 8);
+	}
+	{
+		Value val{7, context};
+		BOOST_CHECK(val.linked().is<Nil>());
+		val.linked() = 8;
+		BOOST_CHECK(val.linked().is<Nil>());
+	}
+	{
+		context.global["tmp"] = Udata{7};
+		BOOST_CHECK(context.global["tmp"].linked().is<Nil>());
+		context.global["tmp"].linked() = 8;
+		BOOST_CHECK_EQUAL(context.global["tmp"].linked().to<int>(), 8);
+	}
+	{
+		context.global["tmp"] = 7;
+		BOOST_CHECK(context.global["tmp"].linked().is<Nil>());
+		context.global["tmp"].linked() = 8;
+		BOOST_CHECK(context.global["tmp"].linked().is<Nil>());
+	}
+}
+#endif	// V53+
 
 
 BOOST_FIXTURE_TEST_CASE(Metatables, fxGlobalVal)

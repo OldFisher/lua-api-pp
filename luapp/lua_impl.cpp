@@ -167,7 +167,6 @@ namespace lua {
 
 //### Indexing operations ###################################################################################################
 
-
 		// const indexer
 
 		LUAPP_HO_INLINE void lazyConstIndexerUtils::extractValue(lua_State* L, int tableref) noexcept
@@ -181,6 +180,18 @@ namespace lua {
 			lua_settable(L, tableref);
 		}
 
+#if(LUAPP_API_VERSION >= 53)
+		LUAPP_HO_INLINE void lazyConstIndexerUtils::extractValuei(lua_State* L, int tableref, long long index) noexcept
+		{
+			lua_geti(L, tableref, index);
+		}
+
+
+		LUAPP_HO_INLINE void lazyConstIndexerUtils::writeValuei(lua_State* L, int tableref, long long index) noexcept
+		{
+			lua_seti(L, tableref, index);
+		}
+#endif	// V53+
 
 		// global indexer
 
@@ -220,6 +231,20 @@ namespace lua {
 			lua_pop(L, 1);
 		}
 
+#if(LUAPP_API_VERSION >= 53)
+		LUAPP_HO_INLINE void lazyTempIndexerUtils::extractValuei(lua_State* L, long long index) noexcept
+		{
+			lua_geti(L, -1, index);
+			lua_remove(L, -2);
+		}
+
+
+		LUAPP_HO_INLINE void lazyTempIndexerUtils::writeValuei(lua_State* L, long long index) noexcept
+		{
+			lua_seti(L, -2, index);
+			lua_pop(L, 1);
+		}
+#endif	// V53+
 
 		// metatable accessor
 
@@ -235,7 +260,27 @@ namespace lua {
 			lua_setmetatable(L, index);
 		}
 
+#if(LUAPP_API_VERSION >= 53)
 
+		// linked value accessor
+
+		LUAPP_HO_INLINE void lazyLinked::doPush(lua::Context& c, int index) noexcept
+		{
+			if(!lua_isuserdata(c, index))	// Safe to call only on userdata
+				c.push(lua::nil);
+			else
+				lua_getuservalue(c, index);		// Produces nil if nothing was linked
+		}
+
+
+		LUAPP_HO_INLINE void lazyLinked::doAssign(lua_State* L, int index) noexcept
+		{
+			if(lua_isuserdata(L, index))	// Safe to call only on userdata
+				lua_setuservalue(L, index);
+			else
+				lua_pop(L, 1);
+		}
+#endif	// V53+
 
 		// raw indexer
 
@@ -764,6 +809,22 @@ namespace lua {
 	{
 		lua_pushboolean(L, val);
 	}
+
+
+
+#if(LUAPP_API_VERSION >= 53)
+	LUAPP_HO_INLINE void Context::push(long long val) noexcept
+	{
+		lua_pushinteger(L, val);
+	}
+
+
+
+	LUAPP_HO_INLINE void Context::push(unsigned long long val) noexcept
+	{
+		lua_pushinteger(L, val);
+	}
+#endif
 
 
 

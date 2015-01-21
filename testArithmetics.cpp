@@ -19,6 +19,15 @@ enum Ops {
 	Div,
 	Mod,
 	Pow,
+#if(LUAPP_API_VERSION >= 53)
+	Idiv,
+	Band,
+	Bor,
+	Bxor,
+	Bneg,
+	Shl,
+	Shr,
+#endif	// V53+
 
     Size
 };
@@ -49,10 +58,18 @@ static Retval unm(Context& c) {++ opcount[Ops::Unm]; return c.ret( -c.args[0].ca
 static Retval add(Context& c) {++ opcount[Ops::Add]; return c.ret( c.args[0].cast<Udata>().x + c.args[1].cast<int>());}
 static Retval sub(Context& c) {++ opcount[Ops::Sub]; return c.ret( c.args[0].cast<Udata>().x - c.args[1].cast<int>());}
 static Retval mul(Context& c) {++ opcount[Ops::Mul]; return c.ret( c.args[0].cast<Udata>().x * c.args[1].cast<int>());}
-static Retval div(Context& c) {++ opcount[Ops::Div]; return c.ret( c.args[0].cast<Udata>().x / c.args[1].cast<int>());}
+static Retval div(Context& c) {++ opcount[Ops::Div]; return c.ret( c.args[0].cast<Udata>().x / c.args[1].cast<double>());}
 static Retval mod(Context& c) {++ opcount[Ops::Mod]; return c.ret( c.args[0].cast<Udata>().x % c.args[1].cast<int>());}
 static Retval pow(Context& c) {++ opcount[Ops::Pow]; return c.ret( mypow(c.args[0].cast<Udata>().x, c.args[1].cast<int>()));}
-
+#if(LUAPP_API_VERSION >= 53)
+static Retval do_idiv(Context& c) {++ opcount[Ops::Idiv]; return c.ret( c.args[0].cast<Udata>().x / c.args[1].cast<int>());}
+static Retval do_band(Context& c) {++ opcount[Ops::Band]; return c.ret( c.args[0].cast<Udata>().x & c.args[1].cast<int>());}
+static Retval do_bor (Context& c) {++ opcount[Ops::Bor ]; return c.ret( c.args[0].cast<Udata>().x | c.args[1].cast<int>());}
+static Retval do_bxor(Context& c) {++ opcount[Ops::Bxor]; return c.ret( c.args[0].cast<Udata>().x ^ c.args[1].cast<int>());}
+static Retval do_bneg(Context& c) {++ opcount[Ops::Bneg]; return c.ret( ~static_cast<unsigned long long>(c.args[0].cast<Udata>().x));}
+static Retval do_shl (Context& c) {++ opcount[Ops::Shl ]; return c.ret( c.args[0].cast<Udata>().x << c.args[1].cast<int>());}
+static Retval do_shr (Context& c) {++ opcount[Ops::Shr ];	return c.ret( c.args[0].cast<Udata>().x >> c.args[1].cast<int>());}
+#endif	// V53+
 
 
 
@@ -69,6 +86,16 @@ struct fxArith: public fxContext{
 			"__div", mkcf<div>,
 			"__mod", mkcf<mod>,
 			"__pow", mkcf<pow>
+#if(LUAPP_API_VERSION >= 53)
+			,
+			"__idiv", mkcf<do_idiv>,
+			"__band", mkcf<do_band>,
+			"__bor" , mkcf<do_bor >,
+			"__bxor", mkcf<do_bxor>,
+			"__bnot", mkcf<do_bneg>,
+			"__shl" , mkcf<do_shl>,
+			"__shr" , mkcf<do_shr>
+#endif	// V53+
 		);
 		}
 	} dummy {context};
@@ -176,8 +203,8 @@ BOOST_FIXTURE_TEST_CASE(Divide, fxArith)
 	BOOST_CHECK_EQUAL((3 / v2).cast<double>(), 1.5);
 	BOOST_CHECK_EQUAL((l3 / 2).cast<double>(), 1.5);
 	BOOST_CHECK_EQUAL((3 / l2).cast<double>(), 1.5);
-	BOOST_CHECK_EQUAL((uv / 3).cast<double>(), 3);
-	BOOST_CHECK_EQUAL((ul / 3).cast<double>(), 3);
+	BOOST_CHECK_EQUAL((uv / 3).cast<double>(), 10.0 / 3);
+	BOOST_CHECK_EQUAL((ul / 3).cast<double>(), 10.0 / 3);
 	BOOST_CHECK_EQUAL(opcount[Ops::Div], 2);
 	BOOST_CHECK(checkOthers(Ops::Div));
 }
@@ -242,6 +269,134 @@ BOOST_FIXTURE_TEST_CASE(Discard, fxArith)
 	BOOST_CHECK(checkOthers(Ops::Add));
 #endif // LUAPP_NODISCARD_ARITHMETICS
 }
+
+
+#if(LUAPP_API_VERSION >= 53)
+BOOST_FIXTURE_TEST_CASE( IntegerDivision, fxArith)
+{
+	uv = Udata{10};
+	ul = Udata{10};
+	BOOST_CHECK_EQUAL(idiv(v3, v2).cast<double>(), 1);
+	BOOST_CHECK_EQUAL(idiv(l3, l2).cast<double>(), 1);
+	BOOST_CHECK_EQUAL(idiv(v3, l2).cast<double>(), 1);
+	BOOST_CHECK_EQUAL(idiv(l3, v2).cast<double>(), 1);
+	BOOST_CHECK_EQUAL(idiv(v3, 2).cast<double>(), 1);
+	BOOST_CHECK_EQUAL(idiv(3, v2).cast<double>(), 1);
+	BOOST_CHECK_EQUAL(idiv(l3, 2).cast<double>(), 1);
+	BOOST_CHECK_EQUAL(idiv(3, l2).cast<double>(), 1);
+	BOOST_CHECK_EQUAL(idiv(uv, 3).cast<double>(), 3);
+	BOOST_CHECK_EQUAL(idiv(ul, 3).cast<double>(), 3);
+	BOOST_CHECK_EQUAL(opcount[Ops::Idiv], 2);
+	BOOST_CHECK(checkOthers(Ops::Idiv));
+}
+
+
+
+BOOST_FIXTURE_TEST_CASE(BinaryAnd, fxArith)
+{
+    BOOST_CHECK_EQUAL(band(v3, v2).to<int>(), 2);
+    BOOST_CHECK_EQUAL(band(l3, l2).to<int>(), 2);
+    BOOST_CHECK_EQUAL(band(v3, l2).to<int>(), 2);
+    BOOST_CHECK_EQUAL(band(l3, v2).to<int>(), 2);
+	BOOST_CHECK_EQUAL(band(v3, 2).to<int>(), 2);
+	BOOST_CHECK_EQUAL(band(3, v2).to<int>(), 2);
+	BOOST_CHECK_EQUAL(band(l3, 2).to<int>(), 2);
+	BOOST_CHECK_EQUAL(band(3, l2).to<int>(), 2);
+	BOOST_CHECK_EQUAL(band(uv, 3).to<int>(), 2);
+	BOOST_CHECK_EQUAL(band(ul, 3).to<int>(), 2);
+	BOOST_CHECK_EQUAL(opcount[Ops::Band], 2);
+	BOOST_CHECK(checkOthers(Ops::Band));
+}
+
+
+
+BOOST_FIXTURE_TEST_CASE(BinaryOr, fxArith)
+{
+    BOOST_CHECK_EQUAL(bor(v3, v2).to<int>(), 3);
+    BOOST_CHECK_EQUAL(bor(l3, l2).to<int>(), 3);
+    BOOST_CHECK_EQUAL(bor(v3, l2).to<int>(), 3);
+    BOOST_CHECK_EQUAL(bor(l3, v2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(bor(v3, 2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(bor(3, v2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(bor(l3, 2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(bor(3, l2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(bor(uv, 3).to<int>(), 3);
+	BOOST_CHECK_EQUAL(bor(ul, 3).to<int>(), 3);
+	BOOST_CHECK_EQUAL(opcount[Ops::Bor], 2);
+	BOOST_CHECK(checkOthers(Ops::Bor));
+}
+
+
+
+BOOST_FIXTURE_TEST_CASE(BinaryXor, fxArith)
+{
+    BOOST_CHECK_EQUAL(bxor(v3, v2).to<int>(), 1);
+    BOOST_CHECK_EQUAL(bxor(l3, l2).to<int>(), 1);
+    BOOST_CHECK_EQUAL(bxor(v3, l2).to<int>(), 1);
+    BOOST_CHECK_EQUAL(bxor(l3, v2).to<int>(), 1);
+	BOOST_CHECK_EQUAL(bxor(v3,  2).to<int>(), 1);
+	BOOST_CHECK_EQUAL(bxor( 3, v2).to<int>(), 1);
+	BOOST_CHECK_EQUAL(bxor(l3,  2).to<int>(), 1);
+	BOOST_CHECK_EQUAL(bxor( 3, l2).to<int>(), 1);
+	BOOST_CHECK_EQUAL(bxor(uv,  3).to<int>(), 1);
+	BOOST_CHECK_EQUAL(bxor(ul,  3).to<int>(), 1);
+	BOOST_CHECK_EQUAL(opcount[Ops::Bxor], 2);
+	BOOST_CHECK(checkOthers(Ops::Bxor));
+}
+
+
+
+BOOST_FIXTURE_TEST_CASE(BinaryNeg, fxArith)
+{
+    BOOST_CHECK_EQUAL(bneg(v2).to<unsigned long long>(), 0xFFFFFFFFFFFFFFFDull);
+    BOOST_CHECK_EQUAL(bneg(l2).to<unsigned long long>(), 0xFFFFFFFFFFFFFFFDull);
+	BOOST_CHECK_EQUAL(bneg(uv).to<unsigned long long>(), 0xFFFFFFFFFFFFFFFDull);
+	BOOST_CHECK_EQUAL(bneg(ul).to<unsigned long long>(), 0xFFFFFFFFFFFFFFFDull);
+	BOOST_CHECK_EQUAL(opcount[Ops::Bneg], 2);
+	BOOST_CHECK(checkOthers(Ops::Bneg));
+}
+
+
+
+BOOST_FIXTURE_TEST_CASE(ShiftLeft, fxArith)
+{
+    BOOST_CHECK_EQUAL(shl(v3, v2).to<int>(), 12);
+    BOOST_CHECK_EQUAL(shl(l3, l2).to<int>(), 12);
+    BOOST_CHECK_EQUAL(shl(v3, l2).to<int>(), 12);
+    BOOST_CHECK_EQUAL(shl(l3, v2).to<int>(), 12);
+	BOOST_CHECK_EQUAL(shl(v3,  2).to<int>(), 12);
+	BOOST_CHECK_EQUAL(shl( 3, v2).to<int>(), 12);
+	BOOST_CHECK_EQUAL(shl(l3,  2).to<int>(), 12);
+	BOOST_CHECK_EQUAL(shl( 3, l2).to<int>(), 12);
+	BOOST_CHECK_EQUAL(shl(uv,  3).to<int>(), 16);
+	BOOST_CHECK_EQUAL(shl(ul,  3).to<int>(), 16);
+	BOOST_CHECK_EQUAL(opcount[Ops::Shl], 2);
+	BOOST_CHECK(checkOthers(Ops::Shl));
+}
+
+
+
+BOOST_FIXTURE_TEST_CASE(ShiftRight, fxArith)
+{
+	v3 = 13;
+	l3 = 13;
+	uv = Udata{17};
+	ul = Udata{17};
+    BOOST_CHECK_EQUAL(shr(v3, v2).to<int>(), 3);
+    BOOST_CHECK_EQUAL(shr(l3, l2).to<int>(), 3);
+    BOOST_CHECK_EQUAL(shr(v3, l2).to<int>(), 3);
+    BOOST_CHECK_EQUAL(shr(l3, v2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(shr(v3,  2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(shr(13, v2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(shr(l3,  2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(shr(13, l2).to<int>(), 3);
+	BOOST_CHECK_EQUAL(shr(uv,  3).to<int>(), 2);
+	BOOST_CHECK_EQUAL(opcount[Ops::Shr], 1);
+	BOOST_CHECK_EQUAL(shr(ul,  3).to<int>(), 2);
+	BOOST_CHECK_EQUAL(opcount[Ops::Shr], 2);
+	BOOST_CHECK(checkOthers(Ops::Shr));
+}
+#endif	// V53+
 
 BOOST_AUTO_TEST_SUITE_END()
 

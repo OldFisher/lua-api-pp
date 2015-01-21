@@ -38,7 +38,7 @@ PROJECT_NAME           = "Lua-API++"
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 2014-11-24-1
+PROJECT_NUMBER         = 2015-01-21-0
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -230,6 +230,7 @@ TAB_SIZE               = 4
 
 ALIASES                =
 ALIASES               += lv53="<em>[Lua 5.3+ only]</em>"
+ALIASES               += lv52m="<em>[Lua 5.2- only]</em>"
 ALIASES               += lv52="<em>[Lua 5.2+ only]</em>"
 ALIASES               += lv51="<em>[Lua 5.1 only]</em>"
 

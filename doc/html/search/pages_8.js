@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['using_20the_20library',['Using the library',['../usage.html',1,'']]]
+  ['performance',['Performance',['../performace.html',1,'']]]
 ];

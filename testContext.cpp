@@ -17,7 +17,11 @@ BOOST_FIXTURE_TEST_CASE(explicitInitialization, fxContext)
 #if(LUAPP_API_VERSION >= 52)
 BOOST_FIXTURE_TEST_CASE(versionQuery, fxContext)
 {
+#if(LUAPP_API_VERSION == 52)
 	BOOST_CHECK(context.getVersion() == 502);
+#elif(LUAPP_API_VERSION == 53)
+	BOOST_CHECK(context.getVersion() == 503);
+#endif
 }
 #endif	// V52+
 
@@ -45,7 +49,7 @@ BOOST_FIXTURE_TEST_CASE(garbageCollector, fxContext)
 BOOST_FIXTURE_TEST_CASE(directLua, fxContext)
 {
 	BOOST_CHECK_EQUAL(gs.getRawState(), context);
-	BOOST_CHECK_EQUAL(context.getTop(), 0);
+	BOOST_CHECK_EQUAL(context.getTop(), 0u);
 }
 
 

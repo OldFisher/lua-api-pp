@@ -20,9 +20,16 @@ namespace lua {
 
 		class lazyConstIndexerUtils final {
 			template<typename> friend class lazyConstIndexer;
+#if(LUAPP_API_VERSION >= 53)
+			friend class lazyConstIntIndexer;
+#endif	// V53+
 		private:
 			static void extractValue(lua_State* L, int tableref) noexcept;
 			static void writeValue(lua_State* L, int tableref) noexcept;
+#if(LUAPP_API_VERSION >= 53)
+			static void extractValuei(lua_State* L, int tableref, long long index) noexcept;
+			static void writeValuei(lua_State* L, int tableref, long long index) noexcept;
+#endif	// V53+
 		};
 
 
@@ -96,6 +103,71 @@ namespace lua {
 			Lazy<lazyImmediateValue<IndexType>> idxlazy;
 		};
 
+
+
+#if(LUAPP_API_VERSION >= 53)
+		//! Constant-value indexer integer specialization
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+		class lazyConstIntIndexer final: public lazyPolicyNondiscardable {
+			friend class ::lua::_::lazyPolicy;
+			friend class ::lua::_::lazyPolicyNondiscardable;
+#else
+		class lazyConstIntIndexer final: public ::lua::_::lazyPolicy {
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+
+			friend class Valref;
+			template<typename> friend class ::lua::_::Lazy;
+
+		public:
+			lazyConstIntIndexer(lazyConstIntIndexer&& src) noexcept:
+				tableref(src.tableref),
+				index(src.index)
+			{
+			}
+
+		private:
+
+			lazyConstIntIndexer(Context&, int tableIndex, long long index_) noexcept:
+				tableref(tableIndex),
+				index(index_)
+			{
+			}
+
+			void push(Context& S);
+
+			void pushSingle(Context& S)
+			{
+				push(S);
+			}
+
+			// Push value and discard it
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+			void onDestroy(Context& S)
+			{
+				lazyPolicyNondiscardable::onDestroySingle(S, *this);
+			}
+#else
+			void onDestroy(Context&)
+			{
+			}
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+
+			void moveout() noexcept
+			{
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+				Pushed = true;
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+			}
+
+			template<typename ValueType>
+			void assign(Context& c, ValueType&& val);
+
+		private:
+			// data
+			const int tableref;
+			const long long index;
+		};
+#endif	// V53+
 
 //##############################################################################
 
@@ -218,9 +290,16 @@ namespace lua {
 
 		class lazyTempIndexerUtils final {
 			template<typename, typename> friend class lazyTempIndexer;
+#if(LUAPP_API_VERSION >= 53)
+			template<typename> friend class lazyTempIntIndexer;
+#endif	// V53+
 		private:
 			static void extractValue(lua_State* L) noexcept;
 			static void writeValue(lua_State* L) noexcept;
+#if(LUAPP_API_VERSION >= 53)
+			static void extractValuei(lua_State* L, long long index) noexcept;
+			static void writeValuei(lua_State* L, long long index) noexcept;
+#endif	// V53+
 		};
 
 
@@ -310,6 +389,82 @@ namespace lua {
 
 
 
+#if(LUAPP_API_VERSION >= 53)
+		//! Temp-value indexer for integer indices
+		template<typename TableType>
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+		class lazyTempIntIndexer final: public lazyPolicyNondiscardable{
+			friend class ::lua::_::lazyPolicyNondiscardable;
+			friend class ::lua::_::lazyPolicy;
+#else
+		class lazyTempIntIndexer final: public lazyPolicy{
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+			template<typename> friend class ::lua::_::Lazy;
+
+			typedef _::Lazy<_::lazyImmediateValue<TableType>> tlazy;
+
+		public:
+			lazyTempIntIndexer(lazyTempIntIndexer<TableType>&& src) noexcept:
+				tableLazy(std::move(src.tableLazy)),
+				index(src.index)
+			{
+			}
+
+		private:
+
+			lazyTempIntIndexer(Context& c, TableType&& table, long long index_) noexcept:
+				tableLazy(c, std::move(table)),
+				index(index_)
+			{
+			}
+
+			lazyTempIntIndexer(Context& c, const TableType& table, long long index_) noexcept:
+				tableLazy(c, table),
+				index(index_)
+			{
+			}
+
+			void push(Context& c);
+
+			void pushSingle(Context& c)
+			{
+				push(c);
+			}
+
+			// Push value and discard it
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+			void onDestroy(Context& c)
+			{
+				lazyPolicyNondiscardable::onDestroySingle(c, *this);
+
+#else
+			void onDestroy(Context&)
+			{
+				tableLazy.onDestroy();
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+			}
+
+
+			void moveout() noexcept
+			{
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+				Pushed = true;
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+				tableLazy.moveout();
+			}
+
+			template<typename ValueType>
+			void assign(Context& c, ValueType&& val);
+
+
+			// data
+			tlazy tableLazy;
+			const long long index;
+
+		};
+#endif	// V53+
+
+
 //#####################  lazyMT  ###############################################
 
 
@@ -377,6 +532,75 @@ namespace lua {
 			// data
 			Lazy<Policy> srcLazy;
 		};
+
+
+
+//##############################  Linked  ######################################
+#if(LUAPP_API_VERSION >= 53)
+
+		class lazyLinked final: public lazyPolicy {
+			template<typename> friend class _::Lazy;
+			template<typename> friend class lazyLinkedTemp;
+
+		public:
+			lazyLinked(lazyLinked&& src) noexcept:
+				index(src.index)
+			{
+			}
+
+		private:
+			lazyLinked(Context&, int index_) noexcept:
+				index(index_) {}
+
+			static void doPush(Context& c, int index) noexcept;
+
+			void push(Context& c)
+			{
+				doPush(c, index);
+			}
+
+			void pushSingle(Context& c)
+			{
+				push(c);
+			}
+
+			template<typename ValueType>
+			void assign(Context& S, ValueType&& val);
+			static void doAssign(lua_State* L, int index) noexcept;
+
+			// data
+			const int index;
+		};
+
+
+
+		template<typename Policy>
+		class lazyLinkedTemp final: public lazyPolicy {
+			template<typename> friend class _::Lazy;
+
+		public:
+			lazyLinkedTemp(lazyLinkedTemp<Policy>&&) noexcept = default;
+
+		private:
+			lazyLinkedTemp(Context&, Lazy<Policy>&& src):
+				srcLazy(std::move(src))
+			{
+			}
+
+			void push(Context& c);
+
+			void pushSingle(Context& c)
+			{
+				push(c);
+			}
+
+			template<typename ValueType>
+			void assign(Context& c, ValueType&& val);
+
+			// data
+			Lazy<Policy> srcLazy;
+		};
+#endif	// V53+
 
 
 

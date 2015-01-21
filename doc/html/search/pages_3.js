@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['external_20links',['External links',['../external_links.html',1,'']]]
+  ['deprecated_20list',['Deprecated List',['../deprecated.html',1,'']]]
 ];

@@ -318,6 +318,7 @@ namespace lua {
 #if(LUAPP_API_VERSION >= 52)
 		//! Arithmetic operation codes (must match defines from lua.h)
 		enum class Arithmetics: int {
+#if(LUAPP_API_VERSION == 52)
 			Add,
 			Sub,
 			Multiply,
@@ -325,6 +326,22 @@ namespace lua {
 			Modulo,
 			Power,
 			UnaryMinus
+#else
+			Add,
+			Sub,
+			Multiply,
+			Modulo,
+			Power,
+			Divide,
+			IntegerDivide,
+			BitwiseAnd,
+			BitwiseOr,
+			BitwiseXor,
+			ShiftLeft,
+			ShiftRight,
+			UnaryMinus,
+			BitwiseNeg
+#endif
 		};
 #endif	// V52+
 
@@ -398,12 +415,18 @@ namespace lua {
 		class lazyLen;
 #endif	// V52+
 		class lazyMT;
+#if(LUAPP_API_VERSION >= 53)
+		class lazyLinked;
+		class lazyConstIntIndexer;
+#endif	// V53+
+		Context& extractContext(const Valref&) noexcept;
 		class vsIterator;
 		class vsCIterator;
 
 		template<typename, typename> class lazyConcat;
 #if(LUAPP_API_VERSION >= 52)
 		template<typename, typename, _::Arithmetics> class lazyArithmetics;
+		template<typename, _::Arithmetics> class lazyArithmeticsUnary;
 #endif	// V52+
 	}
 	//! @endcond
@@ -468,6 +491,7 @@ namespace lua {
 		friend class lua::_::uvIndexer;
 		friend class lua::_::vsIterator;
 		friend class lua::_::vsCIterator;
+		friend Context& lua::_::extractContext(const Valref&) noexcept;
 
 		template<typename, typename> friend class lua::_::lazyConcat;
 
@@ -521,7 +545,8 @@ namespace lua {
 
 
 #ifdef DOXYGEN_ONLY
-		//! @brief Safe conversion to supported types (deprecated, use @ref Valref::to "to" function instead).
+		//! @brief Safe conversion to supported types @lv52m.
+		//! @deprecated use @ref Valref::to "to" function instead.
 		//! @return Converted value or fallback value if the conversion cannot be made.
 		//! @tparam T the type to cast to. Converts to all types supported by @ref lua::Valref::cast "cast" <b>except user data</b>.
 		template<typename T> T optcast(const T& backupValue = T()) const noexcept;
@@ -539,12 +564,13 @@ namespace lua {
 		template<typename T> T to(const T& backupValue) const noexcept;
 
 #else	// Not DOXYGEN_ONLY
+#if(LUAPP_API_VERSION <= 52)
 		template<typename T>
 		T optcast(const T& backupValue = T()) const noexcept
 		{
 			return to<T>(backupValue);
 		}
-
+#endif	// V52-
 		template<typename T> typename std::enable_if<TypeID<T>::typeID != ValueType::UserData, T>::type to() const;
 
 		template<typename UDT> UDT& to(typename UserData<UDT>::enabled * = nullptr) const
@@ -653,6 +679,13 @@ namespace lua {
 		{
 			return _::Lazy<_::lazyConstIndexer<typename std::decay<IndexType>::type>>(context, index, std::forward<IndexType>(index_));
 		}
+
+#if(LUAPP_API_VERSION >= 53)
+		_::Lazy<_::lazyConstIntIndexer> operator [] (int index_) const noexcept;
+		_::Lazy<_::lazyConstIntIndexer> operator [] (unsigned index_) const noexcept;
+		_::Lazy<_::lazyConstIntIndexer> operator [] (long long index_) const noexcept;
+		_::Lazy<_::lazyConstIntIndexer> operator [] (unsigned long long index_) const noexcept;
+#endif	// V53+
 #endif	// DOXYGEN_ONLY
 		//! @}
 
@@ -755,6 +788,13 @@ namespace lua {
 		//! @brief Metatable.
 		//! @return value's metatable or @ref lua::nil "nil".
 		Temporary mt() const  noexcept;
+
+		//! @brief Linked value @lv53.
+		//! @return value's linked value or @ref lua::nil "nil".
+		//! @details This function allows to get and set associated value for userdata.
+		//! For other types it will produce @ref lua::nil "nil" (also for userdata that doesn't have anything associated with it) on read attempts
+		//! and silently ignore write attempts.
+		Temporary linked() const noexcept;
 #else	// Not DOXYGEN_ONLY
 #if(LUAPP_API_VERSION >= 52)
 		_::Lazy<_::lazyLen> len() const  noexcept;
@@ -762,98 +802,10 @@ namespace lua {
 		size_t len() const noexcept;
 #endif	// V52+
 		_::Lazy<_::lazyMT> mt() const  noexcept;
-#endif	// DOXYGEN_ONLY
-		//! @}
 
-
-
-		//! @name Concatenation
-		//! @{
-
-#ifdef DOXYGEN_ONLY
-		//! @brief Concatenation.
-		//! @note
-		//! @li Chained concatenations are optimized into a single multi-value concatenation;
-		//! @li multiple return values and @ref Valset "Valsets" are expanded;
-		//! @li the operation symbol '&' has lower priority than '+' and '-' because in C/C++ it means "bitwise AND", which matches priority of concatenation in Lua.
-		Temporary operator & (Valobj&& v) const noexcept;
-#else	// Not DOXYGEN_ONLY
-		template<typename ValueType> _::Lazy<_::lazyConcat<Valref, typename std::decay<ValueType>::type>> operator & (ValueType&& v) const noexcept
-		{
-			return _::Lazy<_::lazyConcat<Valref, typename std::decay<ValueType>::type>>(context, *this, std::forward<ValueType>(v));
-		}
-
-		template<typename ValueType> friend _::Lazy<_::lazyConcat<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref>> operator & (ValueType&& v, const Valref& cv) noexcept;
-#endif	// DOXYGEN_ONLY
-		//! @}
-
-
-		//! @name Arithmetics @lv52.
-		//! @{
-
-#ifdef DOXYGEN_ONLY
-		Temporary operator - () const noexcept;
-		Temporary operator + (Valobj&& rhs) const noexcept;
-		Temporary operator - (Valobj&& rhs) const noexcept;
-		Temporary operator * (Valobj&& rhs) const noexcept;
-		Temporary operator / (Valobj&& rhs) const noexcept;
-		Temporary operator % (Valobj&& rhs) const noexcept;
-
-		//! @brief Power.
-		//! @warning The operation symbol '^' has lower priority than '+' and '-' because in C/C++ it means "bitwise XOR", not "power". Use parentheses to group expressions properly.
-		Temporary operator ^ (Valobj&& rhs) const noexcept;
-#else	// Not DOXYGEN_ONLY
-#if(LUAPP_API_VERSION >= 52)
-		_::Lazy<_::lazyArithmetics<Valref, void, _::Arithmetics::UnaryMinus>> operator - () const noexcept;
-
-		template<typename ValueType> friend _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Add>> operator + (ValueType&& lhs, const Valref& rhs) noexcept;
-
-		template<typename ValueType>
-		_::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Add>> operator + (ValueType&& rhs) const noexcept
-		{
-			return _::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Add>>(context, *this, std::forward<ValueType>(rhs));
-		}
-
-		template<typename ValueType> friend _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Sub>> operator - (ValueType&& lhs, const Valref& rhs) noexcept;
-
-		template<typename ValueType>
-		_::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Sub>> operator - (ValueType&& rhs) const noexcept
-		{
-			return _::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Sub>>(context, *this, std::forward<ValueType>(rhs));
-		}
-
-		template<typename ValueType> friend _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Multiply>> operator * (ValueType&& lhs, const Valref& rhs) noexcept;
-
-		template<typename ValueType>
-		_::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Multiply>> operator * (ValueType&& rhs) const noexcept
-		{
-			return _::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Multiply>>(context, *this, std::forward<ValueType>(rhs));
-		}
-
-		template<typename ValueType> friend _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Divide>> operator / (ValueType&& lhs, const Valref& rhs) noexcept;
-
-		template<typename ValueType>
-		_::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Divide>> operator / (ValueType&& rhs) const noexcept
-		{
-			return _::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Divide>>(context, *this, std::forward<ValueType>(rhs));
-		}
-
-		template<typename ValueType> friend _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Modulo>> operator % (ValueType&& lhs, const Valref& rhs) noexcept;
-
-		template<typename ValueType>
-		_::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Modulo>> operator % (ValueType&& rhs) const noexcept
-		{
-			return _::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Modulo>>(context, *this, std::forward<ValueType>(rhs));
-		}
-
-		template<typename ValueType> friend _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Power>> operator ^ (ValueType&& lhs, const Valref& rhs) noexcept;
-
-		template<typename ValueType>
-		_::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Power>> operator ^ (ValueType&& rhs) const noexcept
-		{
-			return _::Lazy<_::lazyArithmetics<Valref, typename std::decay<ValueType>::type, _::Arithmetics::Power>>(context, *this, std::forward<ValueType>(rhs));
-		}
-#endif	// V52+
+#if(LUAPP_API_VERSION >= 53)
+		_::Lazy<_::lazyLinked> linked() const  noexcept;
+#endif	// V53+
 #endif	// DOXYGEN_ONLY
 		//! @}
 
@@ -904,99 +856,6 @@ namespace lua {
 	};
 
 
-	//! @name Concatenation
-	//! @{
-
-#ifdef DOXYGEN_ONLY
-	//! @relates lua::Valref
-	//! @note Chained concatenations are optimized into a single multi-value concatenation.
-	//! @warning The operation symbol '&' has lower priority than '+' and '-' because in C/C++ it means "bitwise AND", not "concatenation". Use parentheses to group expressions properly.
-	Temporary operator & (Valobj&& v, const Valref& cv) noexcept;
-#else	// Not DOXYGEN_ONLY
-	template<typename ValueType>
-	inline _::Lazy<_::lazyConcat<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref>> operator & (ValueType&& v, const Valref& cv)  noexcept
-	{
-		return _::Lazy<_::lazyConcat<typename std::decay<ValueType>::type, Valref>>(cv.context, std::forward<ValueType>(v), cv);
-	}
-#endif	// DOXYGEN_ONLY
-	//! @}
-
-
-
-	//! @name Arithmetics @lv52
-	//! @{
-
-#ifdef DOXYGEN_ONLY
-	//! @relates lua::Valref
-	Temporary operator + (Valobj&& lhs, const Valref& rhs) noexcept;
-
-	//! @relates lua::Valref
-	Temporary operator - (Valobj&& lhs, const Valref& rhs) noexcept;
-
-	//! @relates lua::Valref
-	Temporary operator * (Valobj&& lhs, const Valref& rhs) noexcept;
-
-	//! @relates lua::Valref
-	Temporary operator / (Valobj&& lhs, const Valref& rhs) noexcept;
-
-	//! @relates lua::Valref
-	Temporary operator % (Valobj&& lhs, const Valref& rhs) noexcept;
-
-	//! @brief Power
-	//! @relates lua::Valref
-	//! @warning The operation symbol '^' has lower priority than '+' and '-' because in C/C++ it means "bitwise XOR", not "power". Use parentheses to group expressions properly.
-	Temporary operator ^ (Valobj&& lhs, const Valref& rhs) noexcept;
-#else	// Not DOXYGEN_ONLY
-#if(LUAPP_API_VERSION >= 52)
-	template<typename ValueType>
-	inline _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Add>> operator + (ValueType&& lhs, const Valref& rhs) noexcept
-	{
-		return _::Lazy<_::lazyArithmetics<typename std::decay<ValueType>::type, Valref, _::Arithmetics::Add>>(rhs.context, std::forward<ValueType>(lhs), rhs);
-	}
-
-
-
-	template<typename ValueType>
-	inline _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Sub>> operator - (ValueType&& lhs, const Valref& rhs) noexcept
-	{
-		return _::Lazy<_::lazyArithmetics<typename std::decay<ValueType>::type, Valref, _::Arithmetics::Sub>>(rhs.context, std::forward<ValueType>(lhs), rhs);
-	}
-
-
-
-	template<typename ValueType>
-	inline _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref,_:: Arithmetics::Multiply>> operator * (ValueType&& lhs, const Valref& rhs) noexcept
-	{
-		return _::Lazy<_::lazyArithmetics<typename std::decay<ValueType>::type, Valref, _::Arithmetics::Multiply>>(rhs.context, std::forward<ValueType>(lhs), rhs);
-	}
-
-
-
-	template<typename ValueType>
-	inline _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Divide>> operator / (ValueType&& lhs, const Valref& rhs) noexcept
-	{
-		return _::Lazy<_::lazyArithmetics<typename std::decay<ValueType>::type, Valref, _::Arithmetics::Divide>>(rhs.context, std::forward<ValueType>(lhs), rhs);
-	}
-
-
-
-	template<typename ValueType>
-	inline _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Modulo>> operator % (ValueType&& lhs, const Valref& rhs) noexcept
-	{
-		return _::Lazy<_::lazyArithmetics<typename std::decay<ValueType>::type, Valref, _::Arithmetics::Modulo>>(rhs.context, std::forward<ValueType>(lhs), rhs);
-	}
-
-
-
-	template<typename ValueType>
-	inline _::Lazy<_::lazyArithmetics<typename std::enable_if< ! _::HasValueSemantics<ValueType>::value, typename std::decay<ValueType>::type>::type, Valref, _::Arithmetics::Power>> operator ^ (ValueType&& lhs, const Valref& rhs) noexcept
-	{
-		return _::Lazy<_::lazyArithmetics<typename std::decay<ValueType>::type, Valref, _::Arithmetics::Power>>(rhs.context, std::forward<ValueType>(lhs), rhs);
-	}
-
-#endif	// V52+
-#endif	// DOXYGEN_ONLY
-	//! @}
 
 	//! @cond
 	namespace _ {
@@ -1034,6 +893,91 @@ namespace lua {
 		}
 	};
 
+
+
+#ifdef DOXYGEN_ONLY
+	//! @name Concatenation
+	//! @{
+
+	//! @brief Concatenation.
+	//! @relates lua::Valref
+	//! @note
+	//! @li Chained concatenations are optimized into a single multi-value concatenation;
+	//! @li multiple return values and @ref Valset "Valsets" are expanded;
+	//! @li the operation symbol '&' has lower priority than '+' and '-' because in C/C++ it means "bitwise AND", which matches priority of concatenation in Lua.
+	Temporary operator & (Valobj&& lhs, Valobj&& rhs) const noexcept;
+	//! @}
+
+
+
+	//! @name Arithmetics (Lua 5.2+ only).
+	//! @{
+
+	//! @brief @lv52
+	//! @relates lua::Valref
+	Temporary operator - (Valobj&& lhs);
+
+	//! @brief @lv52
+	//! @relates lua::Valref
+	Temporary operator + (Valobj&& lhs, const Valobj& rhs) noexcept;
+
+	//! @brief @lv52
+	//! @relates lua::Valref
+	Temporary operator - (Valobj&& lhs, const Valobj& rhs) noexcept;
+
+	//! @brief @lv52
+	//! @relates lua::Valref
+	Temporary operator * (Valobj&& lhs, const Valobj& rhs) noexcept;
+
+	//! @brief @lv52
+	//! @relates lua::Valref
+	Temporary operator / (Valobj&& lhs, const Valobj& rhs) noexcept;
+
+	//! @brief @lv52
+	//! @relates lua::Valref
+	Temporary operator % (Valobj&& lhs, const Valobj& rhs) noexcept;
+
+	//! @brief Power @lv52.
+	//! @relates lua::Valref
+	//! @warning The operation symbol '^' has lower priority than '+' and '-' because in C/C++ it means "bitwise XOR", not "power". Use parentheses to group expressions properly.
+	Temporary operator ^ (Valobj&& lhs, const Valobj& rhs) noexcept;
+
+	//! @brief Integer division @lv53.
+	//! @relates lua::Valref
+	Temporary idiv(Valobj&& lhs, Valobj&& rhs);
+	//! @}
+
+
+
+	//! @name Binary operations (Lua 5.3+ only)
+	//! @{
+
+	//! @brief Bitwise AND @lv53.
+	//! @relates lua::Valref
+	Temporary band(Valobj&& lhs, Valobj&& rhs);
+
+	//! @brief Bitwise OR @lv53.
+	//! @relates lua::Valref
+	Temporary bor(Valobj&& lhs, Valobj&& rhs);
+
+	//! @brief Bitwise XOR @lv53.
+	//! @relates lua::Valref
+	Temporary bxor(Valobj&& lhs, Valobj&& rhs);
+
+	//! @brief Bitwise NOT @lv53.
+	//! @relates lua::Valref
+	Temporary bneg(Valobj&& lhs);
+
+	//! @brief Bit shift left @lv53.
+	//! @relates lua::Valref
+	Temporary shl(Valobj&& lhs, Valobj&& rhs);
+
+	//! @brief Bit shift right @lv53.
+	//! @relates lua::Valref
+	Temporary shr(Valobj&& lhs, Valobj&& rhs);
+	//! @}
+
+#endif	// DOXYGEN_ONLY
 }
 
 #endif // LUA_BASETYPES_HPP_INCLUDED

@@ -5,8 +5,8 @@
 * (c) 2014 OldFisher
 */
 
-#ifndef LUA_STATE_HPP_INCLUDED
-#define LUA_STATE_HPP_INCLUDED
+#ifndef LUA_CONTEXT_HXX_INCLUDED
+#define LUA_CONTEXT_HXX_INCLUDED
 
 
 
@@ -85,12 +85,21 @@ namespace lua {
 		template<typename, typename ...> friend class ::lua::_::lazyPCall;
 #if(LUAPP_API_VERSION >= 52)
 		template<typename, typename, lua::_::Arithmetics> friend class ::lua::_::lazyArithmetics;
+		template<typename, lua::_::Arithmetics> friend class ::lua::_::lazyArithmeticsUnary;
 #endif	// V52+
 		template<typename, typename> friend class ::lua::_::lazyConcat;
 		friend class ::lua::_::lazyConcatSelector;
+#if(LUAPP_API_VERSION >= 52)
 		template<typename> friend class ::lua::_::lazyLenTemp;
+#endif	// V52+
 		friend class ::lua::_::lazyMT;
 		template<typename> friend class ::lua::_::lazyMtTemp;
+#if(LUAPP_API_VERSION >= 53)
+		friend class ::lua::_::lazyLinked;
+		friend class ::lua::_::lazyConstIntIndexer;
+		template<typename> friend class ::lua::_::lazyLinkedTemp;
+		template<typename> friend class ::lua::_::lazyTempIntIndexer;
+#endif	// V53+
 		template<typename ...> friend class ::lua::_::lazyTableArray;
 		template<typename ...> friend class ::lua::_::lazyTableRecords;
 
@@ -183,7 +192,6 @@ namespace lua {
 			Temporary operator [] (int index) noexcept;
 			//! @}
 	};
-#else
 #endif // DOXYGEN_ONLY
 
 		//! @brief Type for @ref lua::Context::initializeExplicitly "initializeExplicitly" constant.
@@ -624,14 +632,7 @@ namespace lua {
 		//! @note <code><b>void</b></code> is acceptable in template parameter list as a "placeholder" type, matching any type of value.
 		//! @param amount Minimum amount of arguments that must be present on the stack.
 		//! @see checkArgs
-		template<typename ... ArgTypes>
-		void requireArgs(size_t amount = 0) noexcept
-		{
-			const auto nArgsExpected = std::max(sizeof ... (ArgTypes), amount);
-			if(args.size() < nArgsExpected)
-				error(where() & " Insufficient number of arguments (" &  nArgsExpected & " expected, " & args.size() & " passed).");
-			requireArg<ArgTypes..., void>(0);
-		}
+		template<typename ... ArgTypes> void requireArgs(size_t amount = 0);
 
 		//! @brief Registry accessor.
 		//! @details @li use <code>int key = registry.store(any_value);</code> to get integer key for stored value;
@@ -707,6 +708,7 @@ namespace lua {
 		void push(const Nil&) noexcept;
 		void push(bool) noexcept;
 
+#if(LUAPP_API_VERSION <= 52)
 		void push(int val) noexcept
 		{
 			push(double(val));
@@ -727,6 +729,20 @@ namespace lua {
 			push(double(val));
 		}
 
+#else	// V53+
+		void push(int val) noexcept
+		{
+			push(static_cast<long long>(val));
+		}
+
+		void push(unsigned int val) noexcept
+		{
+			push(static_cast<unsigned long long>(val));
+		}
+
+		void push(long long val) noexcept;
+		void push(unsigned long long val) noexcept;
+#endif
 		void push(float val) noexcept
 		{
 			push(double(val));
@@ -895,15 +911,7 @@ namespace lua {
 		}
 
 		//! Require argument type recursively
-		template<typename T, typename ... OtherArgTypes>
-		void requireArg(size_t idx)
-		{
-			if(args[idx].is<typename std::conditional<std::is_void<T>::value, Value, T>::type>())
-				requireArg<OtherArgTypes...>(idx + 1);
-			else
-				error(where() & " Argument " & (idx + 1) & " type is incompatible.");
-		}
-
+		template<typename T, typename ... OtherArgTypes> void requireArg(size_t idx);
 	};
 
 	template<>
@@ -921,4 +929,4 @@ namespace lua {
 }
 
 
-#endif // LUA_STATE_HPP_INCLUDED
+#endif // LUA_CONTEXT_HXX_INCLUDED

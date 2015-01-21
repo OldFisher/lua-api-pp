@@ -29,7 +29,6 @@ namespace lua {
 		{
 			l.moveout();
 		}
-
 	}
 
 //#####################  Valref  ###############################################
@@ -164,14 +163,6 @@ namespace lua {
 
 
 #if(LUAPP_API_VERSION >= 52)
-	inline _::Lazy<_::lazyArithmetics<Valref, void, _::Arithmetics::UnaryMinus>> Valref::operator - () const noexcept
-	{
-		return _::Lazy<_::lazyArithmetics<Valref, void, _::Arithmetics::UnaryMinus>>(context, *this);
-	}
-#endif	// V52+
-
-
-#if(LUAPP_API_VERSION >= 52)
 	inline _::Lazy<_::lazyLen> Valref::len() const  noexcept
 	{
 		return _::Lazy<_::lazyLen>(context, index);
@@ -184,6 +175,36 @@ namespace lua {
 		return _::Lazy<_::lazyMT>(context, index);
 	}
 
+
+#if(LUAPP_API_VERSION >= 53)
+
+	inline _::Lazy<_::lazyLinked> Valref::linked() const noexcept
+	{
+		return _::Lazy<_::lazyLinked>(context, index);
+	}
+
+
+	inline _::Lazy<_::lazyConstIntIndexer> Valref::operator [] (int index_) const noexcept
+	{
+		return _::Lazy<_::lazyConstIntIndexer>(context, index, index_);
+	}
+
+	inline _::Lazy<_::lazyConstIntIndexer> Valref::operator [] (unsigned index_) const noexcept
+	{
+		return _::Lazy<_::lazyConstIntIndexer>(context, index, index_);
+	}
+
+	inline _::Lazy<_::lazyConstIntIndexer> Valref::operator [] (long long index_) const noexcept
+	{
+		return _::Lazy<_::lazyConstIntIndexer>(context, index, index_);
+	}
+
+	inline _::Lazy<_::lazyConstIntIndexer> Valref::operator [] (unsigned long long index_) const noexcept
+	{
+		return _::Lazy<_::lazyConstIntIndexer>(context, index, index_);
+	}
+
+#endif	// V53+
 
 
 	inline _::Lazy<_::lazyExtConstUpvalue> Valref::upvalue(size_t index_) const noexcept
@@ -269,6 +290,14 @@ namespace lua {
 		{
 			return Lazy<lazyMtTemp<Policy>>(S, std::move(*this));
 		}
+
+#if(LUAPP_API_VERSION >= 53)
+		template<typename Policy>
+		inline Lazy<lazyLinkedTemp<Policy>> Lazy<Policy>::linked() &&
+		{
+			return Lazy<lazyLinkedTemp<Policy>>(S, std::move(*this));
+		}
+#endif	// V53+
 
 		template<typename Policy>
 		inline Valset Lazy<Policy>::getUpvalues() &&
@@ -435,6 +464,28 @@ namespace lua {
 		}
 
 
+
+#if(LUAPP_API_VERSION >= 53)
+		template<typename ValueType>
+		inline void lazyConstIntIndexer::assign(Context& c, ValueType&& value)
+		{
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+			Pushed = true;
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+			c.ipush(std::forward<ValueType>(value));
+			lazyConstIndexerUtils::writeValuei(c, tableref, index);
+		}
+
+		inline void lazyConstIntIndexer::push(Context& c)
+		{
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+			Pushed = true;
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+			lazyConstIndexerUtils::extractValuei(c, tableref, index);
+		}
+#endif	// V53+
+
+
 //#####################  lazyGlobalIndexer  ####################################
 
 
@@ -521,6 +572,49 @@ namespace lua {
 		}
 
 
+#if(LUAPP_API_VERSION >= 53)
+//#####################  lazyTempIntIndexer  ###################################
+		template<typename TableType>
+		template<typename ValueType>
+		inline void lazyTempIntIndexer<TableType>::assign(Context& c, ValueType&& value)
+		{
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+			Pushed = true;
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+
+			try {
+				tableLazy.pushSingle();
+			} catch(std::exception&) {
+				_::moveout(std::forward<ValueType>(value));
+				throw;
+			}
+
+			try {
+				c.ipush(std::forward<ValueType>(value));
+			} catch(std::exception&)
+			{
+				c.pop(1);
+				throw;
+			}
+
+			lazyTempIndexerUtils::writeValuei(c, index);
+		}
+
+
+		template<typename TableType>
+		inline void lazyTempIntIndexer<TableType>::push(Context& c)
+		{
+#ifdef LUAPP_NONDISCARDABLE_INDEX
+			Pushed = true;
+#endif	// LUAPP_NONDISCARDABLE_INDEX
+
+			tableLazy.pushSingle();
+			lazyTempIndexerUtils::extractValuei(c, index);
+		}
+#endif	// V53+
+
+
+
 #if(LUAPP_API_VERSION >= 52)
 //#####################  lazyLenTemp  ##########################################
 
@@ -568,6 +662,43 @@ namespace lua {
 			S.pop();
 		}
 
+#if(LUAPP_API_VERSION >= 53)
+
+//#####################  lazyLinked  ###########################################
+
+
+		template<typename ValueType>
+		inline void lazyLinked::assign(Context& c, ValueType&& val)
+		{
+			c.ipush(std::forward<ValueType>(val));
+			doAssign(c, index);
+		}
+
+
+		template<typename Policy>
+		inline void lazyLinkedTemp<Policy>::push(Context& c)
+		{
+			srcLazy.pushSingle();
+			lazyLinked::doPush(c, c.getTop());
+			c.remove(c.getTop() - 1);
+		}
+
+
+		template<typename Policy>
+		template<typename ValueType>
+		inline void lazyLinkedTemp<Policy>::assign(Context& c, ValueType&& val)
+		{
+			srcLazy.pushSingle();
+			try {
+				c.push(std::forward<ValueType>(val));
+			} catch(...) {
+				c.pop();
+				throw;
+			}
+			lazyLinked::doAssign(c, -2);
+			c.pop();
+		}
+#endif	// V53+
 
 //#####################  lazyRawIndexer  #######################################
 
@@ -853,14 +984,14 @@ namespace lua {
 		}
 
 
-		template<typename T1>
-		inline void lazyArithmetics<T1, void, Arithmetics::UnaryMinus>::push(Context& S)
+		template<typename T, Arithmetics op>
+		inline void lazyArithmeticsUnary<T, op>::push(Context& c)
 		{
 #ifdef LUAPP_NONDISCARDABLE_ARITHMETICS
 			Pushed = true;
 #endif	// LUAPP_NONDISCARDABLE_ARITHMETICS
-			L1.pushSingle();
-			S.doArith(Arithmetics::UnaryMinus);
+			srcLazy.pushSingle();
+			c.doArith(op);
 		}
 
 #endif	// V52+
@@ -1152,12 +1283,221 @@ namespace lua {
 	}
 
 
+	namespace _ {
+		template<typename Policy, typename ... Args> inline Lazy<Policy> makeLazy(Args&& ... args) noexcept
+		{
+            return Lazy<Policy>(std::forward<Args>(args)...);
+		}
+	}
+
+
+
+//#####################  Destructive operations  ###############################
+//################  Concatenation, arithmetics, bit ops  #######################
+
+	namespace _ {
+
+
+		inline Context& selectContext (Context& c, decltype(nullptr)) noexcept
+		{
+			return c;
+		}
+
+		inline Context& selectContext (decltype(nullptr), Context& c) noexcept
+		{
+			return c;
+		}
+
+		inline Context& selectContext (Context& , Context& c2) noexcept
+		{
+			return c2;
+		}
+
+		inline Context& extractContext(const lua::Valref& obj) noexcept
+		{
+			return obj.context;
+		}
+
+		template<typename Policy> inline Context& extractContext(const Lazy<Policy>& obj) noexcept
+		{
+			return obj.S;
+		}
+
+		inline decltype(nullptr) extractContext(...) noexcept
+		{
+			return nullptr;
+		}
+
+
+		template<typename ValueType>
+		struct canPromote {
+			static constexpr bool value =
+				std::is_same<
+					Context&,
+					decltype(
+						extractContext(
+							std::declval<
+								typename std::decay<ValueType>::type
+							>()
+						)
+					)
+				>::value;
+		};
+
+		template<typename Value1, typename Value2>
+		struct isPromotable {
+			static constexpr bool value = canPromote<Value1>::value || canPromote<Value2>::value;
+		};
+
+	}
+
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyConcat<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type>> operator& (Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyConcat<typename std::decay<Value1>::type, typename std::decay<Value2>::type>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+#if(LUAPP_API_VERSION >= 52)
+
+	template<typename ValueType>
+	inline 	_::Lazy<_::lazyArithmeticsUnary<typename std::enable_if<_::isPromotable<ValueType, ValueType>::value, typename std::decay<ValueType>::type>::type, _::Arithmetics::UnaryMinus>> operator - (ValueType&& val) noexcept
+	{
+        return _::makeLazy<_::lazyArithmeticsUnary<typename std::decay<ValueType>::type, _::Arithmetics::UnaryMinus>>(_::extractContext(val), std::forward<ValueType>(val));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::Add>> operator+ (Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::Add>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::Sub>> operator- (Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::Sub>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::Multiply>> operator* (Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::Multiply>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::Divide>> operator/ (Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::Divide>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::Modulo>> operator% (Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::Modulo>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::Power>> operator^ (Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::Power>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+#if(LUAPP_API_VERSION >= 53)
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::IntegerDivide>> idiv(Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::IntegerDivide>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::BitwiseAnd>> band(Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::BitwiseAnd>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::BitwiseOr>> bor(Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::BitwiseOr>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::BitwiseXor>> bxor(Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::BitwiseXor>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename ValueType>
+	inline _::Lazy<_::lazyArithmeticsUnary<typename std::enable_if<_::isPromotable<ValueType, ValueType>::value, typename std::decay<ValueType>::type>::type, _::Arithmetics::BitwiseNeg>> bneg(ValueType&& lhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmeticsUnary<typename std::decay<ValueType>::type, _::Arithmetics::BitwiseNeg>>(_::extractContext(lhs), std::forward<ValueType>(lhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::ShiftLeft>> shl(Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::ShiftLeft>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+	template<typename Value1, typename Value2>
+	inline _::Lazy<_::lazyArithmetics<typename std::enable_if<_::isPromotable<Value1, Value2>::value, typename std::decay<Value1>::type>::type, typename std::decay<Value2>::type, _::Arithmetics::ShiftRight>> shr(Value1&& lhs, Value2&& rhs) noexcept
+	{
+		return _::makeLazy<_::lazyArithmetics<typename std::decay<Value1>::type, typename std::decay<Value2>::type, _::Arithmetics::ShiftRight>>(_::selectContext(_::extractContext(lhs), _::extractContext(rhs)), std::forward<Value1>(lhs), std::forward<Value2>(rhs));
+	}
+
+#endif	// next: V52-
+#endif // next: all versions
+
+	namespace _ {
+#if(LUAPP_API_VERSION >= 52)
+#if(LUAPP_API_VERSION >= 53)
+		using ::lua::idiv;
+		using ::lua::band;
+		using ::lua::bor;
+		using ::lua::bxor;
+		using ::lua::bneg;
+		using ::lua::shl;
+		using ::lua::shr;
+#endif	// next: V52-
+		using ::lua::operator-;
+		using ::lua::operator+;
+		using ::lua::operator*;
+		using ::lua::operator/;
+		using ::lua::operator%;
+		using ::lua::operator^;
+#endif // next: all versions
+		using ::lua::operator&;
+	}
+
+
+
+
+//#############################  Context  ######################################
+
+	template<typename ... ArgTypes> void lua::Context::requireArgs(size_t amount)
+	{
+		const auto nArgsExpected = std::max(sizeof ... (ArgTypes), amount);
+		if(args.size() < nArgsExpected)
+			error(where() & " Insufficient number of arguments (" &  nArgsExpected & " expected, " & args.size() & " passed).");
+		requireArg<ArgTypes..., void>(0);
+	}
+
+
+
+	template<typename T, typename ... OtherArgTypes> void lua::Context::requireArg(size_t idx)
+	{
+		if(args[idx].is<typename std::conditional<std::is_void<T>::value, Value, T>::type>())
+			requireArg<OtherArgTypes...>(idx + 1);
+		else
+			error(where() & " Argument " & (idx + 1) & " type is incompatible.");
+	}
 
 
 //##############################################################################
 
+//! @endcond
 }
 
-//! @endcond
 
 #endif // LUA_IMPL_HPP_INCLUDED

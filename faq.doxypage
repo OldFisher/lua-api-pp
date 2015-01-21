@@ -7,15 +7,21 @@
 
 /**
 * @page faq FAQ
-* (In)Frequently Asked Questions
+*
 * @tableofcontents
 *
 * @section faq_compat Compatibility
 * @subsection faq_compat_versions Which versions of Lua does this library support?
-* Versions @ref compatibility_5_1 "5.1" and @ref compatibility_5_2 "5.2" at the moment.
+* Versions @ref compatibility_5_1 "5.1", @ref compatibility_5_2 "5.2" and @ref compatibility_5_3 "5.3".
 *
 * @subsection faq_compat_luajit Is this library compatible with LuaJIT?
 * Yes, all tests pass with LuaJIT in @ref compatibility_5_1 "5.1" compatibility mode.
+*
+* @section faq_programming Programming
+* @subsection faq_programming_polymorphic_userdata Is it possible to use inherited classes with virtual functions as userdata?
+* Yes, just @ref LUAPP_USERDATA "assign" same string ID for base and derived classes.
+* In methods @ref lua::Valref::cast "cast" @b self parameter to base class.
+* Use base class methods for automatic wrapping.
 *
 * @section faq_known_problems Technical issues
 * @subsection faq_known_problems_sjlj I compiled the motivational example and it crashes on out-of-bound array access.
@@ -25,7 +31,7 @@
 * Lua-API++ powered functions).
 * How to avoid that problem:
 * @li use compiler with another exception mechanism (SJLJ isn't that good anyway);
-* @li make sure that pieces of code executed with @ref lua::State::runString(const char*) "runString" / @ref lua::State::runFile(const char*) "runFile"
+* @li make sure that pieces of Lua code executed with @ref lua::State::runString(const char*) "runString" / @ref lua::State::runFile(const char*) "runFile"
 * have simple error-free skeleton that protects calls to main code.
 *
 *

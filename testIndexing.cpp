@@ -14,7 +14,7 @@ using std::string;
 struct fxIndexing: public fxContext {
 	fxIndexing()
 	{
-		context.runString("val = {1, 2, {1, 2, {1, 2}}}");
+		context.runString("val = {1, 2, {1, 2, {1, 2, one = 1, two = 2}, one = 1, two = 2}, one = 1, two = 2}");
 	}
 };
 
@@ -33,10 +33,15 @@ BOOST_FIXTURE_TEST_CASE(Native, fxIndexing)
 {
 	l[1] = 42;
 	BOOST_CHECK_EQUAL(l[1].cast<int>(), 42);
+	l["one"] = 42;
+	BOOST_CHECK_EQUAL(l["one"].cast<int>(), 42);
 	lua::Value v = l;
 	BOOST_CHECK_EQUAL(v[1].cast<int>(), 42);
+	BOOST_CHECK_EQUAL(v["one"].cast<int>(), 42);
 	v[2] = 43;
 	BOOST_CHECK_EQUAL(v[2].cast<int>(), 43);
+	v["two"] = 43;
+	BOOST_CHECK_EQUAL(v["two"].cast<int>(), 43);
 }
 
 

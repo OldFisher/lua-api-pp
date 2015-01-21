@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['len',['len',['../classlua_1_1_valref.html#a4e1246286c0483be9641235e011d3c92',1,'lua::Valref::len() const noexcept'],['../classlua_1_1_valref.html#a94c909f1f9c10e781ecf7ecd4f88280d',1,'lua::Valref::len() const noexcept'],['../classlua_1_1_table.html#a4e1246286c0483be9641235e011d3c92',1,'lua::Table::len() const noexcept'],['../classlua_1_1_table.html#a94c909f1f9c10e781ecf7ecd4f88280d',1,'lua::Table::len() const noexcept']]],
-  ['load',['load',['../classlua_1_1_context.html#ada90f88e0ab44d5da1d0c3335137649e',1,'lua::Context::load(const char *fileName) noexcept'],['../classlua_1_1_context.html#afe2e8b68d7e1fdaa0de519bc0d9eec27',1,'lua::Context::load(const std::string &amp;fileName) noexcept']]]
+  ['idiv',['idiv',['../classlua_1_1_valref.html#a929cd108b1b4adb3aea5901d1169617c',1,'lua::Valref']]],
+  ['is',['is',['../classlua_1_1_valref.html#a61c7e8fee768ec0f7d63de53c0c709bc',1,'lua::Valref']]],
+  ['isblocked',['isBlocked',['../classlua_1_1_valset.html#a90afabcf5c3c7f9163db8acac1caa9d1',1,'lua::Valset']]],
+  ['iterate',['iterate',['../classlua_1_1_table.html#a74a59c576b35fccf1fba54a285d388a3',1,'lua::Table']]]
 ];

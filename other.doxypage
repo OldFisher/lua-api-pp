@@ -71,27 +71,28 @@
 * Additional library features can be configured with special macros. These macros must be defined project-wide to maintain consistency.
 * @section configuring_compatibility Compatibility
 * Macro names that control @ref compatibility mode:
-* @li @b LUAPP_COMPATIBILITY_V51;
-* @li @b LUAPP_COMPATIBILITY_V52.
+* @li <code><b>LUAPP_COMPATIBILITY_V51</b></code>;
+* @li <code><b>LUAPP_COMPATIBILITY_V52</b></code>;
+* @li <code><b>LUAPP_COMPATIBILITY_V53</b></code>.
 *
 * @section configuring_discardability Discardability
 * Operation that produces @ref lua::Temporary "temporary Lua value" may be skipped if the operation result is never used.
 * Such operation is called "discardable". The non-discardable operations are executed no matter what happens to results.
 *
 * By default, only function calls are non-discardable, but it is possible to switch this mode for:
-* @li indexing, with @b LUAPP_NONDISCARDABLE_INDEX;
-* @li arithmetic operations @lv52, with @b LUAPP_NONDISCARDABLE_ARITHMETICS;
-* @li concatenation, with @b LUAPP_NONDISCARDABLE_CONCAT;
-* @li all of the above, with @b LUAPP_NONDISCARDABLE_ALL.
+* @li indexing, with <code><b>LUAPP_NONDISCARDABLE_INDEX</b></code>;
+* @li arithmetic operations @lv52, with <code><b>LUAPP_NONDISCARDABLE_ARITHMETICS</b></code>;
+* @li concatenation, with <code><b>LUAPP_NONDISCARDABLE_CONCAT</b></code>;
+* @li all of the above, with <code><b>LUAPP_NONDISCARDABLE_ALL</b></code>.
 *
 * @section configuring_performance Performance
 * To achieve best performance, API-dependent part may be included in headers as a set of inline functions.
 * This mode can be used when link-time code generation is not available and the performance is crucial.
 *
-* It is turned on with @b LUAPP_HEADER_ONLY macro and lua_impl.cpp still needs to be compiled with the project.
+* It is turned on with <code><b>LUAPP_HEADER_ONLY</b></code> macro and lua_impl.cpp still needs to be compiled with the project.
 *
 * @section configuring_stack_watch Debugging: stack integrity checking
-* The @b LUAPP_WATCH_STACK enables special mode of stack integrity checking at the exense of some operational overhead.
+* The <code><b>LUAPP_WATCH_STACK</b></code> enables special mode of stack integrity checking at the exense of some operational overhead.
 * In this mode, when the correct sequence of stack operations is broken, non-catchable exceptions will be raised,
 * leading to immediate program termination.
 *
@@ -113,18 +114,28 @@
 * The library supports several Lua versions listed below. By default the library selects the most recent API version known to it.
 * @section compatibility_5_1 Lua 5.1
 * Also compatible with <a href="http://luajit.org/">LuaJIT</a>.
-* Turned on with @b LUAPP_COMPATIBILITY_V51 macro.
-*
-* Differences to 5.2 mode:
-* @li natural arithmetics is not supported;
-* @li @ref lua::Valref::len "length" operation returns native size_t instead of producing @ref lua::Temporary "Lua value";
-* @li the @ref lua::Context::gcIsRunning "gcIsRunning" function is not available;
-* @li the @ref lua::Context::getVersion "getVersion" function is not available;
-* @li the @ref lua::Table::raw "raw accessor" does not use specialized pointer get/set functions.
+* Turned on with <code><b>LUAPP_COMPATIBILITY_V51</b></code> macro.
 *
 * @section compatibility_5_2 Lua 5.2
-* Turned on by default or with @b LUAPP_COMPATIBILITY_V52.
+* Turned on with <code><b>LUAPP_COMPATIBILITY_V52</b></code>.
 *
+* Differences to mode 5.1:
+* @li Lua-side arithmetics is enabled for @ref basic_values "value objects";
+* @li @ref lua::Valref::len "length" operation returns @ref lua::Temporary "Lua value" instead of native size_t;
+* @li the @ref lua::Context::gcIsRunning "gcIsRunning" function is available;
+* @li the @ref lua::Context::getVersion "getVersion" function is available;
+* @li the @ref lua::Table::raw "raw accessor" uses specialized rawgetp/rawsetp functions for pointer-type indices.
+*
+* @section compatibility_5_3 Lua 5.3
+* Turned on by default or with <code><b>LUAPP_COMPATIBILITY_V53</b></code>.
+*
+* Differences to mode 5.2:
+* @li native integer types are promoted to Lua number/integer subtype;
+* @li values have @ref lua::Valref::linked "linked" accessor to associated value (only @ref basic_values_user "userdata" can have something associated with it);
+* @li additional Lua-side operations are available: @ref idiv "integer division", @ref band "bitwise AND",
+* @ref bor "bitwise OR", @ref bxor "bitwise XOR", @ref bneg "bitwise NOT", @ref shl "shift bits left", @ref shr "shift bits right";
+* @li indexing values with native integer types now uses specialized geti/seti functions;
+* @li @ref lua::Valref::optcast "optcast" is no longer available (it was superseded by @ref lua::Valref::to "to" with argument).
 *
 * @page external_links External links
 * @li <a href="http://www.lua.org/">Official Lua website</a>;

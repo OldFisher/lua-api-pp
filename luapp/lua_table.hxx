@@ -225,10 +225,11 @@ namespace lua {
 		Temporary operator [] (Valobj index) const noexcept;
 #else	// Not DOXYGEN_ONLY
 		template<typename IndexType>
-		_::Lazy<_::lazyConstIndexer<typename std::decay<IndexType>::type>> operator []  (IndexType&& index) const noexcept
+		auto operator []  (IndexType&& index) const noexcept -> decltype(std::declval<lua::Valref>()[std::forward<IndexType>(index)])
 		{
 			return Anchor[std::forward<IndexType>(index)];
 		}
+
 #endif	// DOXYGEN_ONLY
 		//! @}
 

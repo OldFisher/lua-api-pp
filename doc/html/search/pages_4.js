@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['faq',['FAQ',['../faq.html',1,'']]]
+  ['external_20links',['External links',['../external_links.html',1,'']]]
 ];
