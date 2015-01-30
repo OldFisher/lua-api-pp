@@ -56,4 +56,12 @@ struct fxGlobalVal: public fxContext
 };
 
 
+struct fxFiles: public fxSignal {
+
+	static size_t entryCount;
+
+    fxFiles();
+    ~fxFiles();
+};
+
 #endif // FIXTURES_H_INCLUDED

@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2015-01-21-0</span>
+   &#160;<span id="projectnumber">2015-01-21-1</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -106,8 +106,9 @@ $(document).ready(function(){initNavTree('usage.html','');});
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="usage_basic"></a>
 Using the library with your project</h1>
-<p>This library is intended to be compiled with your project. All the files you're going to need for the project are in luapp/ directory. Add <em>lua_impl.cpp</em> to your project and include <a class="el" href="lua_8hpp.html">lua.hpp</a>.</p>
-<p>Do not include any other *.hpp files: those depend on particular inclusion order in which they are included into <a class="el" href="lua_8hpp.html">lua.hpp</a>. Besides Lua API itself (configured with <a class="el" href="luainc_8h.html">luainc.h</a>) and standard C++ library there are no external dependencies.</p>
+<p>This library is intended to be compiled with your project. All the files you're going to need for the project are in luapp/ directory. Add a source file containing single line</p><div class="fragment"><div class="line"><span class="preprocessor">#include &lt;luapp/impl.cpp&gt;</span> </div>
+</div><!-- fragment --><p> to your project and include <a class="el" href="lua_8hpp.html">luapp/lua.hpp</a> in your sources.</p>
+<p>Do not include any *.hxx files: those depend on particular inclusion order in which they are included into <a class="el" href="lua_8hpp.html">lua.hpp</a>. Besides Lua API itself (configured with <a class="el" href="luainc_8h.html">luainc.h</a>) and standard C++ library there are no external dependencies.</p>
 <p>Set the appropriate <a class="el" href="configuring.html">configuration macros</a> if needed.</p>
 <h1><a class="anchor" id="usage_tests"></a>
 Building the tests (for library development)</h1>
@@ -120,7 +121,7 @@ Documentation</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jan 21 2015 13:01:25 for Lua-API++ by
+    <li class="footer">Generated on Fri Jan 30 2015 15:13:23 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>

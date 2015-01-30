@@ -82,7 +82,7 @@ BOOST_FIXTURE_TEST_CASE(CreateChunkFromStdString, fxContext)
 
 
 
-BOOST_FIXTURE_TEST_CASE(CreateChunkFromFile, fxContext)
+BOOST_FIXTURE_TEST_CASE(CreateChunkFromFile, fxFiles)
 {
 	context.runString("function fnSignal() signal = true end");
 	Value c = context.load("test_good.lua");
@@ -94,7 +94,7 @@ BOOST_FIXTURE_TEST_CASE(CreateChunkFromFile, fxContext)
 
 
 
-BOOST_FIXTURE_TEST_CASE(CreateChunkFromFileStdStr, fxContext)
+BOOST_FIXTURE_TEST_CASE(CreateChunkFromFileStdStr, fxFiles)
 {
 	context.runString(string("function fnSignal() signal = true end"));
 	Value c = context.load(string("test_good.lua"));
@@ -114,7 +114,7 @@ BOOST_FIXTURE_TEST_CASE(RunString, fxContext)
 
 
 
-BOOST_FIXTURE_TEST_CASE(RunFile, fxContext)
+BOOST_FIXTURE_TEST_CASE(RunFile, fxFiles)
 {
 	context.runString("function fnSignal() signal = true end");
 	context.runFile("test_good.lua");
@@ -125,7 +125,7 @@ BOOST_FIXTURE_TEST_CASE(RunFile, fxContext)
 
 
 
-BOOST_FIXTURE_TEST_CASE(RunFileStdStr, fxContext)
+BOOST_FIXTURE_TEST_CASE(RunFileStdStr, fxFiles)
 {
 	context.runString(string("function fnSignal() signal = true end"));
 	context.runFile(string("test_good.lua"));

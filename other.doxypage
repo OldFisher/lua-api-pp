@@ -52,9 +52,9 @@
 * @page usage Using the library
 * @section usage_basic Using the library with your project
 * This library is intended to be compiled with your project. All the files you're going to need for the project are in luapp/ directory.
-* Add <em>lua_impl.cpp</em> to your project and include @ref lua.hpp.
+* Add a source file containing single line @code{.cpp}#include <luapp/impl.cpp> @endcode to your project and include @ref lua.hpp "luapp/lua.hpp" in your sources.
 *
-* Do not include any other *.hpp files: those depend on particular inclusion order in which they are included into @ref lua.hpp.
+* Do not include any *.hxx files: those depend on particular inclusion order in which they are included into @ref lua.hpp.
 * Besides Lua API itself (configured with @ref luainc.h) and standard C++ library there are no external dependencies.
 *
 * Set the appropriate @ref configuring "configuration macros" if needed.
@@ -89,7 +89,7 @@
 * To achieve best performance, API-dependent part may be included in headers as a set of inline functions.
 * This mode can be used when link-time code generation is not available and the performance is crucial.
 *
-* It is turned on with <code><b>LUAPP_HEADER_ONLY</b></code> macro and lua_impl.cpp still needs to be compiled with the project.
+* It is turned on with <code><b>LUAPP_HEADER_ONLY</b></code> macro and impl.cpp still needs to be compiled with the project.
 *
 * @section configuring_stack_watch Debugging: stack integrity checking
 * The <code><b>LUAPP_WATCH_STACK</b></code> enables special mode of stack integrity checking at the exense of some operational overhead.
@@ -102,7 +102,7 @@
 * @page performace Performance
 * The library was designed to introduce as little overhead as possible. Most functions were made inline, except those
 * that interact with @ref luainc.h "Lua API" directly. In order to isolate the user from Lua API its @ref luainc.h "headers" are not used in Lua API++ headers.
-* Functions that interact with Lua API were put into lua_impl.cpp and therefore are not inlined by default.
+* Functions that interact with Lua API were put into impl.cpp and therefore are not inlined by default.
 * You can change that by using link-time code generation (called LTCG in Visual Studio and LTO in GCC).
 * Alternatively, the @b LUAPP_HEADER_ONLY macro will make every function inline, but unlike normal mode
 * @ref luainc.h "Lua API headers" will be included by @ref lua.hpp as well.

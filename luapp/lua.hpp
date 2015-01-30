@@ -140,7 +140,7 @@ namespace lua {
 
 #ifdef LUAPP_HEADER_ONLY
 #define LUAPP_HEADER_ONLY_FLAG
-#include "lua_impl.cpp"
+#include "impl.cpp"
 #undef LUAPP_HEADER_ONLY_FLAG
 #endif
 

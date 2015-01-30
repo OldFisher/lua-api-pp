@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2015-01-21-0</span>
+   &#160;<span id="projectnumber">2015-01-21-1</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -104,14 +104,14 @@ $(document).ready(function(){initNavTree('performace.html','');});
 <div class="title">Performance </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>The library was designed to introduce as little overhead as possible. Most functions were made inline, except those that interact with <a class="el" href="luainc_8h.html">Lua API</a> directly. In order to isolate the user from Lua API its <a class="el" href="luainc_8h.html">headers</a> are not used in Lua API++ headers. Functions that interact with Lua API were put into lua_impl.cpp and therefore are not inlined by default. You can change that by using link-time code generation (called LTCG in Visual Studio and LTO in GCC). Alternatively, the <b>LUAPP_HEADER_ONLY</b> macro will make every function inline, but unlike normal mode <a class="el" href="luainc_8h.html">Lua API headers</a> will be included by <a class="el" href="lua_8hpp.html">lua.hpp</a> as well.</p>
+<div class="textblock"><p>The library was designed to introduce as little overhead as possible. Most functions were made inline, except those that interact with <a class="el" href="luainc_8h.html">Lua API</a> directly. In order to isolate the user from Lua API its <a class="el" href="luainc_8h.html">headers</a> are not used in Lua API++ headers. Functions that interact with Lua API were put into impl.cpp and therefore are not inlined by default. You can change that by using link-time code generation (called LTCG in Visual Studio and LTO in GCC). Alternatively, the <b>LUAPP_HEADER_ONLY</b> macro will make every function inline, but unlike normal mode <a class="el" href="luainc_8h.html">Lua API headers</a> will be included by <a class="el" href="lua_8hpp.html">lua.hpp</a> as well.</p>
 <p>The library relies heavily on templates and aggressive inlining, so without optimization there will be some operational overhead. Use best optimization settings available for your project if you need to achieve best performance. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jan 21 2015 13:01:25 for Lua-API++ by
+    <li class="footer">Generated on Fri Jan 30 2015 15:13:23 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>

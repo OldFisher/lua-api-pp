@@ -18,7 +18,10 @@
 *  + transparent change: table access with integer arguments now uses specialized geti/seti functions;
 *  + removed deprecated @ref lua::Valref::optcast "optcast" function (still accessible in 5.1 and 5.2 modes);
 * - breaking change: compatibility profile 5.3 is now default; the code targeting Lua 5.2 must @ref compatibility_5_2 "define" <code><b>LUAPP_COMPATIBILITY_V52</b></code> macro;
-* - transparent change: concatenation and arithmetics are refactored to one-definition simplifying the codebase.
+* - transparent change: concatenation and arithmetics are refactored to one-definition simplifying the codebase;
+* - minor fixes in v2015-01-21-1:
+*  + renamed lua_impl.cpp to impl.cpp and updated usage recommendations;
+*  + moved test to separate directory.
 *
 * @section changes_2014_11_24_0 2014-11-24-0
 * @li Added argument-checkging functions, @ref lua::Context::checkArgs "Context::checkArgs" and @ref lua::Context::requireArgs "Context::requireArgs"

@@ -3,10 +3,10 @@
 #include "fixtures.h"
 #include <cstring>
 #include <stdexcept>
+
 using std::string;
 
 
-BOOST_AUTO_TEST_SUITE(State)
 
 void* const customAllocatorPointer = reinterpret_cast<void*>(0xDEADBEEF);
 
@@ -36,6 +36,8 @@ static void* customLuaAllocator (void* ud, void* ptr, size_t oldSize, size_t new
 }
 
 
+
+BOOST_AUTO_TEST_SUITE(State)
 
 
 
@@ -79,7 +81,7 @@ BOOST_FIXTURE_TEST_CASE(directCallBad, fxState)
 
 
 
-BOOST_FIXTURE_TEST_CASE(fileExecuteGood, fxSignal)
+BOOST_FIXTURE_TEST_CASE(fileExecuteGood, fxFiles)
 {
 	gs.runFile("test_good.lua");
 	BOOST_REQUIRE(isSignaled());
@@ -91,7 +93,7 @@ BOOST_FIXTURE_TEST_CASE(fileExecuteGood, fxSignal)
 
 
 
-BOOST_FIXTURE_TEST_CASE(fileExecuteBad, fxSignal)
+BOOST_FIXTURE_TEST_CASE(fileExecuteBad, fxFiles)
 {
 	BOOST_REQUIRE_THROW(gs.runFile("test_bad.lua"), std::runtime_error);
 	BOOST_REQUIRE_THROW(gs.runFile(string("test_bad.lua")), std::runtime_error);

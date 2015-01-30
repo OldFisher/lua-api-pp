@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2015-01-21-0</span>
+   &#160;<span id="projectnumber">2015-01-21-1</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -116,7 +116,12 @@ $(document).ready(function(){initNavTree('changelog.html','');});
 </ul>
 </li>
 <li>breaking change: compatibility profile 5.3 is now default; the code targeting Lua 5.2 must <a class="el" href="compatibility.html#compatibility_5_2">define</a> <code><b>LUAPP_COMPATIBILITY_V52</b></code> macro;</li>
-<li>transparent change: concatenation and arithmetics are refactored to one-definition simplifying the codebase.</li>
+<li>transparent change: concatenation and arithmetics are refactored to one-definition simplifying the codebase;</li>
+<li>minor fixes in v2015-01-21-1:<ul>
+<li>renamed lua_impl.cpp to impl.cpp and updated usage recommendations;</li>
+<li>moved test to separate directory.</li>
+</ul>
+</li>
 </ul>
 <h1><a class="anchor" id="changes_2014_11_24_0"></a>
 2014-11-24-0</h1>
@@ -175,7 +180,7 @@ $(document).ready(function(){initNavTree('changelog.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jan 21 2015 13:01:25 for Lua-API++ by
+    <li class="footer">Generated on Fri Jan 30 2015 15:13:23 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>

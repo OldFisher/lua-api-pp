@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2015-01-21-0</span>
+   &#160;<span id="projectnumber">2015-01-21-1</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -124,7 +124,7 @@ Discardability</h1>
 <h1><a class="anchor" id="configuring_performance"></a>
 Performance</h1>
 <p>To achieve best performance, API-dependent part may be included in headers as a set of inline functions. This mode can be used when link-time code generation is not available and the performance is crucial.</p>
-<p>It is turned on with <code><b>LUAPP_HEADER_ONLY</b></code> macro and lua_impl.cpp still needs to be compiled with the project.</p>
+<p>It is turned on with <code><b>LUAPP_HEADER_ONLY</b></code> macro and impl.cpp still needs to be compiled with the project.</p>
 <h1><a class="anchor" id="configuring_stack_watch"></a>
 Debugging: stack integrity checking</h1>
 <p>The <code><b>LUAPP_WATCH_STACK</b></code> enables special mode of stack integrity checking at the exense of some operational overhead. In this mode, when the correct sequence of stack operations is broken, non-catchable exceptions will be raised, leading to immediate program termination.</p>
@@ -134,7 +134,7 @@ Debugging: stack integrity checking</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jan 21 2015 13:01:25 for Lua-API++ by
+    <li class="footer">Generated on Fri Jan 30 2015 15:13:23 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>
