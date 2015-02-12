@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['nil',['Nil',['../namespacelua.html#classlua_1_1_nil',1,'lua']]],
-  ['nil',['nil',['../namespacelua.html#a14799155d9b9fb3fd424dd59a5e6bc57',1,'lua::nil()'],['../namespacelua.html#ad9971b6ef33e02ba2c75d19c1d2518a1a4da8b7eb2c3f2007cf8238334401ef51',1,'lua::Nil()']]],
-  ['none',['None',['../namespacelua.html#ad9971b6ef33e02ba2c75d19c1d2518a1a6adf97f83acf6453d4a6a4b1070f3754',1,'lua']]],
-  ['nparameters',['nParameters',['../namespacelua.html#a70dada50816e99086d756ecf375e5ac8',1,'lua::ClosureInfo']]],
-  ['number',['Number',['../namespacelua.html#ad9971b6ef33e02ba2c75d19c1d2518a1ab2ee912b91d69b435159c7c3f6df7f5f',1,'lua']]],
-  ['nupvalues',['nUpvalues',['../namespacelua.html#a90ec8b42e6384aae829564afe25f6509',1,'lua::ClosureInfo']]]
+  ['mkcf',['mkcf',['../namespacelua.html#a0fb38d48b0f92faa1fb0b9cf2553ebd9',1,'lua']]],
+  ['motivational_20example',['Motivational example',['../motivational_example.html',1,'']]],
+  ['mt',['mt',['../classlua_1_1_valref.html#acadbfe8792299ba4fafaa646403e5b8c',1,'lua::Valref::mt()'],['../classlua_1_1_context.html#a1e702413d170d8cdc00ae9374d7664c7',1,'lua::Context::mt()'],['../classlua_1_1_table.html#acadbfe8792299ba4fafaa646403e5b8c',1,'lua::Table::mt()']]]
 ];

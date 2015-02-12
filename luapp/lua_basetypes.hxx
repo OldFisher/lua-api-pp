@@ -883,14 +883,57 @@ namespace lua {
 	//! @brief Key for registry-stored values.
 	class RegistryKey {
 		friend class ::lua::Context;
+
 	public:
+		//! @brief Empty key value (LUA_NOREF).
+		constexpr static int noref = -2;
+
 		RegistryKey(const RegistryKey&) noexcept = default;
+
+		//! @brief Default RegistryKey is empty.
+		RegistryKey() noexcept = default;
+
+		//! @brief RegistryKey cannot be overwritten by another.
+		RegistryKey& operator = (const RegistryKey&) = delete;
+
+		//! @brief Destroy the reference (becomes non-ref).
+		void kill() noexcept
+		{
+			value = noref;
+		}
+
+		//! @brief Check if the value is not empty.
+		//! @details Only valid non-empty keys can be used with registry.
+		operator bool() const noexcept
+		{
+			return value != noref;
+		}
+
+		//! @brief Get underlying key value.
+		int get() const noexcept
+		{
+			return value;
+		}
+
+		//! @brief Check for equality of keys.
+		bool operator == (const RegistryKey& rhs) const noexcept
+		{
+			return value == rhs.value;
+		}
+
+		//! @brief Check for inequality of keys.
+		bool operator != (const RegistryKey& rhs) const noexcept
+		{
+			return value != rhs.value;
+		}
+
 	private:
-		const int value;
+		int value = noref;
 		RegistryKey(int value_) noexcept:
 			value(value_)
 		{
 		}
+
 	};
 
 

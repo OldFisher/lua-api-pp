@@ -47,9 +47,19 @@ BOOST_FIXTURE_TEST_CASE(RegistryAccessor, fxContext)
 	BOOST_CHECK(context.mt<Udata>() == t2);
 
 	const auto key = context.registry.store(t2);
+	BOOST_CHECK(key);
+	const auto keyValue = key.get();
+	BOOST_CHECK_NE(keyValue, -2);
 	BOOST_CHECK(context.registry[key] == t2);
 	context.registry[key] = t;
 	BOOST_CHECK(context.registry[key] == t);
+	BOOST_CHECK_EQUAL(key.get(), keyValue);
+	auto key2 = key;
+	BOOST_CHECK(key == key2);
+	BOOST_CHECK_EQUAL(key2.get(), key.get());
+	key2.kill();
+	BOOST_CHECK(!key2);
+	BOOST_CHECK(key != key2);
 }
 
 

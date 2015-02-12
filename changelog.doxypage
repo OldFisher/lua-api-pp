@@ -8,6 +8,14 @@
 /*!
 * @page changelog Changelog
 *
+* @section changes_2015_02_12_0 2015-02-12-0
+* - RegistryKey now can be:
+*  + @ref lua::RegistryKey::get "queried" for underlying key value;
+*  + @ref lua::RegistryKey::RegistryKey() "default-initialized" to empty value;
+*  + checked to be non-empty;
+*  + @ref lua::RegistryKey::operator == "equality-" and @ref lua::RegistryKey::operator != "inequality-"checked against other RegistryKeys;
+*  + @ref lua::RegistryKey::kill "killed" to become empty.
+*
 * @section changes_2015_01_21_0 2015-01-21-0
 * - added compatibility profile for Lua 5.3 featuring:
 *  + added @ref lua::Valref::linked "linked" accessor to read and write values associated with userdata;

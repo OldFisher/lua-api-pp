@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2015-01-21-1</span>
+   &#160;<span id="projectnumber">2015-02-12-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -128,12 +128,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a5af3df1c2b23cded53ae3344374058bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access to metatable associated with type description string.  <a href="#a5af3df1c2b23cded53ae3344374058bc">More...</a><br /></td></tr>
 <tr class="separator:a5af3df1c2b23cded53ae3344374058bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">References</div></td></tr>
-<tr class="memitem:a9f2a1a773e4101d40f56376ce6f1f1d0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context_1_1_registry.html#a9f2a1a773e4101d40f56376ce6f1f1d0">store</a> (<a class="el" href="namespacelua.html#classlua_1_1_valobj">Valobj</a> val)</td></tr>
-<tr class="memdesc:a9f2a1a773e4101d40f56376ce6f1f1d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store an object into registry.  <a href="#a9f2a1a773e4101d40f56376ce6f1f1d0">More...</a><br /></td></tr>
-<tr class="separator:a9f2a1a773e4101d40f56376ce6f1f1d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdcac4fff27c2f69c1affafa8bf2b537"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context_1_1_registry.html#abdcac4fff27c2f69c1affafa8bf2b537">operator[]</a> (int index) noexcept</td></tr>
-<tr class="memdesc:abdcac4fff27c2f69c1affafa8bf2b537"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access to stored objects.  <a href="#abdcac4fff27c2f69c1affafa8bf2b537">More...</a><br /></td></tr>
-<tr class="separator:abdcac4fff27c2f69c1affafa8bf2b537"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38bf61058b7975ba648f73725ccfd828"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context_1_1_registry.html#a38bf61058b7975ba648f73725ccfd828">store</a> (<a class="el" href="namespacelua.html#classlua_1_1_valobj">Valobj</a> val)</td></tr>
+<tr class="memdesc:a38bf61058b7975ba648f73725ccfd828"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store an object into registry.  <a href="#a38bf61058b7975ba648f73725ccfd828">More...</a><br /></td></tr>
+<tr class="separator:a38bf61058b7975ba648f73725ccfd828"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27cdc08d72b25b9dd418ba49d2db519d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_context_1_1_registry.html#a27cdc08d72b25b9dd418ba49d2db519d">operator[]</a> (<a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a> index) noexcept</td></tr>
+<tr class="memdesc:a27cdc08d72b25b9dd418ba49d2db519d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access to stored objects.  <a href="#a27cdc08d72b25b9dd418ba49d2db519d">More...</a><br /></td></tr>
+<tr class="separator:a27cdc08d72b25b9dd418ba49d2db519d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Type of <a class="el" href="classlua_1_1_context.html#a36086215a6fa5c75c34674924dbc5aa3">registry accessor</a>. </p>
@@ -207,12 +207,12 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9f2a1a773e4101d40f56376ce6f1f1d0"></a>
+<a class="anchor" id="a38bf61058b7975ba648f73725ccfd828"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int store </td>
+          <td class="memname"><a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a> store </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacelua.html#classlua_1_1_valobj">Valobj</a>&#160;</td>
           <td class="paramname"><em>val</em></td><td>)</td>
@@ -222,11 +222,11 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Store an object into registry. </p>
-<dl class="section return"><dt>Returns</dt><dd>Index to access stored object via <a class="el" href="classlua_1_1_context_1_1_registry.html#abdcac4fff27c2f69c1affafa8bf2b537">indexation operator</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Index to access stored object via <a class="el" href="classlua_1_1_context_1_1_registry.html#a27cdc08d72b25b9dd418ba49d2db519d">indexation operator</a>. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="abdcac4fff27c2f69c1affafa8bf2b537"></a>
+<a class="anchor" id="a27cdc08d72b25b9dd418ba49d2db519d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -236,7 +236,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespacelua.html#classlua_1_1_temporary">Temporary</a> operator[] </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype"><a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a>&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td></td>
         </tr>
@@ -251,7 +251,7 @@ Public Member Functions</h2></td></tr>
 <p>Access to stored objects. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">index</td><td>An index returned by <a class="el" href="classlua_1_1_context_1_1_registry.html#a9f2a1a773e4101d40f56376ce6f1f1d0">store</a> function. </td></tr>
+    <tr><td class="paramname">index</td><td>An index returned by <a class="el" href="classlua_1_1_context_1_1_registry.html#a38bf61058b7975ba648f73725ccfd828">store</a> function. </td></tr>
   </table>
   </dd>
 </dl>
@@ -264,7 +264,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelua.html">lua</a></li><li class="navelem"><a class="el" href="classlua_1_1_context.html">Context</a></li><li class="navelem"><a class="el" href="classlua_1_1_context_1_1_registry.html">Registry</a></li>
-    <li class="footer">Generated on Fri Jan 30 2015 15:13:23 for Lua-API++ by
+    <li class="footer">Generated on Thu Feb 12 2015 13:08:01 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>

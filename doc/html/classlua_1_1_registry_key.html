@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2015-01-21-1</span>
+   &#160;<span id="projectnumber">2015-02-12-0</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -109,6 +109,8 @@ $(document).ready(function(){initNavTree('classlua_1_1_registry_key.html','');})
 
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classlua_1_1_registry_key-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">RegistryKey Class Reference</div>  </div>
@@ -117,15 +119,80 @@ $(document).ready(function(){initNavTree('classlua_1_1_registry_key.html','');})
 
 <p>Key for registry-stored values.  
  <a href="classlua_1_1_registry_key.html#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a7431da5efffeaf0f57cb6fe7e3e98dfd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7431da5efffeaf0f57cb6fe7e3e98dfd"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_registry_key.html#a7431da5efffeaf0f57cb6fe7e3e98dfd">RegistryKey</a> () noexcept=default</td></tr>
+<tr class="memdesc:a7431da5efffeaf0f57cb6fe7e3e98dfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default <a class="el" href="classlua_1_1_registry_key.html" title="Key for registry-stored values. ">RegistryKey</a> is empty. <br /></td></tr>
+<tr class="separator:a7431da5efffeaf0f57cb6fe7e3e98dfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afed9bd45f9dfcee4f9c5414e7747fbc0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afed9bd45f9dfcee4f9c5414e7747fbc0"></a>
+<a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_registry_key.html#afed9bd45f9dfcee4f9c5414e7747fbc0">operator=</a> (const <a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a> &amp;)=delete</td></tr>
+<tr class="memdesc:afed9bd45f9dfcee4f9c5414e7747fbc0"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classlua_1_1_registry_key.html" title="Key for registry-stored values. ">RegistryKey</a> cannot be overwritten by another. <br /></td></tr>
+<tr class="separator:afed9bd45f9dfcee4f9c5414e7747fbc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af38db1a1e60b1ef929f2774f2455049a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af38db1a1e60b1ef929f2774f2455049a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_registry_key.html#af38db1a1e60b1ef929f2774f2455049a">kill</a> () noexcept</td></tr>
+<tr class="memdesc:af38db1a1e60b1ef929f2774f2455049a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the reference (becomes non-ref). <br /></td></tr>
+<tr class="separator:af38db1a1e60b1ef929f2774f2455049a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a420e60e9788bfa3b52aa3aab72ea3a5e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_registry_key.html#a420e60e9788bfa3b52aa3aab72ea3a5e">operator bool</a> () const noexcept</td></tr>
+<tr class="memdesc:a420e60e9788bfa3b52aa3aab72ea3a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the value is not empty.  <a href="#a420e60e9788bfa3b52aa3aab72ea3a5e">More...</a><br /></td></tr>
+<tr class="separator:a420e60e9788bfa3b52aa3aab72ea3a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaac1efb65cda8206504db9d1e9261e6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afaac1efb65cda8206504db9d1e9261e6"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_registry_key.html#afaac1efb65cda8206504db9d1e9261e6">get</a> () const noexcept</td></tr>
+<tr class="memdesc:afaac1efb65cda8206504db9d1e9261e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get underlying key value. <br /></td></tr>
+<tr class="separator:afaac1efb65cda8206504db9d1e9261e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a22ad7f74c951ff1e08c66ac7bd60c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8a22ad7f74c951ff1e08c66ac7bd60c1"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_registry_key.html#a8a22ad7f74c951ff1e08c66ac7bd60c1">operator==</a> (const <a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a> &amp;rhs) const noexcept</td></tr>
+<tr class="memdesc:a8a22ad7f74c951ff1e08c66ac7bd60c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for equality of keys. <br /></td></tr>
+<tr class="separator:a8a22ad7f74c951ff1e08c66ac7bd60c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19d9d3a36bc44e13ab5c4eb787ce1084"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a19d9d3a36bc44e13ab5c4eb787ce1084"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_registry_key.html#a19d9d3a36bc44e13ab5c4eb787ce1084">operator!=</a> (const <a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a> &amp;rhs) const noexcept</td></tr>
+<tr class="memdesc:a19d9d3a36bc44e13ab5c4eb787ce1084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for inequality of keys. <br /></td></tr>
+<tr class="separator:a19d9d3a36bc44e13ab5c4eb787ce1084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a873e67eaf1808cab4f47d6f10fd65191"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a873e67eaf1808cab4f47d6f10fd65191"></a>
+static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_registry_key.html#a873e67eaf1808cab4f47d6f10fd65191">noref</a> = -2</td></tr>
+<tr class="memdesc:a873e67eaf1808cab4f47d6f10fd65191"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty key value (LUA_NOREF). <br /></td></tr>
+<tr class="separator:a873e67eaf1808cab4f47d6f10fd65191"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Key for registry-stored values. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a420e60e9788bfa3b52aa3aab72ea3a5e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">operator bool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if the value is not empty. </p>
+<p>Only valid non-empty keys can be used with registry. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelua.html">lua</a></li><li class="navelem"><a class="el" href="classlua_1_1_registry_key.html">RegistryKey</a></li>
-    <li class="footer">Generated on Fri Jan 30 2015 15:13:23 for Lua-API++ by
+    <li class="footer">Generated on Thu Feb 12 2015 13:08:01 for Lua-API++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>

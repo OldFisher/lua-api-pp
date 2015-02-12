@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['_7estate',['~State',['../classlua_1_1_state.html#aaf25afd89446e3f024a22a83052a083f',1,'lua::State']]],
-  ['_7evalset',['~Valset',['../classlua_1_1_valset.html#a5bf340219444e29ef02032fa2ee82d64',1,'lua::Valset']]],
-  ['_7evalue',['~Value',['../classlua_1_1_value.html#aa806aa70424170e7efcc88ac0f8dd983',1,'lua::Value']]]
+  ['where',['where',['../classlua_1_1_context.html#a050b4504c23733ec3b5055f3149e6338',1,'lua::Context']]],
+  ['wrap',['wrap',['../classlua_1_1_context.html#affbac55a8c123d2b7bc7856a0b9004f5',1,'lua::Context::wrap(ReturnValueType(*fn)(ArgTypes...)) noexcept'],['../classlua_1_1_context.html#ae477d6fbf9e48497a758c9e8d6ecca34',1,'lua::Context::wrap(ReturnValueType(Host::*fn)(ArgTypes...)) noexcept']]]
 ];

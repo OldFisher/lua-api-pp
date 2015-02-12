@@ -184,12 +184,12 @@ namespace lua {
 			//! @{
 
 			//! @brief Store an object into registry.
-			//! @return Index to access stored object via @ref lua::Context::Registry::operator[](int) "indexation operator".
-			int store(Valobj val);
+			//! @return Index to access stored object via @ref lua::Context::Registry::operator[](RegistryKey) "indexation operator".
+			RegistryKey store(Valobj val);
 
 			//! @brief Access to stored objects.
 			//! @param index An index returned by @ref lua::Context::Registry::store "store" function.
-			Temporary operator [] (int index) noexcept;
+			Temporary operator [] (RegistryKey index) noexcept;
 			//! @}
 	};
 #endif // DOXYGEN_ONLY
