@@ -745,7 +745,7 @@ namespace lua {
 #else // V52+
 	LUAPP_HO_INLINE ClosureInfo Valref::retrieveClosureInfo(lua_State* s) noexcept
 	{
-		lua_Debug ld{};
+		lua_Debug ld;
 		lua_getinfo(s, ">u", &ld);
 		return ClosureInfo{ld.nups, ld.nparams, ld.isvararg != 0};
 	}

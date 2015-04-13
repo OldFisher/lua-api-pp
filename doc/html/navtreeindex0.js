@@ -28,6 +28,7 @@ var NAVTREEINDEX0 =
 "changelog.html#changes_2014_11_24_0":[11,2],
 "changelog.html#changes_2015_01_21_0":[11,1],
 "changelog.html#changes_2015_02_12_0":[11,0],
+"changelog.html#changes_2015_02_12_1":[11,0,0],
 "classes.html":[14,1],
 "classlua_1_1_context.html":[14,0,0,1],
 "classlua_1_1_context.html#a007b86314fbbbe2fd83f1c4419636116":[14,0,0,1,21],
@@ -228,8 +229,8 @@ var NAVTREEINDEX0 =
 "globals.html":[15,1,0],
 "globals_defs.html":[15,1,1],
 "hierarchy.html":[14,2],
-"index.html":[],
 "index.html":[0],
+"index.html":[],
 "lua_8hpp.html":[15,0,0,0],
 "lua_8hpp.html#a0fb38d48b0f92faa1fb0b9cf2553ebd9":[15,0,0,0,4],
 "lua_8hpp.html#a1d08ef8a7b1a72e59f411d9d18d5aacc":[15,0,0,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "pages.html":[],
 "performace.html":[7],
 "stack_management.html":[4],
-"stack_management.html#stack_management_function":[4,0],
-"stack_management.html#stack_management_function_anchor":[4,0,1]
+"stack_management.html#stack_management_function":[4,0]
 };
