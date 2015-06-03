@@ -759,6 +759,7 @@ WARN_LOGFILE           =
 
 INPUT                  = main.doxypage \
 						 concepts.doxypage \
+						 guidebook.doxypage \
 						 example.doxypage \
 						 other.doxypage \
 						 faq.doxypage \

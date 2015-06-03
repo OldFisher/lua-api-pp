@@ -1,0 +1,89 @@
+/*
+* This file is part of Lua API++ library (https://github.com/OldFisher/lua-api-pp)
+* distributed under MIT License (http://opensource.org/licenses/MIT).
+* See license.txt for details.
+* (c) 2014 OldFisher
+*/
+
+/*!
+* @page guidebook Guide book
+* 
+* This book will gently introduce you to Lua API++ library, explain basic ideas and concepts behind it while showing in simple examples how this library is used.
+* If you want to know what this library does, whether you should use it and what you will gain from doing so, this is the reading for you.
+* It is assumed that you're already familiar with the basics of Lua and its API.
+*
+* @tableofcontents
+*
+* @section guidebook_introduction Introduction
+* So, what is Lua API++? In short, it is something you use @em instead of Lua API to achieve same things much easier. 
+* Of course, it is not a complete replacement, but rather an intermediate, who "explains" your intent to Lua API.
+* The things you do are efficiently translated into calls to Lua API, nearing or matching the efficiency of using Lua API manually.
+*
+* @section guidebook_setting_up Setting up
+* Let's start our acquaintance with Lua API++ in careful little steps, revealing some interesting details along the way.
+* Everything you need for Lua API++ is contained in @c luapp directory. All other files are tests and documentation.
+*
+* @subsection guidebook_setting_up_empty Empty project
+* For starters, let's make a project that does nothing. It is up to you how you create new project in your IDE (or even whether you use IDE at all)
+* and how you attach Lua to your project. You probably will add Lua header directory as well as Lua API++ directory to additional include paths.
+*
+* Lua API++ is designed to be compiled into your projects rather than linked as a static or dynamic library. 
+* Also it's @em separated from Lua API, which means that including Lua API++ does not include Lua API headers.
+* This will prevent you from accidentally mixing calls to Lua API++ and plain Lua API, which could create some messy situations.
+* Mixing calls @em intentionally is, of course, entirely possible.
+*
+* @subsubsection guidebook_setting_up_empty_implcpp Impl.cpp
+*
+* Our empty project should have a file (let's call it @c lua_impl.cpp) with this single line of code:
+* @code{.cpp}
+* #include <luapp/impl.cpp>
+* @endcode
+*
+* Let's see why. Since Lua API++ must be compiled into project, but cannot include Lua headers, all the calls to Lua API were put into separate file @c impl.cpp.
+* It may include Lua headers because it isn't a header itself. The easiest way to compile @c impl.cpp with the project is to make such include-dummy as @c lua_impl.cpp.
+*
+* @subsubsection guidebook_setting_up_empty_luainc Luainc.h
+*
+* Inside @c luapp directory you may find a file called @c luainc.h. It contains only include directives for Lua headers and may be used when you need
+* to use Lua API directly to save a couple of lines.
+*
+* The only reason to care about it is if you configured Lua headers to be included in some unusual way. In that case, the contents of @c luainc.h
+* should be modified in accordance to that unusual way. Even if you don't use this file, @c impl.cpp does.
+*
+* @subsubsection guidebook_setting_up_empty_luahpp Minimal program code
+* So, after taking care of impl.cpp, we just write minimal program code for our empty project:
+* @code{.cpp}
+* #include <luapp/lua.hpp>
+*
+* int main()
+* {
+* }
+* @endcode
+*
+* @subsection guidebook_setting_up_state Interpreter and the State
+*
+* Now we can move further and make our project non-empty. Let's make a simple interpreter, accepting a single file name from command line and running it.
+* We will get help from lua::State object. It serves to embody whole Lua state: globals, functions, everything.
+* It will do the job for us, so all we need to do is to catch and report errors.
+*
+* @code{.cpp}
+* #include <iostream>
+* using std::cout; using std::endl;
+* #include <luapp/lua.hpp>
+* using lua::State;
+*
+* int main(int argc, const char* argv[])
+* {
+*     cout << "Lua interpreter\n";
+*     if(argc > 1) { // If something was given in the command line...
+*         State s;   // ...create Lua state...
+*         try { 
+*             s.runFile(argv[1]);  // ...and attempt to execute file.
+*         } catch(std::exception& e) {
+*             cout << e.what() << endl;  // Report error.
+*         }
+*     } // Lua state is correctly closed at this point even if there was an error.
+* }
+* @endcode
+*
+*/
