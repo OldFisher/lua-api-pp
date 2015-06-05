@@ -109,9 +109,6 @@ namespace lua {
 
 		friend class ::lua::State;
 
-		friend int ::lua::_::LFunctionWrapper(::lua::LFunction, lua_State*) noexcept;
-
-
 #ifndef DOXYGEN_ONLY
 		class Registry {
 			friend class ::lua::Context;
@@ -152,8 +149,6 @@ namespace lua {
 		};
 #endif // DOXYGEN_ONLY
 
-
-		Context(lua_State *l) noexcept;
 
 	public:
 
@@ -212,10 +207,7 @@ namespace lua {
 		//! Context c(luaStatePtr, Context::initializeExplicitly);
 		//! @endcode
 		//! @warning This operation is considered unsafe. Be careful with stack manipulations and do not create duplicates of Context object.
-		Context(lua_State* s, const InitializeExplicitly&):
-			Context(s)
-		{
-		}
+		Context(lua_State* s, const InitializeExplicitly&) noexcept;
 
 		//! @brief Copying is prohibited.
 		Context(const Context&) = delete;

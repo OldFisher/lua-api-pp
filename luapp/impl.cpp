@@ -34,7 +34,7 @@ namespace lua {
 //			if(!f)
 //				return lua_error("Attempt to call null pointer as a Lua function");
 			try {
-				Context S(s);
+				Context S(s, Context::initializeExplicitly);
 				return f(S).rvamount;
 			} catch(std::exception& e) {
 				return luaL_error(s, (std::string("Lua function terminated with an exception: ") + e.what()).c_str());
@@ -754,8 +754,9 @@ namespace lua {
 //### Context ###############################################################################################################
 
 
-	LUAPP_HO_INLINE Context::Context(lua_State* l) noexcept:
-		L(l), global(*this),
+	LUAPP_HO_INLINE Context::Context(lua_State* l, const Context::InitializeExplicitly&) noexcept:
+		L(l),
+		global(*this),
 		upvalues(*this),
 		args(*this, 1, lua_gettop(l)),
 		registry(*this)
