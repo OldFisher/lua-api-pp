@@ -115,7 +115,7 @@ namespace lua{
 #else
 		class lazyConcat final: public lazyPolicy {
 #endif
-			template<typename, bool> friend class _::Lazy;
+			template<typename> friend class _::Lazy;
 
 		public:
 			lazyConcat(lazyConcat<VT1, VT2>&&) noexcept = default;
@@ -203,7 +203,7 @@ namespace lua{
 #else
 		class lazyArithmetics final: public lazyPolicy {
 #endif	// LUAPP_NONDISCARDABLE_ARITHMETICS
-			template <typename, bool> friend class _::Lazy;
+			template <typename> friend class _::Lazy;
 
 		public:
 			lazyArithmetics(lazyArithmetics<T1, T2, op>&&) noexcept = default;

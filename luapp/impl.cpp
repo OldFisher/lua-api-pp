@@ -782,7 +782,7 @@ namespace lua {
 		currentStackSize -= amount;
 #endif // LUAPP_WATCH_STACK
 		if(!returning)
-			lua_pop(L, amount);
+			lua_pop(L, int(amount));
 	}
 
 
