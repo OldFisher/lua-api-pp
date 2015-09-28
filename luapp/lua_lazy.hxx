@@ -464,32 +464,32 @@ namespace lua{
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator == (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).template operator ==  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs) == std::forward<ValueType>(lhs);
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator != (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).template operator != <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs) != std::forward<ValueType>(lhs);
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator < (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).template operator >  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs) > std::forward<ValueType>(lhs);
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator > (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).template operator <  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs) < std::forward<ValueType>(lhs);
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator <= (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).template operator >=  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs) >= std::forward<ValueType>(lhs);
 		}
 
 		template<typename Policy, typename ValueType> typename std::enable_if<!IsLazy<ValueType>::value && !IsAnchor<ValueType>::value, bool>::type operator >= (ValueType&& lhs, _::Lazy<Policy>&& rhs)
 		{
-			return std::move(rhs).template operator <=  <ValueType> (std::forward<ValueType>(lhs));
+			return std::move(rhs) <= std::forward<ValueType>(lhs);
 		}
 
 
