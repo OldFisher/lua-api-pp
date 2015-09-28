@@ -190,11 +190,7 @@ namespace lua {
 #endif // DOXYGEN_ONLY
 
 		//! @brief Type for @ref lua::Context::initializeExplicitly "initializeExplicitly" constant.
-		struct InitializeExplicitly{};
-
-		//! @brief Indicator constant used in explicit context creation.
-		//! @see lua::Context::Context(lua_State*, const InitializeExplicitly&);
-		static constexpr InitializeExplicitly initializeExplicitly{};
+		enum InitializeExplicitly{initializeExplicitly = 0};
 
 		//! @name Life cycle
 		//! @{
@@ -808,8 +804,9 @@ namespace lua {
 		template<typename T>
 		void push(const _::wrap::Envelope<T>& fptr)
 		{
+			union recast {T f; LightUserData uptr; recast(T f_) noexcept: f(f_) {}};
 			if(sizeof(T) == sizeof(LightUserData))
-				push(reinterpret_cast<LightUserData>(fptr.data));
+				push(recast(fptr.data).uptr);
 			else
 				*reinterpret_cast<T*>(allocateUD(sizeof(T))) = fptr.data;
 		}

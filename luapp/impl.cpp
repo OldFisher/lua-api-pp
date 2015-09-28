@@ -14,10 +14,7 @@
 #endif // LUAPP_HEADER_ONLY
 
 
-#ifndef LUAPP_HEADER_ONLY_FLAG
 #include "lua.hpp"
-	constexpr lua::Context::InitializeExplicitly lua::Context::initializeExplicitly;
-#endif
 
 
 #include <algorithm>
