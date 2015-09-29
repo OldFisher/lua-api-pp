@@ -37,13 +37,15 @@ BOOST_FIXTURE_TEST_CASE(Length, fxGlobalVal)
 {
 	context.runString("val = {1, 2, 3}");
 #if(LUAPP_API_VERSION >= 52)
-	BOOST_CHECK_EQUAL(l.len().cast<unsigned int>(), 3);
+	BOOST_CHECK_EQUAL(l.len().cast<unsigned int>(), 3u);
 	v = l;
-	BOOST_CHECK_EQUAL(v.len().cast<unsigned int>(), 3);
+	BOOST_CHECK_EQUAL(v.len().cast<unsigned int>(), 3u);
+	BOOST_CHECK_EQUAL(v.rawlen(), 3u);
+	BOOST_CHECK_EQUAL(v.rawlen(), 3u);
 #else	// V51-
-	BOOST_CHECK_EQUAL(l.len(), 3);
+	BOOST_CHECK_EQUAL(l.len(), 3u);
 	v = l;
-	BOOST_CHECK_EQUAL(v.len(), 3);
+	BOOST_CHECK_EQUAL(v.len(), 3u);
 #endif
 }
 

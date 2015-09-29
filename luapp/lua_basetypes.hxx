@@ -782,6 +782,9 @@ namespace lua {
 		//! @brief Length @lv52.
 		Temporary len() const  noexcept;
 
+		//! @brief Raw length (no metamethods) @lv52.
+		size_t rawlen() const  noexcept;
+
 		//! @brief Length @lv51.
 		size_t len() const noexcept;
 
@@ -798,6 +801,7 @@ namespace lua {
 #else	// Not DOXYGEN_ONLY
 #if(LUAPP_API_VERSION >= 52)
 		_::Lazy<_::lazyLen> len() const  noexcept;
+		size_t rawlen() const noexcept;
 #else	// V51-
 		size_t len() const noexcept;
 #endif	// V52+

@@ -380,6 +380,12 @@ namespace lua{
 			//! Length
 #if(LUAPP_API_VERSION >= 52)
 			Lazy<lazyLenTemp<Policy>> len() &&;
+
+			size_t rawlen() &&
+			{
+				return toTemporary().rawlen();
+			}
+
 #else	// V51-
 			size_t len() &&
 			{

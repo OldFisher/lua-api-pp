@@ -717,6 +717,13 @@ namespace lua {
 	}
 
 
+#if(LUAPP_API_VERSION >= 52)
+	LUAPP_HO_INLINE size_t Valref::rawlen() const noexcept
+	{
+		return lua_rawlen(context, index);
+	}
+#endif	// V52+
+
 
 #if(LUAPP_API_VERSION < 52)
 	LUAPP_HO_INLINE size_t Valref::len() const noexcept
