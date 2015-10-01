@@ -51,6 +51,8 @@ BOOST_FIXTURE_TEST_CASE(UpvalueTempExt, fxContext)
 
 
 
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
+// getUpvalues depends on NRVO
 BOOST_FIXTURE_TEST_CASE(ReadUpvaluesConst, fxContext)
 {
 	context.runString("local uv = \"ExtUpvalue\"; function fn() return uv; end");
@@ -71,6 +73,7 @@ BOOST_FIXTURE_TEST_CASE(ReadUpvaluesTemp, fxContext)
 	BOOST_CHECK_EQUAL(vs[0].cast<string>(), "ExtUpvalue");
 	BOOST_CHECK_EQUAL(vs[1].cast<string>(), "uv");
 }
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 
 
 

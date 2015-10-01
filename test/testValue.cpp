@@ -129,12 +129,13 @@ BOOST_FIXTURE_TEST_CASE(Assign, fxContext)
 }
 
 
-
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 static Value testReturn1(lua::Context& context)
 {
 	Value rv(3.14, context);
 	return rv;
 }
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 
 Value testReturn2(lua::Context& context)
 {
@@ -143,10 +144,12 @@ Value testReturn2(lua::Context& context)
 
 BOOST_FIXTURE_TEST_CASE(ReturnFromFunction, fxContext)
 {
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 	Value v1 = testReturn1(context);
-	Value v2 = testReturn2(context);
 	BOOST_CHECK(v1.type() == lua::ValueType::Number);
 	BOOST_CHECK_EQUAL(v1.cast<double>(), 3.14);
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
+	Value v2 = testReturn2(context);
 	BOOST_CHECK(v2.type() == lua::ValueType::Number);
 	BOOST_CHECK_EQUAL(v2.cast<double>(), 3.14);
 }

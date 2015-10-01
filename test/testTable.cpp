@@ -63,20 +63,24 @@ static Table r1(lua::Context& context)
 	return Table(context);
 }
 
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 static Table r2(lua::Context& context)
 {
 	Table t(context);
 	return t;
 }
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 
 BOOST_FIXTURE_TEST_CASE(ReturnFromFunction, fxContext)
 {
 	Table t1 = r1(context);
 	BOOST_CHECK_EQUAL(context.getTop(), 1);
-	Table t2 = r2(context);
 	BOOST_CHECK(static_cast<Valref&>(t1).is<Table>());
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
+	Table t2 = r2(context);
 	BOOST_CHECK(static_cast<Valref&>(t2).is<Table>());
 	BOOST_CHECK_EQUAL(context.getTop(), 2);
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 }
 
 

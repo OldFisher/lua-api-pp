@@ -747,12 +747,14 @@ namespace lua {
 		_::Lazy<_::lazyExtConstUpvalue> upvalue(size_t index_) const noexcept;
 #endif	// DOXYGEN_ONLY
 
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 		//! @brief Retrieve upvalues and their names.
 		//! @details This function returns values and names of all closure upvalues.
 		//! Upvalues are always named "" in C closures. Upvalue ordering in Lua functions is undefined.
 		//! @pre this->is<LFunction>()
 		//! @return Value-name pairs for each upvalue.
 		Valset getUpvalues() const noexcept;
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 
 #if(defined(DOXYGEN_ONLY) || LUAPP_API_VERSION > 51)
 		//! @brief Retrieve information about closure @lv52.

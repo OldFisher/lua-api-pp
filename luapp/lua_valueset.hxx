@@ -321,8 +321,10 @@ namespace lua{
 	//! @note Lua has no concept of immutability, so even constant Valset could be used to change the referenced or nested values.
 	class Valset final: public _::noNew {
 		friend class Context;
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 		friend Valset Valref::getUpvalues() const noexcept;
 		template<typename Policy> friend Valset _::Lazy<Policy>::getUpvalues() &&;
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 
 	public:
 

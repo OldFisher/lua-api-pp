@@ -258,8 +258,10 @@ namespace lua{
 				return Lazy<lazyExtTempUpvalue<Policy>>(S, std::move(*this), index);
 			}
 
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 			//! Read upvalues.
 			Valset getUpvalues() &&;
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 
 			//! Closure properties
 #if(LUAPP_API_VERSION > 51)

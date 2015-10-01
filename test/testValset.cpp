@@ -164,7 +164,7 @@ BOOST_FIXTURE_TEST_CASE(CreateFromAnchors, fxContext)
 }
 
 
-
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 static Valset retVs(Context& c)
 {
 	Valset vs(c);
@@ -189,12 +189,21 @@ BOOST_FIXTURE_TEST_CASE(ReturnFromFunction, fxContext)
 	BOOST_CHECK(vs[2].is<int>());
 	BOOST_CHECK_EQUAL(vs[2].cast<int>(), 3);
 }
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 
+
+inline void fillVs(Valset& vs)
+{
+	vs.push_back(1);
+	vs.push_back("2");
+	vs.push_back(3);
+}
 
 
 BOOST_FIXTURE_TEST_CASE(DirectCopy, fxContext)
 {
-	Valset src = retVs(context);
+	Valset src(context);
+	fillVs(src);
 	Valset vs = src;
 	BOOST_CHECK_EQUAL(context.getTop(), 6);
 	BOOST_CHECK_EQUAL(vs.size(), 3);
@@ -215,7 +224,8 @@ BOOST_FIXTURE_TEST_CASE(DirectCopy, fxContext)
 BOOST_FIXTURE_TEST_CASE(Destruction, fxContext)
 {
 	{
-		Valset vs= retVs(context);
+		Valset vs(context);
+		fillVs(vs);
 		BOOST_CHECK_EQUAL(context.getTop(), 3);
 		BOOST_CHECK_EQUAL(vs.size(), 3);
 		BOOST_CHECK(!vs.empty());
@@ -227,7 +237,8 @@ BOOST_FIXTURE_TEST_CASE(Destruction, fxContext)
 
 BOOST_FIXTURE_TEST_CASE(Modification, fxContext)
 {
-	Valset src = retVs(context);
+	Valset src(context);
+	fillVs(src);
 	Valset vs(context);
 	BOOST_CHECK(src.isBlocked());
 	vs.push_back(1);
@@ -266,7 +277,8 @@ BOOST_FIXTURE_TEST_CASE(Modification, fxContext)
 
 BOOST_FIXTURE_TEST_CASE(Indexation, fxContext)
 {
-	Valset vs = retVs(context);
+	Valset vs(context);
+	fillVs(vs);
 	BOOST_CHECK_EQUAL(vs.at(2).cast<int>(), 3);
 	BOOST_CHECK_THROW(vs.at(3), std::range_error);
 	BOOST_CHECK_EQUAL(vs[2].cast<int>(), 3);
@@ -277,9 +289,13 @@ BOOST_FIXTURE_TEST_CASE(Indexation, fxContext)
 BOOST_FIXTURE_TEST_CASE(IteratorRetrieval, fxContext)
 {
 	const Valset ce(context);
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 	const Valset cf = retVs(context);
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 	Valset e(context);
-	Valset f = retVs(context);
+	Valset f(context);
+	fillVs(f);
+
 
 	BOOST_CHECK(ce.begin() == ce.end());
 	BOOST_CHECK(ce.cbegin() == ce.end());
@@ -290,10 +306,12 @@ BOOST_FIXTURE_TEST_CASE(IteratorRetrieval, fxContext)
 	BOOST_CHECK(e.cbegin() == e.end());
 	BOOST_CHECK(e.begin() == e.cend());
 
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 	BOOST_CHECK(cf.begin() != cf.end());
 	BOOST_CHECK(cf.cbegin() != cf.end());
 	BOOST_CHECK(cf.begin() != cf.cend());
 	BOOST_CHECK(cf.cbegin() != cf.cend());
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 	BOOST_CHECK(f.begin() != f.end());
 	BOOST_CHECK(f.cbegin() != f.cend());
 	BOOST_CHECK(f.cbegin() != f.end());
@@ -308,10 +326,12 @@ BOOST_FIXTURE_TEST_CASE(IteratorRetrieval, fxContext)
 	BOOST_CHECK(e.crbegin() == e.rend());
 	BOOST_CHECK(e.rbegin() == e.crend());
 
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 	BOOST_CHECK(cf.rbegin() != cf.rend());
 	BOOST_CHECK(cf.crbegin() != cf.rend());
 	BOOST_CHECK(cf.rbegin() != cf.crend());
 	BOOST_CHECK(cf.crbegin() != cf.crend());
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 	BOOST_CHECK(f.rbegin() != f.rend());
 	BOOST_CHECK(f.crbegin() != f.crend());
 	BOOST_CHECK(f.crbegin() != f.rend());
@@ -324,7 +344,8 @@ using std::is_same;
 using std::is_convertible;
 BOOST_FIXTURE_TEST_CASE(IteratorInterface, fxContext)
 {
-	Valset vs = retVs(context);
+	Valset vs(context);
+	fillVs(vs);
 	Valset::iterator i = vs.begin();
 	Valset::const_iterator ci = vs.cbegin();
 

@@ -227,6 +227,8 @@ namespace lua {
 	}
 
 
+
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 	inline Valset Valref::getUpvalues() const noexcept
 	{
 		Valset rv(context);
@@ -234,6 +236,8 @@ namespace lua {
 		rv.Size = context.getTop() - rv.Idx + 1;
 		return rv;
 	}
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
+
 
 
 #if(LUAPP_API_VERSION > 51)
@@ -299,6 +303,7 @@ namespace lua {
 		}
 #endif	// V53+
 
+#ifndef LUAPP_COMPATIBILITY_NO_NRVO
 		template<typename Policy>
 		inline Valset Lazy<Policy>::getUpvalues() &&
 		{
@@ -309,7 +314,7 @@ namespace lua {
 			rv.Size = S.getTop() - rv.Idx + 1;
 			return rv;
 		}
-
+#endif	// LUAPP_COMPATIBILITY_NO_NRVO
 
 #if(LUAPP_API_VERSION > 51)
 		template<typename Policy>
