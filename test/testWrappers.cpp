@@ -199,12 +199,11 @@ BOOST_FIXTURE_TEST_CASE(SimpleWrappers, fxContext)
 
 
 
-static const double cd1 = 3.14, cd2 = 2.7;
 static double d1 = 3.14, d2 = 2.7;
 
 static const double& crefwrapped(int idx)
 {
-	return idx ? cd1 : cd2;
+	return idx ? d1 : d2;
 }
 
 static double& refwrapped(int idx)
@@ -272,37 +271,36 @@ BOOST_FIXTURE_TEST_CASE(CustomWrappers, fxContext)
 
 
 
-
 BOOST_FIXTURE_TEST_CASE(SimpleMemberWrapping, fxContext)
 {
 	context.mt<SimpleClass>() = Table::records(context);
 	Value u(SimpleClass{3}, context);
 	{
-		context.global["fn"] = SimpleClass::increment;
+		context.global["fn"] = &SimpleClass::increment;
 		const int result = context.global["fn"](u);
 		BOOST_CHECK_EQUAL(result, 4);
 	}
 	{
-		context.global["fn"] = SimpleClass::decrement;
+		context.global["fn"] = &SimpleClass::decrement;
 		const int result = context.global["fn"](u);
 		BOOST_CHECK_EQUAL(result, 3);
 	}
 	{
-		context.global["fn"] = context.wrap(SimpleClass::read);
+		context.global["fn"] = context.wrap(&SimpleClass::read);
 		const int result = context.global["fn"](u);
 		BOOST_CHECK_EQUAL(result, 3);
 	}
 	{
-		context.global["fn"] = SimpleClass::write;
+		context.global["fn"] = &SimpleClass::write;
 		context.global["fn"](u, 12);
-		context.global["fn"] = SimpleClass::read;
+		context.global["fn"] = &SimpleClass::read;
 		const int result = context.global["fn"](u);
 		BOOST_CHECK_EQUAL(result, 12);
 	}
 	{
-		context.global["fn"] = context.vwrap(SimpleClass::decrement);
+		context.global["fn"] = context.vwrap(&SimpleClass::decrement);
 		context.global["fn"](u);
-		context.global["fn"] = SimpleClass::read;
+		context.global["fn"] = &SimpleClass::read;
 		const int result = context.global["fn"](u);
 		BOOST_CHECK_EQUAL(result, 11);
 	}
@@ -316,25 +314,26 @@ BOOST_FIXTURE_TEST_CASE(ComplicatedMemberWrapping, fxContext)
 	static_assert(sizeof(&Complicated::read) > sizeof(void*), "Pointers to complicated class members are supposed to be bigger");
 	Value u(Complicated{3}, context);
 	{
-		context.global["fn"] = context.wrap(Complicated::read);
+		context.global["fn"] = context.wrap(&Complicated::read);
 		const int result = context.global["fn"](u);
 		BOOST_CHECK_EQUAL(result, 3);
 	}
 	{
-		context.global["fn"] = Complicated::write;
+		context.global["fn"] = &Complicated::write;
 		context.global["fn"](u, 12);
-		context.global["fn"] = Complicated::read;
+		context.global["fn"] = &Complicated::read;
 		const int result = context.global["fn"](u);
 		BOOST_CHECK_EQUAL(result, 12);
 	}
 	{
-		context.global["fn"] = context.vwrap(Complicated::write);
+		context.global["fn"] = context.vwrap(&Complicated::write);
 		context.global["fn"](u, 11);
-		context.global["fn"] = Complicated::read;
+		context.global["fn"] = &Complicated::read;
 		const int result = context.global["fn"](u);
 		BOOST_CHECK_EQUAL(result, 11);
 	}
 }
+
 
 
 BOOST_AUTO_TEST_SUITE_END()

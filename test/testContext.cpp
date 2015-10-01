@@ -48,7 +48,7 @@ BOOST_FIXTURE_TEST_CASE(garbageCollector, fxContext)
 
 BOOST_FIXTURE_TEST_CASE(directLua, fxContext)
 {
-	BOOST_CHECK_EQUAL(gs.getRawState(), context);
+	BOOST_CHECK_EQUAL(gs.getRawState(), static_cast<lua_State*>(context));
 	BOOST_CHECK_EQUAL(context.getTop(), 0u);
 }
 
