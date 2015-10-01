@@ -30,10 +30,10 @@ namespace lua {
 
 			//! Default argument conversion routine (simple cast).
 			//! Specialized for certain type if necessary.
-			template<typename ValueType>
-			inline auto argCvt(const lua::Valref& value) -> decltype(std::declval<lua::Valref>().cast<ValueType>())
+			template<typename ValType>
+			inline typename std::conditional<::lua::TypeID<ValType>::typeID == ::lua::ValueType::UserData, ValType&, ValType>::type argCvt(const ::lua::Valref& value)
 			{
-				return value.cast<ValueType>();
+				return value.cast<ValType>();
 			}
 
 

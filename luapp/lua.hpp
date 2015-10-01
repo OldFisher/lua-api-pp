@@ -118,7 +118,7 @@ namespace lua {
 //! @endcode
 //! @note Use this macro outside of namespaces, functions, classes etc.
 //! @see lua::Context::wrap
-#define LUAPP_ARG_CONVERT(src_type, body) namespace lua { namespace _ { namespace wrap { template<> src_type inline argCvt<src_type>(const lua::Valref& val) body }}}
+#define LUAPP_ARG_CONVERT(src_type, body) namespace lua { namespace _ { namespace wrap { template<> inline src_type argCvt<src_type>(const ::lua::Valref& val) body }}}
 
 
 
