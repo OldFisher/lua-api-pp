@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['nil',['Nil',['../namespacelua.html#classlua_1_1_nil',1,'lua']]]
+  ['registry',['Registry',['../classlua_1_1_context_1_1_registry.html',1,'lua::Context']]],
+  ['registrykey',['RegistryKey',['../classlua_1_1_registry_key.html',1,'lua']]],
+  ['retval',['Retval',['../classlua_1_1_retval.html',1,'lua']]]
 ];

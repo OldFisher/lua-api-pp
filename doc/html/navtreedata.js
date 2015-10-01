@@ -36,7 +36,10 @@ var NAVTREE =
       [ "Documentation", "usage.html#Documentation", null ]
     ] ],
     [ "Configuring the library", "configuring.html", [
-      [ "Compatibility", "configuring.html#configuring_compatibility", null ],
+      [ "Compatibility", "configuring.html#configuring_compatibility", [
+        [ "Lua language version", "configuring.html#configuring_compatibility_langver", null ],
+        [ "NRVO support", "configuring.html#configuring_compatibility_nrvo", null ]
+      ] ],
       [ "Discardability", "configuring.html#configuring_discardability", null ],
       [ "Performance", "configuring.html#configuring_performance", null ],
       [ "Debugging: stack integrity checking", "configuring.html#configuring_stack_watch", null ]
@@ -45,7 +48,8 @@ var NAVTREE =
     [ "Compatibility", "compatibility.html", [
       [ "Lua 5.1", "compatibility.html#compatibility_5_1", null ],
       [ "Lua 5.2", "compatibility.html#compatibility_5_2", null ],
-      [ "Lua 5.3", "compatibility.html#compatibility_5_3", null ]
+      [ "Lua 5.3", "compatibility.html#compatibility_5_3", null ],
+      [ "NRVO compiler capability", "compatibility.html#compatibility_nrvo", null ]
     ] ],
     [ "External links", "external_links.html", null ],
     [ "FAQ", "faq.html", [
@@ -62,7 +66,8 @@ var NAVTREE =
     ] ],
     [ "Changelog", "changelog.html", [
       [ "2015-02-12-0", "changelog.html#changes_2015_02_12_0", [
-        [ "2015-02-12-1", "changelog.html#changes_2015_02_12_1", null ]
+        [ "2015-02-12-1", "changelog.html#changes_2015_02_12_1", null ],
+        [ "2015-02-12-2", "changelog.html#changes_2015_02_12_2", null ]
       ] ],
       [ "2015-01-21-0", "changelog.html#changes_2015_01_21_0", null ],
       [ "2014-11-24-0", "changelog.html#changes_2014_11_24_0", null ],
@@ -83,15 +88,16 @@ var NAVTREE =
       [ "Typedefs", "namespacemembers_type.html", null ],
       [ "Enumerations", "namespacemembers_enum.html", null ]
     ] ],
-    [ "Classes", null, [
-      [ "Class List", "annotated.html", "annotated" ],
+    [ "Classes", "annotated.html", [
+      [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ]
+        [ "Typedefs", "functions_type.html", null ],
+        [ "Enumerations", "functions_enum.html", null ]
       ] ]
     ] ],
     [ "Files", null, [
@@ -107,7 +113,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"stack_management.html#stack_management_function_anchor"
+"namespacemembers_vars.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

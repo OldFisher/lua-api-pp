@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['valuetype',['ValueType',['../namespacelua.html#ad9971b6ef33e02ba2c75d19c1d2518a1',1,'lua']]]
+  ['initializeexplicitly',['InitializeExplicitly',['../classlua_1_1_context.html#a151465980a8c92423d23f64002a35fed',1,'lua::Context']]]
 ];

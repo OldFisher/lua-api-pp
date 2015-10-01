@@ -189,7 +189,7 @@ namespace lua {
 	};
 #endif // DOXYGEN_ONLY
 
-		//! @brief Type for @ref lua::Context::initializeExplicitly "initializeExplicitly" constant.
+		//! @brief Static constant to signal explicit context construction.
 		enum InitializeExplicitly{initializeExplicitly = 0};
 
 		//! @name Life cycle

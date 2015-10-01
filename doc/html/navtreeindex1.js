@@ -1,5 +1,10 @@
 var NAVTREEINDEX1 =
 {
+"namespacemembers_vars.html":[13,2],
+"pages.html":[],
+"performace.html":[7],
+"stack_management.html":[4],
+"stack_management.html#stack_management_function":[4,0],
 "stack_management.html#stack_management_function_anchor":[4,0,1],
 "stack_management.html#stack_management_function_valref":[4,0,0],
 "structlua_1_1_type_i_d.html":[14,0,0,8],

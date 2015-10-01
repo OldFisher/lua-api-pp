@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['table',['Table',['../classlua_1_1_table.html',1,'lua']]],
-  ['temporary',['Temporary',['../namespacelua.html#classlua_1_1_temporary',1,'lua']]],
-  ['typeid',['TypeID',['../structlua_1_1_type_i_d.html',1,'lua']]]
+  ['valobj',['Valobj',['../namespacelua.html#classlua_1_1_valobj',1,'lua']]],
+  ['valref',['Valref',['../classlua_1_1_valref.html',1,'lua']]],
+  ['valset',['Valset',['../classlua_1_1_valset.html',1,'lua']]],
+  ['value',['Value',['../classlua_1_1_value.html',1,'lua']]]
 ];

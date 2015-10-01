@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['nil',['nil',['../namespacelua.html#a14799155d9b9fb3fd424dd59a5e6bc57',1,'lua']]],
-  ['noref',['noref',['../classlua_1_1_registry_key.html#a873e67eaf1808cab4f47d6f10fd65191',1,'lua::RegistryKey']]],
-  ['nparameters',['nParameters',['../namespacelua.html#a70dada50816e99086d756ecf375e5ac8',1,'lua::ClosureInfo']]],
-  ['nupvalues',['nUpvalues',['../namespacelua.html#a90ec8b42e6384aae829564afe25f6509',1,'lua::ClosureInfo']]]
+  ['raw',['raw',['../classlua_1_1_table.html#a5035d6acb9b556155dbf648a4f534fae',1,'lua::Table']]],
+  ['registry',['registry',['../classlua_1_1_context.html#a36086215a6fa5c75c34674924dbc5aa3',1,'lua::Context']]]
 ];

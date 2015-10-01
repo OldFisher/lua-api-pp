@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['rawlen',['rawlen',['../classlua_1_1_valref.html#ac099725b7171aaffd3155c9fdfd11573',1,'lua::Valref']]],
   ['records',['records',['../classlua_1_1_table.html#a196b5d9f1a833e25aa4d80536f279b0a',1,'lua::Table']]],
   ['registrykey',['RegistryKey',['../classlua_1_1_registry_key.html#a7431da5efffeaf0f57cb6fe7e3e98dfd',1,'lua::RegistryKey']]],
   ['requireargs',['requireArgs',['../classlua_1_1_context.html#a27057da9b45c3e29517f4bfc2a28eb8a',1,'lua::Context']]],

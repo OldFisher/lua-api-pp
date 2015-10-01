@@ -52,7 +52,9 @@
 * @page usage Using the library
 * @section usage_basic Using the library with your project
 * This library is intended to be compiled with your project. All the files you're going to need for the project are in luapp/ directory.
-* Add a source file containing single line @code{.cpp}#include <luapp/impl.cpp> @endcode to your project and include @ref lua.hpp "luapp/lua.hpp" in your sources.
+* Add a source file containing single line @code{.cpp}#include <luapp/impl.cpp> @endcode to your project.
+* In @ref configuring_performance "header-only" mode this step is not required.
+* Just include @ref lua.hpp "luapp/lua.hpp" in your sources and you're ready to go.
 *
 * Do not include any *.hxx files: those depend on particular inclusion order in which they are included into @ref lua.hpp.
 * Besides Lua API itself (configured with @ref luainc.h) and standard C++ library there are no external dependencies.
@@ -70,10 +72,13 @@
 * @page configuring Configuring the library
 * Additional library features can be configured with special macros. These macros must be defined project-wide to maintain consistency.
 * @section configuring_compatibility Compatibility
-* Macro names that control @ref compatibility mode:
+* @subsection configuring_compatibility_langver Lua language version
 * @li <code><b>LUAPP_COMPATIBILITY_V51</b></code>;
 * @li <code><b>LUAPP_COMPATIBILITY_V52</b></code>;
 * @li <code><b>LUAPP_COMPATIBILITY_V53</b></code>.
+* @subsection configuring_compatibility_nrvo NRVO support
+* The macro <code><b>LUAPP_COMPATIBILITY_NO_NRVO</b></code> disables tests that require @ref compatibility_nrvo "NRVO" compiler capability.
+* Also it disables the @ref lua::Valref::getUpvalues "getUpvalues" method that requires NRVO too.
 *
 * @section configuring_discardability Discardability
 * Operation that produces @ref lua::Temporary "temporary Lua value" may be skipped if the operation result is never used.
@@ -89,7 +94,8 @@
 * To achieve best performance, API-dependent part may be included in headers as a set of inline functions.
 * This mode can be used when link-time code generation is not available and the performance is crucial.
 *
-* It is turned on with <code><b>LUAPP_HEADER_ONLY</b></code> macro and impl.cpp still needs to be compiled with the project.
+* It is turned on with <code><b>LUAPP_HEADER_ONLY</b></code> macro and impl.cpp no longer needs to be included.
+* Note that in this mode all Lua API functions will be exposed to your source.
 *
 * @section configuring_stack_watch Debugging: stack integrity checking
 * The <code><b>LUAPP_WATCH_STACK</b></code> enables special mode of stack integrity checking at the exense of some operational overhead.
@@ -136,6 +142,14 @@
 * @ref bor "bitwise OR", @ref bxor "bitwise XOR", @ref bneg "bitwise NOT", @ref shl "shift bits left", @ref shr "shift bits right";
 * @li indexing values with native integer types now uses specialized geti/seti functions;
 * @li @ref lua::Valref::optcast "optcast" is no longer available (it was superseded by @ref lua::Valref::to "to" with argument).
+*
+*
+* @section compatibility_nrvo NRVO compiler capability
+* NRVO is a compiler feature, extension of RVO (return value optimization). RVO in short means that if a function returns anonymous value,
+* it won't be copied into result but rather constructed in-place. NRVO (named RVO) means that same thing can be done with named variable.
+* This feature, if supported by compiler, allows to return @ref basic_values_anchors "anchors" from functions by value.
+* Some tests and @ref lua::Valref::getUpvalues "getUpvalues" function depend on it and will be disabled if
+* <code><b>LUAPP_COMPATIBILITY_NO_NRVO</b></code> macro is used.
 *
 * @page external_links External links
 * @li <a href="http://www.lua.org/">Official Lua website</a>;

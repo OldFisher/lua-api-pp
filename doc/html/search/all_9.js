@@ -1,10 +1,10 @@
 var searchData=
 [
   ['lua_20api_2b_2b_20library',['Lua API++ library',['../index.html',1,'']]],
-  ['len',['len',['../classlua_1_1_valref.html#a4e1246286c0483be9641235e011d3c92',1,'lua::Valref::len() const noexcept'],['../classlua_1_1_valref.html#a94c909f1f9c10e781ecf7ecd4f88280d',1,'lua::Valref::len() const noexcept'],['../classlua_1_1_table.html#a4e1246286c0483be9641235e011d3c92',1,'lua::Table::len() const noexcept'],['../classlua_1_1_table.html#a94c909f1f9c10e781ecf7ecd4f88280d',1,'lua::Table::len() const noexcept']]],
+  ['len',['len',['../classlua_1_1_valref.html#a453bcbd75c958d1a882b7818a6697129',1,'lua::Valref::len() const  noexcept'],['../classlua_1_1_valref.html#aaa04d4199e20937ebff1a24c5d8c9526',1,'lua::Valref::len() const  noexcept'],['../classlua_1_1_table.html#a453bcbd75c958d1a882b7818a6697129',1,'lua::Table::len() const  noexcept'],['../classlua_1_1_table.html#aaa04d4199e20937ebff1a24c5d8c9526',1,'lua::Table::len() const  noexcept']]],
   ['lfunction',['LFunction',['../namespacelua.html#a1d08ef8a7b1a72e59f411d9d18d5aacc',1,'lua']]],
   ['lightuserdata',['LightUserData',['../namespacelua.html#a1d01cc7a767f2112221a5088441572d3',1,'lua::LightUserData()'],['../namespacelua.html#ad9971b6ef33e02ba2c75d19c1d2518a1a6e4c577b4d0b098de1e834d2ccc96928',1,'lua::LightUserdata()']]],
-  ['linked',['linked',['../classlua_1_1_valref.html#a46eba48ed72c056f220e2fa800fd45e5',1,'lua::Valref']]],
+  ['linked',['linked',['../classlua_1_1_valref.html#ad908b321a1aa09b2939d416fe201af6e',1,'lua::Valref']]],
   ['load',['load',['../classlua_1_1_context.html#ada90f88e0ab44d5da1d0c3335137649e',1,'lua::Context::load(const char *fileName) noexcept'],['../classlua_1_1_context.html#afe2e8b68d7e1fdaa0de519bc0d9eec27',1,'lua::Context::load(const std::string &amp;fileName) noexcept']]],
   ['lua',['lua',['../namespacelua.html',1,'']]],
   ['lua_2ehpp',['lua.hpp',['../lua_8hpp.html',1,'']]],

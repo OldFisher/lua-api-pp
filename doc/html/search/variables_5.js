@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['typeid',['typeID',['../structlua_1_1_type_i_d.html#af86d8b33ba6a2c7d97b9143f60c977ef',1,'lua::TypeID']]]
+  ['upvalues',['upvalues',['../classlua_1_1_context.html#a8efd73c5a9d7207e7ced545bac6404fd',1,'lua::Context']]]
 ];
