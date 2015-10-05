@@ -67,7 +67,8 @@ var NAVTREE =
     [ "Changelog", "changelog.html", [
       [ "2015-02-12-0", "changelog.html#changes_2015_02_12_0", [
         [ "2015-02-12-1", "changelog.html#changes_2015_02_12_1", null ],
-        [ "2015-02-12-2", "changelog.html#changes_2015_02_12_2", null ]
+        [ "2015-02-12-2", "changelog.html#changes_2015_02_12_2", null ],
+        [ "2015-02-12-3", "changelog.html#changes_2015_02_12_3", null ]
       ] ],
       [ "2015-01-21-0", "changelog.html#changes_2015_01_21_0", null ],
       [ "2014-11-24-0", "changelog.html#changes_2014_11_24_0", null ],
@@ -113,7 +114,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"namespacemembers_vars.html"
+"namespacemembers_enum.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

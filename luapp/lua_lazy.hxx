@@ -144,6 +144,13 @@ namespace lua{
 				return toTemporary().template is<T>();
 			}
 
+#if(LUAPP_API_VERSION >= 53)
+			bool isInteger() &&
+			{
+				return toTemporary().isInteger();
+			}
+#endif
+
 			ValueType type() &&
 			{
 				return toTemporary().type();

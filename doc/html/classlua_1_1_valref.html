@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="lpp_logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Lua-API++
-   &#160;<span id="projectnumber">2015-02-12-2</span>
+   &#160;<span id="projectnumber">2015-02-12-3</span>
    </div>
    <div id="projectbrief">Lua-API++ library</div>
   </td>
@@ -178,8 +178,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7d27cc515e59f676f08d399124be099d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7420a5e28322c9a7a3348d35b46fbe66"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a7420a5e28322c9a7a3348d35b46fbe66"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66">is</a> () const  noexcept</td></tr>
-<tr class="memdesc:a7420a5e28322c9a7a3348d35b46fbe66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the value is of given type or convertible.  <a href="#a7420a5e28322c9a7a3348d35b46fbe66">More...</a><br /></td></tr>
+<tr class="memdesc:a7420a5e28322c9a7a3348d35b46fbe66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the value convertible to given type.  <a href="#a7420a5e28322c9a7a3348d35b46fbe66">More...</a><br /></td></tr>
 <tr class="separator:a7420a5e28322c9a7a3348d35b46fbe66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a610dff1f7c219411e1da805e62a338da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#a610dff1f7c219411e1da805e62a338da">isInteger</a> () const  noexcept</td></tr>
+<tr class="memdesc:a610dff1f7c219411e1da805e62a338da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the value is an integer number <em>[Lua 5.3+ only]</em>  <a href="#a610dff1f7c219411e1da805e62a338da">More...</a><br /></td></tr>
+<tr class="separator:a610dff1f7c219411e1da805e62a338da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21d255a0d1603f31217e1ef715eb6e2c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21d255a0d1603f31217e1ef715eb6e2c"></a>
 <a class="el" href="namespacelua.html#ad9971b6ef33e02ba2c75d19c1d2518a1">ValueType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlua_1_1_valref.html#a21d255a0d1603f31217e1ef715eb6e2c">type</a> () const  noexcept</td></tr>
 <tr class="memdesc:a21d255a0d1603f31217e1ef715eb6e2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actual type of referenced value. <br /></td></tr>
@@ -774,7 +777,7 @@ Related Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Check if the value is of given type or convertible. </p>
+<p>Check if the value convertible to given type. </p>
 <p>Exception: is&lt;bool&gt; checks if value type is actually boolean, because any value can be converted to bool. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>the type to check compatibility with, one of those:<ul>
@@ -796,6 +799,33 @@ Related Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>Note</dt><dd>All numeric types are interchangeable for this function and check only for numeric format. Use <a class="el" href="classlua_1_1_valref.html#a610dff1f7c219411e1da805e62a338da">isInteger</a> to check if the number is actually of integer subtype. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a610dff1f7c219411e1da805e62a338da"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isInteger </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if the value is an integer number <em>[Lua 5.3+ only]</em> </p>
+<dl class="section return"><dt>Returns</dt><dd>true if the value is a number and has integer subtype, false otherwise (i.e. the value is floating-point or not a number at all). </dd></dl>
 
 </div>
 </div>
@@ -909,7 +939,7 @@ Related Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66" title="Check if the value is of given type or convertible. ">is&lt;LFunction&gt;()</a> </dd></dl>
+<dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66" title="Check if the value convertible to given type. ">is&lt;LFunction&gt;()</a> </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::runtime_error</td><td>on wrong index. </td></tr>
@@ -941,7 +971,7 @@ Related Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Retrieve upvalues and their names. </p>
-<p>This function returns values and names of all closure upvalues. Upvalues are always named "" in C closures. Upvalue ordering in Lua functions is undefined. </p><dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66" title="Check if the value is of given type or convertible. ">is&lt;LFunction&gt;()</a> </dd></dl>
+<p>This function returns values and names of all closure upvalues. Upvalues are always named "" in C closures. Upvalue ordering in Lua functions is undefined. </p><dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66" title="Check if the value convertible to given type. ">is&lt;LFunction&gt;()</a> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>Value-name pairs for each upvalue. </dd></dl>
 
 </div>
@@ -968,7 +998,7 @@ Related Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Retrieve information about closure <em>[Lua 5.2+ only]</em>. </p>
-<p>This function is applicable only to closures. It returns number of upvalues, parameters and whether function is variadic (accepts variable number of arguments). </p><dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66" title="Check if the value is of given type or convertible. ">is&lt;LFunction&gt;()</a> </dd></dl>
+<p>This function is applicable only to closures. It returns number of upvalues, parameters and whether function is variadic (accepts variable number of arguments). </p><dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66" title="Check if the value convertible to given type. ">is&lt;LFunction&gt;()</a> </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>For closures made from C functions <code>nParameters</code> is always 0 and <code>variadic</code> is always <b><code>true</code></b>. </dd></dl>
 
 </div>
@@ -996,7 +1026,7 @@ Related Functions</h2></td></tr>
 
 <p>Retrieve information about closure <em>[Lua 5.1 only]</em>. </p>
 <p>This function is applicable only to closures. </p><dl class="section return"><dt>Returns</dt><dd>Number of upvalues. </dd></dl>
-<dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66" title="Check if the value is of given type or convertible. ">is&lt;LFunction&gt;()</a> </dd></dl>
+<dl class="section pre"><dt>Precondition</dt><dd>this-&gt;<a class="el" href="classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66" title="Check if the value convertible to given type. ">is&lt;LFunction&gt;()</a> </dd></dl>
 
 </div>
 </div>
@@ -1791,7 +1821,7 @@ Related Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelua.html">lua</a></li><li class="navelem"><a class="el" href="classlua_1_1_valref.html">Valref</a></li>
-    <li class="footer">Generated on Thu Oct 1 2015 12:17:33 for Lua-API++ by
+    <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.10 </li>
   </ul>

@@ -9,6 +9,7 @@ var classlua_1_1_table =
     [ "operator const Valref &", "classlua_1_1_table.html#a48a69ade109eefdbf0613a023689201a", null ],
     [ "operator[]", "classlua_1_1_table.html#a7cc1890e3221999f19a6a7d7647d4e22", null ],
     [ "len", "classlua_1_1_table.html#a453bcbd75c958d1a882b7818a6697129", null ],
+    [ "rawlen", "classlua_1_1_table.html#ac099725b7171aaffd3155c9fdfd11573", null ],
     [ "len", "classlua_1_1_table.html#aaa04d4199e20937ebff1a24c5d8c9526", null ],
     [ "mt", "classlua_1_1_table.html#a5304ef8e074fabae103a49463f320293", null ],
     [ "iterate", "classlua_1_1_table.html#a74a59c576b35fccf1fba54a285d388a3", null ],

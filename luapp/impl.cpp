@@ -651,6 +651,13 @@ namespace lua {
 	}
 
 
+#if(LUAPP_API_VERSION >= 53)
+	LUAPP_HO_INLINE bool Valref::isInteger() const noexcept
+	{
+		return lua_isinteger(context, index) != 0;
+	}
+#endif
+
 
 	LUAPP_HO_INLINE ValueType Valref::type() const noexcept
 	{

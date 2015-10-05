@@ -18,6 +18,7 @@ var classlua_1_1_valref =
     [ "operator const char *", "classlua_1_1_valref.html#abdd0820f8401e11e09a1e92ab7f4d864", null ],
     [ "operator std::string", "classlua_1_1_valref.html#a7d27cc515e59f676f08d399124be099d", null ],
     [ "is", "classlua_1_1_valref.html#a7420a5e28322c9a7a3348d35b46fbe66", null ],
+    [ "isInteger", "classlua_1_1_valref.html#a610dff1f7c219411e1da805e62a338da", null ],
     [ "type", "classlua_1_1_valref.html#a21d255a0d1603f31217e1ef715eb6e2c", null ],
     [ "operator[]", "classlua_1_1_valref.html#a217af750486a7b4641e9e5a0201019d4", null ],
     [ "operator()", "classlua_1_1_valref.html#a862a45b71363f28f5a73c6d1b58fb62f", null ],

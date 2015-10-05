@@ -601,7 +601,7 @@ namespace lua {
 		}
 
 #ifdef DOXYGEN_ONLY
-		//! @brief Check if the value is of given type or convertible.
+		//! @brief Check if the value convertible to given type.
 		//! @details Exception: is<bool> checks if value type is actually boolean,
 		//! because any value can be converted to bool.
 		//! @tparam T the type to check compatibility with, one of those:
@@ -618,7 +618,13 @@ namespace lua {
 		//! - @ref lua::LightUserData "LightUserData"
 		//! - Table
 		//! - any user data type (see @ref basic_values_user "this section")
+		//! @note All numeric types are interchangeable for this function and check only for numeric format.
+		//! Use @ref ::lua::Valref::isInteger "isInteger" to check if the number is actually of integer subtype.
 		template<typename T> bool is() const noexcept;
+
+		//! @brief Check if the value is an integer number @lv53
+		//! @return true if the value is a number and has integer subtype, false otherwise (i.e. the value is floating-point or not a number at all).
+		bool isInteger () const noexcept;
 #else	// Not DOXYGEN_ONLY
 		template<typename T> typename std::enable_if<TypeID<T>::typeID != ValueType::UserData, bool>::type is() const noexcept;
 
@@ -626,7 +632,12 @@ namespace lua {
 		{
 			return isUserData(UserData<UDT>::classname);
 		}
+
+#if(LUAPP_API_VERSION >= 53)
+		bool isInteger () const noexcept;
+#endif	// V53+
 #endif // DOXYGEN_ONLY
+
 
 		//! @brief Actual type of referenced value.
 		ValueType type() const noexcept;

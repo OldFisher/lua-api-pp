@@ -19,9 +19,12 @@
 *	+ minor fix to remove some warnings about uninitialized fields.
 * @subsection changes_2015_02_12_2 2015-02-12-2
 *	+ changed signal value for explicit @ref lua::Context "Context" initialization into a enum (no more static constants);
-*	+ added @ref lua::Valref::rawlen "rawlen" function (5.2+);
+*	+ added @ref lua::Valref::rawlen "rawlen" function to value types (5.2+);
 *	+ compatibility mode for compilers that do not support @ref compatibility_nrvo "NRVO" (such as Visual Studio), turned on with <b><code>LUAPP_COMPATIBILITY_NO_NRVO</code></b> macro;
 *	+ minor fixes that increase compatibility with Visual Studio 2015.
+* @subsection changes_2015_02_12_3 2015-02-12-3
+*   + added @ref lua::Table::rawlen "rawlen" function to @ref lua::Table "Table";
+*   + added @ref lua::Valref::isInteger "isInteger" function to value types (5.3+).
 *
 * @section changes_2015_01_21_0 2015-01-21-0
 * - added compatibility profile for Lua 5.3 featuring:

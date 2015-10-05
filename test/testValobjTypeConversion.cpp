@@ -34,12 +34,18 @@ BOOST_FIXTURE_TEST_CASE(Nil_, fxGlobalVal)
 	BOOST_CHECK(v.is<Nil>());
 	BOOST_CHECK_EQUAL(v.cast<bool>(), false);
 	BOOST_CHECK_EQUAL(v.to<bool>(), false);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!v.isInteger());
+#endif
 
 	l = nil;
 	BOOST_CHECK(l.type() == ValueType::Nil);
 	BOOST_CHECK(l.is<Nil>());
 	BOOST_CHECK_EQUAL(l.cast<bool>(), false);
 	BOOST_CHECK_EQUAL(l.to<bool>(), false);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!l.isInteger());
+#endif
 }
 
 
@@ -58,6 +64,9 @@ BOOST_FIXTURE_TEST_CASE(Boolean, fxGlobalVal)
 
 	BOOST_CHECK_EQUAL(v.to<bool>(false), true);
 	BOOST_CHECK_EQUAL(v.to<int>(42), 42);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!v.isInteger());
+#endif
 
 	l = true;
 	BOOST_CHECK(l.type() == ValueType::Boolean);
@@ -70,6 +79,9 @@ BOOST_FIXTURE_TEST_CASE(Boolean, fxGlobalVal)
 	}
 	BOOST_CHECK_EQUAL(l.to<bool>(false), true);
 	BOOST_CHECK_EQUAL(l.to<int>(42), 42);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!l.isInteger());
+#endif
 }
 
 
@@ -90,6 +102,9 @@ BOOST_FIXTURE_TEST_CASE(Int, fxGlobalVal)
 	BOOST_CHECK_EQUAL(v.to<int>(), src);
 	BOOST_CHECK_EQUAL(v.to<int>(src - 1), src);
 	BOOST_CHECK(v.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(v.isInteger());
+#endif
 
     l = src;
 	BOOST_CHECK(l.type() == ValueType::Number);
@@ -104,6 +119,9 @@ BOOST_FIXTURE_TEST_CASE(Int, fxGlobalVal)
 	BOOST_CHECK_EQUAL(l.to<int>(), src);
 	BOOST_CHECK_EQUAL(l.to<int>(src - 1), src);
 	BOOST_CHECK(l.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(l.isInteger());
+#endif
 }
 
 
@@ -125,6 +143,9 @@ BOOST_FIXTURE_TEST_CASE(UnsignedInt, fxGlobalVal)
 	BOOST_CHECK_EQUAL(v.to<unsigned int>(), src);
 	BOOST_CHECK_EQUAL(v.to<unsigned int>(src - 1), src);
 	BOOST_CHECK(v.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(v.isInteger());
+#endif
 
     l = src;
 	BOOST_CHECK(l.type() == ValueType::Number);
@@ -139,6 +160,9 @@ BOOST_FIXTURE_TEST_CASE(UnsignedInt, fxGlobalVal)
 	BOOST_CHECK_EQUAL(l.to<unsigned int>(), src);
 	BOOST_CHECK_EQUAL(l.to<unsigned int>(src - 1), src);
 	BOOST_CHECK(l.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(l.isInteger());
+#endif
 }
 
 
@@ -160,6 +184,9 @@ BOOST_FIXTURE_TEST_CASE(LongLong, fxGlobalVal)
 	BOOST_CHECK_EQUAL(v.to<long long>(), src);
 	BOOST_CHECK(v.to<long long>(src - 1) == src);
 	BOOST_CHECK(v.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(v.isInteger());
+#endif
 
     l = src;
 	BOOST_CHECK(l.type() == ValueType::Number);
@@ -174,6 +201,9 @@ BOOST_FIXTURE_TEST_CASE(LongLong, fxGlobalVal)
 	BOOST_CHECK_EQUAL(l.to<long long>(), src);
 	BOOST_CHECK_EQUAL(l.to<long long>(src - 1), src);
 	BOOST_CHECK(l.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(l.isInteger());
+#endif
 }
 
 
@@ -195,6 +225,9 @@ BOOST_FIXTURE_TEST_CASE(UnsignedLongLong, fxGlobalVal)
 	BOOST_CHECK_EQUAL(v.to<unsigned long long>(), src);
 	BOOST_CHECK_EQUAL(v.to<unsigned long long>(src - 1), src);
 	BOOST_CHECK(v.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(v.isInteger());
+#endif
 
     l = src;
 	BOOST_CHECK(l.type() == ValueType::Number);
@@ -209,6 +242,9 @@ BOOST_FIXTURE_TEST_CASE(UnsignedLongLong, fxGlobalVal)
 	BOOST_CHECK_EQUAL(l.to<unsigned long long>(), src);
 	BOOST_CHECK_EQUAL(l.to<unsigned long long>(src - 1), src);
 	BOOST_CHECK(l.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(l.isInteger());
+#endif
 }
 
 
@@ -230,6 +266,9 @@ BOOST_FIXTURE_TEST_CASE(Float, fxGlobalVal)
 	BOOST_CHECK_EQUAL(v.to<float>(), src);
 	BOOST_CHECK_EQUAL(v.to<float>(src - 1), src);
 	BOOST_CHECK(v.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!v.isInteger());
+#endif
 
     l = src;
 	BOOST_CHECK(l.type() == ValueType::Number);
@@ -244,6 +283,9 @@ BOOST_FIXTURE_TEST_CASE(Float, fxGlobalVal)
 	BOOST_CHECK_EQUAL(l.to<float>(), src);
 	BOOST_CHECK_EQUAL(l.to<float>(src - 1), src);
 	BOOST_CHECK(l.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!l.isInteger());
+#endif
 }
 
 
@@ -265,6 +307,9 @@ BOOST_FIXTURE_TEST_CASE(Double, fxGlobalVal)
 	BOOST_CHECK_EQUAL(v.to<double>(), src);
 	BOOST_CHECK_EQUAL(v.to<double>(src - 1), src);
 	BOOST_CHECK(v.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!v.isInteger());
+#endif
 
     l = src;
 	BOOST_CHECK(l.type() == ValueType::Number);
@@ -279,6 +324,9 @@ BOOST_FIXTURE_TEST_CASE(Double, fxGlobalVal)
 	BOOST_CHECK_EQUAL(l.to<double>(), src);
 	BOOST_CHECK_EQUAL(l.to<double>(src - 1), src);
 	BOOST_CHECK(l.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!l.isInteger());
+#endif
 }
 
 
@@ -303,6 +351,9 @@ BOOST_FIXTURE_TEST_CASE(String, fxGlobalVal)
 	}
 	BOOST_CHECK(strcmp(v.to<const char*>("Another string"), src) == 0);
 	BOOST_CHECK(v.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!v.isInteger());
+#endif
 
 	const string src2("A string 2");
 	v = src2;
@@ -339,6 +390,9 @@ BOOST_FIXTURE_TEST_CASE(String, fxGlobalVal)
 	}
 	BOOST_CHECK(strcmp(l.to<const char*>("Another string"), src) == 0);
 	BOOST_CHECK(l.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!l.isInteger());
+#endif
 
 	l = src2;
 	BOOST_CHECK(l.type() == ValueType::String);
@@ -422,6 +476,9 @@ BOOST_FIXTURE_TEST_CASE(C_Function, fxGlobalVal)
 	BOOST_CHECK(v.to<CFunction>() == src);
 	BOOST_CHECK(v.to<CFunction>(doNothing2) == src);
 	BOOST_CHECK(v.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!v.isInteger());
+#endif
 
     l = src;
 	BOOST_CHECK(l.type() == ValueType::C_Function);
@@ -436,6 +493,9 @@ BOOST_FIXTURE_TEST_CASE(C_Function, fxGlobalVal)
 	BOOST_CHECK(l.to<CFunction>() == src);
 	BOOST_CHECK(l.to<CFunction>(doNothing2) == src);
 	BOOST_CHECK(l.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!l.isInteger());
+#endif
 }
 
 
@@ -449,12 +509,18 @@ BOOST_FIXTURE_TEST_CASE(Function, fxGlobalVal)
 	BOOST_CHECK_EQUAL(v.cast<bool>(), true);
 	BOOST_CHECK_EQUAL(v.to<bool>(), true);
 	BOOST_CHECK(v.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!v.isInteger());
+#endif
 
 	BOOST_CHECK(l.type() == ValueType::Function);
 	BOOST_CHECK(l.is<LFunction>());
 	BOOST_CHECK_EQUAL(l.cast<bool>(), true);
 	BOOST_CHECK_EQUAL(l.to<bool>(), true);
 	BOOST_CHECK(l.to<LightUserData>(nullptr) == nullptr);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!l.isInteger());
+#endif
 }
 
 
@@ -476,6 +542,9 @@ BOOST_FIXTURE_TEST_CASE(LightUserdata, fxGlobalVal)
 	BOOST_CHECK(v.to<LightUserData>() == src);
 	BOOST_CHECK(v.to<LightUserData>(&someObject2) == src);
 	BOOST_CHECK_EQUAL(v.to<int>(42), 42);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!v.isInteger());
+#endif
 
     l = src;
 	BOOST_CHECK(l.type() == ValueType::LightUserdata);
@@ -490,6 +559,9 @@ BOOST_FIXTURE_TEST_CASE(LightUserdata, fxGlobalVal)
 	BOOST_CHECK(l.to<LightUserData>() == src);
 	BOOST_CHECK(l.to<LightUserData>(&someObject2) == src);
 	BOOST_CHECK_EQUAL(l.to<int>(42), 42);
+#if(LUAPP_API_VERSION >= 53)
+	BOOST_CHECK(!l.isInteger());
+#endif
 }
 
 

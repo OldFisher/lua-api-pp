@@ -1,7 +1,7 @@
 var searchData=
 [
   ['raw',['raw',['../classlua_1_1_table.html#a5035d6acb9b556155dbf648a4f534fae',1,'lua::Table']]],
-  ['rawlen',['rawlen',['../classlua_1_1_valref.html#ac099725b7171aaffd3155c9fdfd11573',1,'lua::Valref']]],
+  ['rawlen',['rawlen',['../classlua_1_1_valref.html#ac099725b7171aaffd3155c9fdfd11573',1,'lua::Valref::rawlen()'],['../classlua_1_1_table.html#ac099725b7171aaffd3155c9fdfd11573',1,'lua::Table::rawlen()']]],
   ['records',['records',['../classlua_1_1_table.html#a196b5d9f1a833e25aa4d80536f279b0a',1,'lua::Table']]],
   ['reference',['reference',['../classlua_1_1_valset.html#ac1b4bcd9a31488015c182cd8168b8846',1,'lua::Valset']]],
   ['registry',['registry',['../classlua_1_1_context.html#a36086215a6fa5c75c34674924dbc5aa3',1,'lua::Context']]],

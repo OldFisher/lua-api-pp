@@ -272,6 +272,10 @@ namespace lua {
 		//! @details Same as Valref::len.
 		Temporary len() const noexcept;
 
+		//! @brief Raw length @lv52.
+		//! @details Same as Valref::rawlen.
+		size_t rawlen() const noexcept;
+
 		//! @brief Length @lv51.
 		size_t len() const noexcept;
 
@@ -284,6 +288,11 @@ namespace lua {
 		_::Lazy<_::lazyLen> len() const noexcept
 		{
 			return Anchor.len();
+		}
+
+		size_t rawlen() const noexcept
+		{
+			return Anchor.rawlen();
 		}
 #else	// V51-
 		size_t len() const noexcept
